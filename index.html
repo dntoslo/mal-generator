@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ukens turer: malgenerator for turlag</title>
+<meta name="description" content="Lag et ferdig bilde med ukens turer til Facebook og Instagram, i DNTs profil.">
+<link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<main class="app">
+
+  <section class="panel" aria-label="Innstillinger">
+
+    <header class="panel__intro">
+      <h1 class="panel__tittel">Ukens turer</h1>
+      <p class="panel__ingress">Fyll inn ukens turer, velg bilde og last ned ferdig bilde til Facebook og Instagram. Alt annet er låst til DNTs profil.</p>
+    </header>
+
+    <div class="felt">
+      <p class="felt__etikett">1. Velg format</p>
+      <div class="knapperad" data-gruppe="format" role="group" aria-label="Format">
+        <button type="button" class="pille" data-verdi="feed">Feed</button>
+        <button type="button" class="pille" data-verdi="kvadrat">Kvadrat</button>
+        <button type="button" class="pille" data-verdi="story">Story</button>
+      </div>
+      <p class="hjelp" id="format-hjelp"></p>
+    </div>
+
+    <div class="felt">
+      <p class="felt__etikett">Tekststørrelse</p>
+      <div class="knapperad" data-gruppe="tekst" role="group" aria-label="Tekststørrelse">
+        <button type="button" class="pille" data-verdi="normal">Normal</button>
+        <button type="button" class="pille pille--stor" data-verdi="stor">Stor</button>
+      </div>
+      <p class="hjelp" id="tekst-hjelp"></p>
+    </div>
+
+    <div class="felt">
+      <p class="felt__etikett">2. Velg bildeoppsett</p>
+      <div class="knapperad knapperad--grid" data-gruppe="oppsett" role="group" aria-label="Bildeoppsett">
+        <button type="button" class="kort-knapp" data-verdi="topp">Bilde øverst</button>
+        <button type="button" class="kort-knapp" data-verdi="stort">Stort bilde</button>
+        <button type="button" class="kort-knapp" data-verdi="side">Stående til høyre</button>
+        <button type="button" class="kort-knapp" data-verdi="bakgrunn">Bilde som bakgrunn</button>
+      </div>
+      <p class="hjelp" id="oppsett-hjelp"></p>
+    </div>
+
+    <div class="felt">
+      <p class="felt__etikett">3. Bilde</p>
+      <label class="opplasting">
+        <span class="opplasting__tittel">Velg bilde fra maskinen</span>
+        <span class="hjelp" id="bildenavn"></span>
+        <input type="file" id="bilde-fil" accept="image/*">
+      </label>
+
+      <div class="boks">
+        <div class="felt__topp">
+          <span class="boks__etikett">Juster utsnitt</span>
+          <span class="knapperad">
+            <button type="button" class="liten-knapp" id="nytt-eksempel">Nytt eksempelbilde</button>
+            <button type="button" class="liten-knapp" id="midtstill">Midtstill</button>
+          </span>
+        </div>
+        <label class="glider"><span>Vannrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="x"></label>
+        <label class="glider"><span>Loddrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="y"></label>
+        <label class="glider"><span>Zoom</span><input type="range" min="100" max="200" step="1" data-utsnitt="z"></label>
+        <p class="hjelp">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så feed, kvadrat og story kan ha ulikt.</p>
+      </div>
+    </div>
+
+    <div class="felt">
+      <p class="felt__etikett">4. Tittel, turlag og uke</p>
+      <label class="skjult" for="tittel">Tittel</label>
+      <input type="text" class="tekstfelt" id="tittel" data-felt="tittel" placeholder="Ukens turer">
+      <label class="skjult" for="turlag">Turlag</label>
+      <input type="text" class="tekstfelt" id="turlag" data-felt="turlag" placeholder="Navn på turlaget">
+      <label class="skjult" for="periode">Uke og måned</label>
+      <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38 · SEPTEMBER">
+      <label class="skjult" for="lenke">Nettadresse</label>
+      <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/lorenskog">
+      <label class="avkryssing"><input type="checkbox" id="vis-logo" checked><span>Vis DNT-logo i bildet</span></label>
+    </div>
+
+    <div class="felt felt--romslig">
+      <div class="felt__topp">
+        <p class="felt__etikett">5. Turene</p>
+        <button type="button" class="liten-knapp" id="legg-til">+ Legg til tur</button>
+      </div>
+      <div class="turliste" id="turliste"></div>
+      <p class="advarsel" id="formange" hidden></p>
+    </div>
+
+    <div class="felt">
+      <button type="button" class="primar" id="last-ned">Last ned bildet</button>
+      <p class="hjelp" id="nedlasting-hjelp"></p>
+      <p class="hjelp" id="kreditering" hidden></p>
+      <p class="advarsel" id="feil" role="alert" hidden></p>
+    </div>
+
+    <div class="bunn">
+      <button type="button" class="lenkeknapp" id="tom-skjema">Tøm skjemaet og start på nytt</button>
+      <button type="button" class="lenkeknapp" id="veksle-prompt">Reserveløsning: prompt til Claude</button>
+      <div class="prompt" id="prompt-boks" hidden>
+        <p class="hjelp">Får du ikke lastet ned bildet, kan du lime denne teksten inn i Claude. Turene du har fylt inn er allerede med.</p>
+        <label class="skjult" for="prompt-tekst">Prompt</label>
+        <textarea id="prompt-tekst" readonly rows="10"></textarea>
+        <button type="button" class="mork-knapp" id="kopier-prompt">Kopier prompten</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="forhandsvisning" aria-label="Forhåndsvisning">
+    <p class="felt__etikett">Forhåndsvisning</p>
+    <div class="ramme" id="ramme">
+      <div id="plakat-skala">
+        <div id="plakat" data-oppsett="topp"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<template id="tur-rad">
+  <div class="tur">
+    <div class="tur__topp">
+      <span class="tur__nummer"></span>
+      <button type="button" class="ikon-knapp" data-handling="opp" title="Flytt opp" aria-label="Flytt opp">↑</button>
+      <button type="button" class="ikon-knapp" data-handling="ned" title="Flytt ned" aria-label="Flytt ned">↓</button>
+      <button type="button" class="ikon-knapp ikon-knapp--fjern" data-handling="fjern" title="Fjern turen" aria-label="Fjern turen">×</button>
+    </div>
+    <div class="tur__rad">
+      <select class="tur__kort tur__dag" data-felt="dag" aria-label="Dag">
+        <option value="MAN">MAN</option><option value="TIR">TIR</option><option value="ONS">ONS</option>
+        <option value="TOR">TOR</option><option value="FRE">FRE</option><option value="LØR">LØR</option><option value="SØN">SØN</option>
+      </select>
+      <input type="text" class="tur__kort" data-felt="dato" placeholder="Dato" aria-label="Dato">
+      <input type="text" class="tur__kort" data-felt="tid" placeholder="kl." aria-label="Klokkeslett">
+    </div>
+    <input type="text" data-felt="tittel" placeholder="Turmål" aria-label="Turmål">
+    <input type="text" data-felt="sted" placeholder="Startsted" aria-label="Startsted">
+    <div class="tur__rad">
+      <input type="text" class="tur__liten" data-felt="turleder" placeholder="Turleder" aria-label="Turleder">
+      <input type="text" class="tur__liten" data-felt="varighet" placeholder="8 km · 3 t" aria-label="Lengde og varighet">
+    </div>
+    <div class="tur__rad">
+      <select class="tur__liten" data-felt="grad" aria-label="Gradering">
+        <option value="">Ingen gradering</option>
+        <option value="Enkel">Enkel (grønn)</option>
+        <option value="Middels">Middels (blå)</option>
+        <option value="Krevende">Krevende (rød)</option>
+        <option value="Ekspert">Ekspert (svart)</option>
+      </select>
+      <label class="tur__pamelding"><input type="checkbox" data-felt="pamelding"><span>Påmelding</span></label>
+    </div>
+  </div>
+</template>
+
+<script src="js/vendor/html2canvas.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

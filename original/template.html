@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="1711211d-87f2-47ac-8ee6-3022d9951c1f"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>/* =========================================================
+   DNT Oslo og Omegn — designtokens
+   Farger, typografi, luft, radier, skygger. Grunnstiler.
+   Importer denne i alle prototyper.
+   ========================================================= */
+
+/* ---------- Fonter ----------
+   ABC Social          → brødtekst (Light er standard, Regular er "fet")
+   ABC Social Extended → headinger og utheving av tekst
+   Romek               → store overskrifter/display (Light foretrekkes)
+   Vi har kun Light 300 + Regular 400 av hver familie.
+   Mangler (jf. brandbook): øvrige vekter (Hairline–Black), italic,
+   samt Social Extended Medium/Bold til utheving. */
+
+@font-face {
+  font-family: "ABC Social";
+  src: url("e713d300-9826-48b2-ac5e-f4f44145f554") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social";
+  src: url("519a3668-fd23-4d0c-8188-53f73cdf0dc3") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social";
+  src: url("78b05ff7-9132-4211-9202-f34277d645cc") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("4c565fca-a42a-4c3f-b5be-467bdf34fd46") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("8b571ee2-7818-44e5-8b8a-0587e1b1c0a6") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("d4dd0880-8052-4b2b-9b44-dd862b42c78e") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("a0a856ad-8cb9-4c9a-a09c-606bbb1d9f3c") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("78ccb9d8-250e-45a3-b1c0-83303d77c723") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("372eb95f-e421-40a6-932b-9cbedf8090f3") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Merkevarefarger ---------- */
+  --dnt-rod:        #D82D20;  /* DNT Rød — hovedaksent, aldri bakgrunn for mengdetekst */
+  --lys-rod:        #FFC8C3;  /* Lys rød — kun grafiske elementer */
+  --lys-beige:      #FFF7E9;  /* Lys beige — primær bakgrunn */
+  --mork-beige:     #F8E6C6;  /* Mørk beige — sekundær bakgrunn */
+  --lys-gronn:      #E9F2D9;  /* Lys grønn — bakgrunnsvariasjon */
+  --mork-gronn:     #597E61;  /* Mørk grønn — bakgrunnsvariasjon */
+  --bla:            #C5DCEA;  /* Blå — bakgrunnsvariasjon */
+  --gul:            #FFF097;  /* Gul — kun grafiske elementer */
+  --oransje:        #FFB674;  /* Oransje — kun grafiske elementer */
+  --hvit:           #FFFFFF;
+  --sort:           #000000;
+
+  /* ---------- Flatetokens ---------- */
+  --bg:             var(--lys-beige);
+  --bg-alt:         var(--mork-beige);
+  --bg-cool:        var(--bla);
+  --bg-fresh:       var(--lys-gronn);
+  --bg-forest:      var(--mork-gronn);
+  --bg-paper:       var(--hvit);
+
+  /* ---------- Teksttokens ---------- */
+  --fg:             var(--sort);       /* standard tekst på alle bakgrunner og bilder */
+  --fg-invert:      var(--hvit);       /* tekst på mørk flate / foto */
+  --fg-muted:       color-mix(in srgb, var(--sort) 62%, transparent);
+  --fg-faint:       color-mix(in srgb, var(--sort) 38%, transparent);
+  --accent:         var(--dnt-rod);
+
+  /* ---------- Kantlinjer ---------- */
+  --border:         color-mix(in srgb, var(--sort) 14%, transparent);
+  --border-strong:  var(--sort);
+
+  /* ---------- Funksjonsfarger fra nettflatene ---------- */
+  /* Samplet fra dnt.no og hyttebestilling.dnt.no. Supplerer brandbook-
+     paletten i UI-sammenheng; brukes ikke i print/kampanje. */
+  --mork-bla:   #316095;  /* funksjonsblå: lenker, blå kortoverskrifter, sekundærknapp, feltkanter */
+  --bla-kant:   #B2C9E4;  /* tykk ramme på temakort (dnt.no) */
+  --varm-hvit:  #FFFCF6;  /* artikkelbakgrunn på dnt.no, aldri ren hvit flate */
+  --nett-beige: #F6F0E2;  /* seksjons-/sidebakgrunn på nett, kjøligere enn Lys beige */
+  --nett-kort:  #FBF7EF;  /* kortbakgrunn (hyttebestilling) */
+  --nett-kant:  #E8D7B5;  /* tan hairline-kant og footer (hyttebestilling) */
+  --chip-gronn: #DCF3E0;  /* «DNTs tilbud»-chip (ca.-verdi) */
+  --rod-hover:  #B52418;  /* primærknapp hover */
+
+  /* ---------- Radier ---------- */
+  /* DNTs formspråk er mykt avrundet: T-logoen, ikonstrøkene og
+     hyttene deler samme runde avslutninger. Hjørnene følger etter. */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:   14px;
+  --r-lg:   24px;
+  --r-xl:   40px;
+  --r-pill: 999px;
+
+  /* ---------- Luft (4px-basert) ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ---------- Skygger ---------- */
+  /* Lavmælte og varme, aldri harde. Tenk mykt dagslys på papir. */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,0.12);
+  --shadow-inset: inset 0 0 0 1px var(--border);
+
+  /* ---------- Lesbarhetsgradient til foto ---------- */
+  --photo-scrim: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 40%,
+    rgba(0,0,0,0.55) 100%
+  ); /* @kind other */
+
+  /* ---------- Typografi ---------- */
+  --font-display: "Romek", "Times New Roman", serif;
+  --font-heading: "ABC Social Extended", "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:    "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Typeskala — laget for skjerm. Romek Light bærer de store
+     overskriftene, Social Extended de mindre, Social all mengdetekst. */
+  --fs-display-xl: clamp(56px, 8vw, 120px); /* @kind font */
+  --fs-display:    clamp(44px, 5.5vw, 80px); /* @kind font */
+  --fs-h1:         clamp(36px, 4vw, 56px); /* @kind font */
+  --fs-h2:         clamp(28px, 3vw, 40px); /* @kind font */
+  --fs-h3:         22px;
+  --fs-h4:         18px;
+  --fs-body:       17px;
+  --fs-body-sm:    15px;
+  --fs-caption:    13px;
+  --fs-micro:      11px;
+
+  --lh-tight:  1.05; /* @kind font */
+  --lh-snug:   1.15; /* @kind font */
+  --lh-normal: 1.45; /* @kind font */
+  --lh-loose:  1.6; /* @kind font */
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+}
+
+/* =========================================================
+   Grunnstiler — gjelder automatisk når arket er lastet.
+   Trygt å bygge videre på.
+   ========================================================= */
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  font-weight: 300;            /* Light er standard brødtekst */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;            /* Regular er standard headingvekt */
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+  margin: 0 0 var(--s-4);
+  text-wrap: balance;
+}
+
+/* Store overskrifter settes i Romek Light */
+h1 { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-h1); letter-spacing: var(--tracking-tight); }
+h2 { font-size: var(--fs-h2); letter-spacing: -0.01em; }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+
+p  { margin: 0 0 var(--s-4); text-wrap: pretty; }
+a  { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--dnt-rod); }
+
+strong, b { font-weight: 700; }  /* Bold — brandbookens uthevingsvekt */
+
+.eyebrow {
+  font-family: var(--font-heading);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Displaytype — brukes sparsomt på hero og seksjonsåpnere */
+.display    { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display);    line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+.display-xl { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display-xl); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+
+/* Rød aksenttekst — et klassisk DNT-grep: løft ett ord i DNT Rød. */
+.accent { color: var(--dnt-rod); }
+</style>
+<style>/* Ekstra fontvekter fra DNTs originale fontfiler (Medium 500, Black 900).
+   Lastes etter colors_and_type.css. */
+@font-face { font-family: "ABC Social"; src: url("02ff95b4-9e7a-4981-b1a4-1d7ec0fe3003") format("opentype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "ABC Social Extended"; src: url("b7931cc6-a81e-4368-a9a6-527b2d6e5f65") format("opentype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "ABC Social Extended"; src: url("a460056d-0aea-4f47-aa50-19903e6d210b") format("opentype"); font-weight: 900; font-style: normal; font-display: swap; }
+</style>
+<script src="b2f01bc4-3240-40a1-aa8b-4283f6c93d4c"></script>
+<style>
+  html, body { margin: 0; background: #E7E3DA; }
+  input, select, button, textarea { font: inherit; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #D82D20; }
+</style>
+</helmet>
+
+
+
+<img id="standardbilde" src="0e8bf6e4-812e-4cc9-afe8-dfb67b194949" alt="" style="display: none;">
+<img id="standardbilde-staaende" src="acacb7b2-eac1-4f12-9443-3d1dfeed546b" alt="" style="display: none;">
+
+<div style="display: flex; flex-wrap: wrap; gap: 28px; padding: 28px; align-items: flex-start; box-sizing: border-box; min-height: 100vh;">
+
+  <div style="flex: 1 1 400px; max-width: 470px; background: var(--hvit); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 24px; box-shadow: 0 6px 18px rgba(0,0,0,0.08);">
+
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.1; color: var(--sort);">Ukens turer</div>
+      <div style="font-family: var(--font-body); font-weight: 400; font-size: 15px; line-height: 1.45; color: rgba(0,0,0,0.62);">Fyll inn ukens turer, velg bilde og last ned ferdig bilde til Facebook og Instagram. Alt annet er låst til DNTs profil.</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">1. VELG FORMAT</div>
+      <div style="display: flex; gap: 9px;">
+        <button sc-camel-on-click="{{ velgFeed }}" style="flex: 1; border: none; border-radius: 999px; padding: 12px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; cursor: pointer; background: {{ v.feedBg }}; color: {{ v.feedFg }};">Feed</button>
+        <button sc-camel-on-click="{{ velgKvadrat }}" style="flex: 1; border: none; border-radius: 999px; padding: 12px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; cursor: pointer; background: {{ v.kvadratBg }}; color: {{ v.kvadratFg }};">Kvadrat</button>
+        <button sc-camel-on-click="{{ velgStory }}" style="flex: 1; border: none; border-radius: 999px; padding: 12px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; cursor: pointer; background: {{ v.storyBg }}; color: {{ v.storyFg }};">Story</button>
+      </div>
+      <div style="font-family: var(--font-body); font-weight: 400; font-size: 13px; color: rgba(0,0,0,0.55);">{{ formatTekst }}</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">TEKSTSTØRRELSE</div>
+      <div style="display: flex; gap: 9px;">
+        <button sc-camel-on-click="{{ velgNormalTekst }}" style="flex: 1; border: none; border-radius: 999px; padding: 12px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; cursor: pointer; background: {{ v.normalBg }}; color: {{ v.normalFg }};">Normal</button>
+        <button sc-camel-on-click="{{ velgStorTekst }}" style="flex: 1; border: none; border-radius: 999px; padding: 12px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 16px; cursor: pointer; background: {{ v.storBg }}; color: {{ v.storFg }};">Stor</button>
+      </div>
+      <div style="font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.55);">{{ tekstHjelp }}</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">2. VELG BILDEOPPSETT</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 9px;">
+        <button sc-camel-on-click="{{ velgTopp }}" style="border: none; border-radius: 12px; padding: 12px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; background: {{ v.toppBg }}; color: {{ v.toppFg }};">Bilde øverst</button>
+        <button sc-camel-on-click="{{ velgStort }}" style="border: none; border-radius: 12px; padding: 12px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; background: {{ v.stortBg }}; color: {{ v.stortFg }};">Stort bilde</button>
+        <button sc-camel-on-click="{{ velgSide }}" style="border: none; border-radius: 12px; padding: 12px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; background: {{ v.sideBg }}; color: {{ v.sideFg }};">Stående til høyre</button>
+        <button sc-camel-on-click="{{ velgBakgrunn }}" style="border: none; border-radius: 12px; padding: 12px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; background: {{ v.bakgrunnBg }}; color: {{ v.bakgrunnFg }};">Bilde som bakgrunn</button>
+      </div>
+      <div style="font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.55);">{{ oppsettTekst }}</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">3. BILDE</div>
+      <label style="display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1.5px dashed rgba(0,0,0,0.28); border-radius: 12px; padding: 18px; cursor: pointer; background: var(--lys-beige); text-align: center;">
+        <span style="font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--sort);">Velg bilde fra maskinen</span>
+        <span style="font-family: var(--font-body); font-weight: 400; font-size: 13px; color: rgba(0,0,0,0.55);">{{ bildenavn }}</span>
+        <input type="file" accept="image/*" sc-camel-on-change="{{ endreBilde }}" style="display: none;">
+      </label>
+
+      <div style="display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: 12px; background: var(--lys-beige);">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <span style="font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: rgba(0,0,0,0.5);">JUSTER UTSNITT</span>
+          <button sc-camel-on-click="{{ nullstillBilde }}" style="border: none; background: rgba(0,0,0,0.07); border-radius: 999px; padding: 6px 13px; font-family: var(--font-heading); font-weight: 700; font-size: 13px; color: var(--sort); cursor: pointer;">Midtstill</button>
+        </div>
+        <label style="display: flex; align-items: center; gap: 12px;">
+          <span style="flex: none; width: 80px; font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7);">Vannrett</span>
+          <input type="range" min="0" max="100" step="1" value="{{ bildeX }}" sc-camel-on-change="{{ endreBildeX }}" sc-camel-on-input="{{ endreBildeX }}" style="flex: 1; accent-color: #D82D20;">
+        </label>
+        <label style="display: flex; align-items: center; gap: 12px;">
+          <span style="flex: none; width: 80px; font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7);">Loddrett</span>
+          <input type="range" min="0" max="100" step="1" value="{{ bildeY }}" sc-camel-on-change="{{ endreBildeY }}" sc-camel-on-input="{{ endreBildeY }}" style="flex: 1; accent-color: #D82D20;">
+        </label>
+        <label style="display: flex; align-items: center; gap: 12px;">
+          <span style="flex: none; width: 80px; font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7);">Zoom</span>
+          <input type="range" min="100" max="200" step="1" value="{{ bildeZoomTall }}" sc-camel-on-change="{{ endreBildeZoom }}" sc-camel-on-input="{{ endreBildeZoom }}" style="flex: 1; accent-color: #D82D20;">
+        </label>
+        <span style="font-family: var(--font-body); font-size: 13px; line-height: 1.4; color: rgba(0,0,0,0.55);">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så feed, kvadrat og story kan ha ulikt.</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">4. TITTEL, TURLAG OG UKE</div>
+      <input type="text" value="{{ tittel }}" sc-camel-on-change="{{ endreTittel }}" placeholder="Ukens turer" style="border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 13px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+      <input type="text" value="{{ turlag }}" sc-camel-on-change="{{ endreTurlag }}" placeholder="Navn på turlaget" style="border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 13px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+      <input type="text" value="{{ periode }}" sc-camel-on-change="{{ endrePeriode }}" placeholder="UKE 38 · SEPTEMBER" style="border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 13px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+      <input type="text" value="{{ lenke }}" sc-camel-on-change="{{ endreLenke }}" placeholder="Alle turer: dnt.no/..." style="border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 13px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">5. TURENE</div>
+        <button sc-camel-on-click="{{ leggTil }}" style="border: none; background: var(--lys-beige); border-radius: 999px; padding: 8px 15px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--sort); cursor: pointer;">+ Legg til tur</button>
+      </div>
+
+      <sc-for list="{{ skjema }}" as="tur" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: var(--lys-beige);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="flex: 1; font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: rgba(0,0,0,0.45);">TUR {{ tur.nummer }}</span>
+            <button sc-camel-on-click="{{ tur.flyttOpp }}" title="Flytt opp" style="width: 32px; height: 32px; border: none; border-radius: 8px; background: rgba(0,0,0,0.06); font-size: 15px; line-height: 1; color: rgba(0,0,0,0.6); cursor: pointer;">↑</button>
+            <button sc-camel-on-click="{{ tur.flyttNed }}" title="Flytt ned" style="width: 32px; height: 32px; border: none; border-radius: 8px; background: rgba(0,0,0,0.06); font-size: 15px; line-height: 1; color: rgba(0,0,0,0.6); cursor: pointer;">↓</button>
+            <button sc-camel-on-click="{{ tur.fjern }}" title="Fjern turen" style="width: 32px; height: 32px; border: none; border-radius: 8px; background: rgba(0,0,0,0.06); font-size: 17px; line-height: 1; color: rgba(0,0,0,0.6); cursor: pointer;">×</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <sc-raw-select value="{{ tur.dag }}" sc-camel-on-change="{{ tur.endreDag }}" style="flex: none; width: 88px; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 10px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+              <option value="MAN">MAN</option>
+              <option value="TIR">TIR</option>
+              <option value="ONS">ONS</option>
+              <option value="TOR">TOR</option>
+              <option value="FRE">FRE</option>
+              <option value="LØR">LØR</option>
+              <option value="SØN">SØN</option>
+            </sc-raw-select>
+            <input type="text" value="{{ tur.dato }}" sc-camel-on-change="{{ tur.endreDato }}" placeholder="Dato" style="flex: 1; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 10px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 15px; text-align: center; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+            <input type="text" value="{{ tur.tid }}" sc-camel-on-change="{{ tur.endreTid }}" placeholder="kl." style="flex: 1; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 10px 10px; font-family: var(--font-heading); font-weight: 700; font-size: 15px; text-align: center; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+          </div>
+          <input type="text" value="{{ tur.tittel }}" sc-camel-on-change="{{ tur.endreTittel }}" placeholder="Turmål" style="border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+          <input type="text" value="{{ tur.sted }}" sc-camel-on-change="{{ tur.endreSted }}" placeholder="Startsted" style="border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px; font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);">
+          <div style="display: flex; gap: 8px;">
+            <input type="text" value="{{ tur.turleder }}" sc-camel-on-change="{{ tur.endreTurleder }}" placeholder="Turleder" style="flex: 1; min-width: 0; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px; font-family: var(--font-body); font-size: 15px; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+            <input type="text" value="{{ tur.varighet }}" sc-camel-on-change="{{ tur.endreVarighet }}" placeholder="8 km · 3 t" style="flex: 1; min-width: 0; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px; font-family: var(--font-body); font-size: 15px; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <sc-raw-select value="{{ tur.grad }}" sc-camel-on-change="{{ tur.endreGrad }}" style="flex: 1; min-width: 0; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px 8px; font-family: var(--font-body); font-size: 15px; color: var(--sort); background: var(--hvit); box-sizing: border-box;">
+              <option value="">Ingen gradering</option>
+              <option value="Enkel">Enkel (grønn)</option>
+              <option value="Middels">Middels (blå)</option>
+              <option value="Krevende">Krevende (rød)</option>
+              <option value="Ekspert">Ekspert (svart)</option>
+            </sc-raw-select>
+            <label style="flex: none; display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer;">
+              <input type="checkbox" checked="{{ tur.pamelding }}" sc-camel-on-change="{{ tur.endrePamelding }}" style="width: 18px; height: 18px; accent-color: #D82D20;">
+              <span>Påmelding</span>
+            </label>
+          </div>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{ formange }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius: 12px; padding: 13px 15px; background: #FDECEA; font-family: var(--font-body); font-size: 14px; line-height: 1.45; color: #8E1B12;">{{ formangeTekst }}</div>
+      </sc-if>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <button sc-camel-on-click="{{ lastNed }}" disabled="{{ formange }}" style="border: none; border-radius: 999px; background: {{ v.nedlastingBg }}; color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: 17px; padding: 17px 22px; cursor: {{ v.nedlastingPeker }};">{{ nedlastingstekst }}</button>
+      <div style="font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.55);">Bildet lagres i {{ formatTekst }} og er klart til å legges rett ut.</div>
+    </div>
+
+    <div style="border-top: 1px solid rgba(0,0,0,0.10); padding-top: 18px; display: flex; flex-direction: column; gap: 10px;">
+      <button sc-camel-on-click="{{ vekslePrompt }}" style="border: none; background: none; padding: 0; text-align: left; font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--mork-bla); cursor: pointer;">{{ prompttittel }}</button>
+      <sc-if value="{{ visPrompt }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="font-family: var(--font-body); font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.6);">Får du ikke lastet ned bildet, kan du lime denne teksten inn i Claude sammen med ukens turer.</div>
+          <textarea readonly="readonly" rows="7" value="{{ promptTekst }}" style="border: 1.5px solid rgba(0,0,0,0.18); border-radius: 10px; padding: 12px; font-family: var(--font-body); font-size: 13px; line-height: 1.5; color: var(--sort); background: var(--lys-beige); resize: vertical;"></textarea>
+          <button sc-camel-on-click="{{ kopierPrompt }}" style="border: none; border-radius: 999px; background: var(--sort); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: 14px; padding: 12px 18px; cursor: pointer; align-self: flex-start;">{{ kopiertekst }}</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="flex: 1 1 560px; display: flex; flex-direction: column; gap: 13px; align-items: flex-start;">
+    <div style="font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; color: rgba(0,0,0,0.5);">FORHÅNDSVISNING</div>
+    <div style="width: {{ v.previewW }}px; height: {{ v.previewH }}px; overflow: hidden; border-radius: 14px; box-shadow: 0 8px 26px rgba(0,0,0,0.12); background: var(--hvit);">
+      <div id="plakat-skala" style="transform: scale({{ v.skala }}); transform-origin: top left;">
+        <div id="plakat" style="width: {{ v.bredde }}px; height: {{ v.hoyde }}px; overflow: hidden; position: relative; background: var(--lys-beige);">
+
+          <sc-if value="{{ erTopp }}" hint-placeholder-val="{{ true }}">
+            <div style="width: {{ v.bredde }}px; height: {{ v.hoyde }}px; background: var(--lys-beige); display: flex; flex-direction: column; overflow: hidden;">
+              <div style="flex: none; height: {{ v.heroH }}px; position: relative; overflow: hidden; background: #2f3b33;">
+                <div data-foto="1" ref="{{ fotoRef }}" style="width: 100%; height: 100%; background-size: {{ v.bgStr }}; background-position: {{ v.bgPos }}; background-repeat: no-repeat;"></div>
+                <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.46) 0%, rgba(20,30,22,0.14) 50%, {{ v.heroBunn }} 100%);"></div>
+                <div style="position: absolute; left: 56px; top: 46px; right: 170px; display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-family: var(--font-heading); font-weight: 500; font-size: 25px; letter-spacing: 0.18em; color: var(--hvit);">{{ turlagVersaler }}</span>
+                  <span style="font-family: var(--font-display); font-weight: 700; font-size: 92px; line-height: 0.98; letter-spacing: -0.03em; color: var(--hvit);">{{ tittel }}</span>
+                </div>
+                <div style="position: absolute; right: 46px; top: 40px; width: 88px; height: 88px; border-radius: 999px; background: var(--hvit); display: flex; align-items: center; justify-content: center;">
+                  <img src="bc7d1217-19d1-4f69-bad5-66b888448206" alt="DNT" style="width: 60px; height: 60px; object-fit: contain; display: block;">
+                </div>
+                <div style="position: absolute; left: 56px; bottom: 34px; font-family: var(--font-heading); font-weight: 500; font-size: 27px; letter-spacing: 0.16em; color: var(--hvit);">{{ periode }}</div>
+              </div>
+
+              <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0;">
+                <sc-for list="{{ turer }}" as="tur" hint-placeholder-count="4">
+                  <div style="flex: 1; display: flex; align-items: center; gap: 26px; padding: 0 56px; background: {{ tur.radBakgrunn }};">
+                    <div style="flex: none; width: {{ v.chip }}px; height: {{ v.chip }}px; border-radius: 16px; overflow: hidden; background: {{ tur.datoBakgrunn }}; display: flex; flex-direction: column;">
+                      <div style="background: var(--dnt-rod); padding: 6px 0 7px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.dagSize }}px; letter-spacing: 0.1em; line-height: 1; color: var(--hvit);">{{ tur.dag }}</div>
+                      <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: {{ v.datoSize }}px; line-height: 1; color: var(--sort);">{{ tur.dato }}</div>
+                    </div>
+                    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+                      <div style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.titleSize }}px; line-height: 1.1; color: var(--sort);">{{ tur.tittel }}</div>
+                      <div style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.metaSize }}px; line-height: 1.2; color: rgba(0,0,0,0.66);">{{ tur.sted }}</div>
+                      <sc-if value="{{ tur.harDetaljer }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                          <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.detaljSize }}px; line-height: 1.2; color: rgba(0,0,0,0.55);">{{ tur.detaljer }}</span>
+                          <sc-if value="{{ tur.grad }}" hint-placeholder-val="{{ false }}">
+                            <span style="display: flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: {{ tur.gradFarge }};">
+                              <span style="width: 13px; height: 13px; border-radius: 999px; background: {{ tur.gradFarge }};"></span>
+                              <span>{{ tur.grad }}</span>
+                            </span>
+                          </sc-if>
+                          <sc-if value="{{ tur.pamelding }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: var(--dnt-rod);">Påmelding</span>
+                          </sc-if>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <div style="flex: none; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.tidSize }}px; color: var(--dnt-rod);">{{ tur.tid }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="flex: none; background: var(--dnt-rod); padding: 30px 56px; display: flex; align-items: center; gap: 20px;">
+                <img src="44403a69-291d-411b-add7-602e7c165394" alt="" style="width: 44px; height: 44px; display: block;">
+                <span style="font-family: var(--font-heading); font-weight: 700; font-size: 38px; line-height: 1; color: var(--hvit);">{{ lenke }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ erStort }}" hint-placeholder-val="{{ false }}">
+            <div style="width: {{ v.bredde }}px; height: {{ v.hoyde }}px; position: relative; overflow: hidden; background: var(--lys-beige);">
+              <div style="position: absolute; left: 0; right: 0; top: 0; height: {{ v.stortH }}px; overflow: hidden; background: #2f3b33;">
+                <div data-foto="1" ref="{{ fotoRef }}" style="width: 100%; height: 100%; background-size: {{ v.bgStr }}; background-position: {{ v.bgPos }}; background-repeat: no-repeat;"></div>
+                <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.46) 0%, rgba(20,30,22,0.04) 46%, rgba(20,30,22,0.04) 100%);"></div>
+                <div style="position: absolute; left: 56px; top: 46px; right: 170px; display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: 0.18em; color: var(--hvit);">{{ turlagVersaler }} · {{ periode }}</span>
+                  <span style="font-family: var(--font-display); font-weight: 700; font-size: 92px; line-height: 0.98; letter-spacing: -0.03em; color: var(--hvit);">{{ tittel }}</span>
+                </div>
+                <div style="position: absolute; right: 46px; top: 40px; width: 88px; height: 88px; border-radius: 999px; background: var(--hvit); display: flex; align-items: center; justify-content: center;">
+                  <img src="bc7d1217-19d1-4f69-bad5-66b888448206" alt="DNT" style="width: 60px; height: 60px; object-fit: contain; display: block;">
+                </div>
+              </div>
+
+              <div style="position: absolute; left: 40px; right: 40px; bottom: 40px; background: #FFFFFF; border-radius: 26px; display: flex; flex-direction: column; overflow: hidden;">
+                <div style="display: flex; flex-direction: column; gap: {{ v.kortGap }}px; padding: {{ v.kortPad }}px 40px;">
+                  <sc-for list="{{ turer }}" as="tur" hint-placeholder-count="4">
+                    <div style="display: flex; align-items: center; gap: 22px;">
+                      <div style="flex: none; width: {{ v.chip }}px; height: {{ v.chip }}px; border-radius: 14px; overflow: hidden; background: var(--lys-beige); display: flex; flex-direction: column;">
+                        <div style="background: var(--dnt-rod); padding: 5px 0 6px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.dagSize }}px; letter-spacing: 0.1em; line-height: 1; color: var(--hvit);">{{ tur.dag }}</div>
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: {{ v.datoSize }}px; line-height: 1; color: var(--sort);">{{ tur.dato }}</div>
+                      </div>
+                      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+                        <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.titleSize }}px; line-height: 1.1; color: var(--sort);">{{ tur.tittel }}</span>
+                        <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.metaSize }}px; line-height: 1.2; color: rgba(0,0,0,0.66);">{{ tur.sted }}</span>
+                        <sc-if value="{{ tur.harDetaljer }}" hint-placeholder-val="{{ false }}">
+                          <span style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.detaljSize }}px; line-height: 1.2; color: rgba(0,0,0,0.55);">{{ tur.detaljer }}</span>
+                            <sc-if value="{{ tur.grad }}" hint-placeholder-val="{{ false }}">
+                              <span style="display: flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: {{ tur.gradFarge }};">
+                                <span style="width: 13px; height: 13px; border-radius: 999px; background: {{ tur.gradFarge }};"></span>
+                                <span>{{ tur.grad }}</span>
+                              </span>
+                            </sc-if>
+                            <sc-if value="{{ tur.pamelding }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: var(--dnt-rod);">Påmelding</span>
+                            </sc-if>
+                          </span>
+                        </sc-if>
+                      </div>
+                      <span style="flex: none; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.tidSize }}px; color: var(--dnt-rod);">{{ tur.tid }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="flex: none; background: var(--dnt-rod); padding: 24px 40px; display: flex; align-items: center; gap: 18px;">
+                  <img src="44403a69-291d-411b-add7-602e7c165394" alt="" style="width: 40px; height: 40px; display: block;">
+                  <span style="font-family: var(--font-heading); font-weight: 700; font-size: 35px; line-height: 1; color: var(--hvit);">{{ lenke }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ erSide }}" hint-placeholder-val="{{ false }}">
+            <div style="width: {{ v.bredde }}px; height: {{ v.hoyde }}px; background: var(--lys-beige); display: flex; flex-direction: column; overflow: hidden;">
+              <div style="flex: 1; display: flex; min-height: 0; overflow: hidden;">
+                <div style="flex: 1; display: flex; flex-direction: column; padding: 52px 0 40px 56px; min-width: 0; min-height: 0; overflow: hidden;">
+                  <div style="flex: none; display: flex; flex-direction: column; gap: 8px; padding-right: 40px;">
+                    <span style="font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: 0.18em; color: var(--dnt-rod);">{{ periode }}</span>
+                    <span style="font-family: var(--font-display); font-weight: 700; font-size: 82px; line-height: 0.98; letter-spacing: -0.03em; color: var(--sort);">{{ tittel }}</span>
+                    <span style="font-family: var(--font-heading); font-weight: 500; font-size: 27px; line-height: 1.2; color: rgba(0,0,0,0.6);">{{ turlag }}</span>
+                  </div>
+                  <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: {{ v.kortGap }}px; padding: 24px 40px 0 0; min-height: 0; overflow: hidden;">
+                    <sc-for list="{{ turer }}" as="tur" hint-placeholder-count="4">
+                      <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="flex: none; width: {{ v.chipSmal }}px; height: {{ v.chipSmal }}px; border-radius: 14px; overflow: hidden; background: var(--hvit); display: flex; flex-direction: column;">
+                          <div style="background: var(--dnt-rod); padding: 5px 0 6px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.dagSize }}px; letter-spacing: 0.1em; line-height: 1; color: var(--hvit);">{{ tur.dag }}</div>
+                          <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: {{ v.datoSizeSmal }}px; line-height: 1; color: var(--sort);">{{ tur.dato }}</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+                          <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.titleSizeSmal }}px; line-height: 1.1; color: var(--sort);">{{ tur.tittel }}</span>
+                          <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.metaSize }}px; line-height: 1.2; color: rgba(0,0,0,0.66);">{{ tur.stedOgTid }}</span>
+                          <sc-if value="{{ tur.harDetaljer }}" hint-placeholder-val="{{ false }}">
+                            <span style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                              <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.detaljSize }}px; line-height: 1.2; color: rgba(0,0,0,0.55);">{{ tur.detaljer }}</span>
+                              <sc-if value="{{ tur.grad }}" hint-placeholder-val="{{ false }}">
+                                <span style="display: flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: {{ tur.gradFarge }};">
+                                  <span style="width: 13px; height: 13px; border-radius: 999px; background: {{ tur.gradFarge }};"></span>
+                                  <span>{{ tur.grad }}</span>
+                                </span>
+                              </sc-if>
+                              <sc-if value="{{ tur.pamelding }}" hint-placeholder-val="{{ false }}">
+                                <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: var(--dnt-rod);">Påmelding</span>
+                              </sc-if>
+                            </span>
+                          </sc-if>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="flex: none; width: {{ v.sideBredde }}px; position: relative; overflow: hidden; background: #2f3b33;">
+                  <div data-foto="1" ref="{{ fotoRef }}" style="width: 100%; height: 100%; background-size: {{ v.bgStr }}; background-position: {{ v.bgPos }}; background-repeat: no-repeat;"></div>
+                  <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.30) 0%, rgba(20,30,22,0.02) 45%, rgba(20,30,22,0.10) 100%);"></div>
+                  <div style="position: absolute; right: 30px; top: 30px; width: 84px; height: 84px; border-radius: 999px; background: var(--hvit); display: flex; align-items: center; justify-content: center;">
+                    <img src="bc7d1217-19d1-4f69-bad5-66b888448206" alt="DNT" style="width: 58px; height: 58px; object-fit: contain; display: block;">
+                  </div>
+                </div>
+              </div>
+
+              <div style="flex: none; background: var(--dnt-rod); padding: 28px 56px; display: flex; align-items: center; gap: 20px;">
+                <img src="44403a69-291d-411b-add7-602e7c165394" alt="" style="width: 44px; height: 44px; display: block;">
+                <span style="font-family: var(--font-heading); font-weight: 700; font-size: 38px; line-height: 1; color: var(--hvit);">{{ lenke }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ erBakgrunn }}" hint-placeholder-val="{{ false }}">
+            <div style="width: {{ v.bredde }}px; height: {{ v.hoyde }}px; position: relative; overflow: hidden; background: #2f3b33;">
+              <div data-foto="1" ref="{{ fotoRef }}" style="position: absolute; inset: 0; background-size: {{ v.bgStr }}; background-position: {{ v.bgPos }}; background-repeat: no-repeat;"></div>
+              <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.52) 0%, rgba(20,30,22,0.14) 34%, rgba(20,30,22,0.30) 100%);"></div>
+
+              <div style="position: absolute; left: 56px; top: 52px; right: 170px; display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: 0.18em; color: var(--hvit);">{{ turlagVersaler }} · {{ periode }}</span>
+                <span style="font-family: var(--font-display); font-weight: 700; font-size: 92px; line-height: 0.98; letter-spacing: -0.03em; color: var(--hvit);">{{ tittel }}</span>
+              </div>
+              <div style="position: absolute; right: 46px; top: 46px; width: 88px; height: 88px; border-radius: 999px; background: var(--hvit); display: flex; align-items: center; justify-content: center;">
+                <img src="bc7d1217-19d1-4f69-bad5-66b888448206" alt="DNT" style="width: 60px; height: 60px; object-fit: contain; display: block;">
+              </div>
+
+              <div style="position: absolute; left: 40px; right: 40px; bottom: 40px; background: #FFFFFF; border-radius: 26px; overflow: hidden;">
+                <div style="display: flex; flex-direction: column; gap: {{ v.kortGap }}px; padding: 32px 40px 28px;">
+                  <sc-for list="{{ turer }}" as="tur" hint-placeholder-count="4">
+                    <div style="display: flex; align-items: center; gap: 22px;">
+                      <div style="flex: none; width: {{ v.chipSmal }}px; height: {{ v.chipSmal }}px; border-radius: 14px; overflow: hidden; background: var(--lys-beige); display: flex; flex-direction: column;">
+                        <div style="background: var(--dnt-rod); padding: 5px 0 6px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.dagSize }}px; letter-spacing: 0.1em; line-height: 1; color: var(--hvit);">{{ tur.dag }}</div>
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: {{ v.datoSizeSmal }}px; line-height: 1; color: var(--sort);">{{ tur.dato }}</div>
+                      </div>
+                      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+                        <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.titleSizeSmal }}px; line-height: 1.1; color: var(--sort);">{{ tur.tittel }}</span>
+                        <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.metaSize }}px; line-height: 1.2; color: rgba(0,0,0,0.66);">{{ tur.sted }}</span>
+                        <sc-if value="{{ tur.harDetaljer }}" hint-placeholder-val="{{ false }}">
+                          <span style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <span style="font-family: var(--font-body); font-weight: 400; font-size: {{ v.detaljSize }}px; line-height: 1.2; color: rgba(0,0,0,0.55);">{{ tur.detaljer }}</span>
+                            <sc-if value="{{ tur.grad }}" hint-placeholder-val="{{ false }}">
+                              <span style="display: flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: {{ tur.gradFarge }};">
+                                <span style="width: 13px; height: 13px; border-radius: 999px; background: {{ tur.gradFarge }};"></span>
+                                <span>{{ tur.grad }}</span>
+                              </span>
+                            </sc-if>
+                            <sc-if value="{{ tur.pamelding }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-family: var(--font-heading); font-weight: 700; font-size: {{ v.detaljSize }}px; line-height: 1; color: var(--dnt-rod);">Påmelding</span>
+                            </sc-if>
+                          </span>
+                        </sc-if>
+                      </div>
+                      <span style="flex: none; font-family: var(--font-heading); font-weight: 700; font-size: {{ v.tidSize }}px; color: var(--dnt-rod);">{{ tur.tid }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="background: var(--dnt-rod); padding: 22px 40px; display: flex; align-items: center; gap: 18px;">
+                  <img src="44403a69-291d-411b-add7-602e7c165394" alt="" style="width: 38px; height: 38px; display: block;">
+                  <span style="font-family: var(--font-heading); font-weight: 700; font-size: 34px; line-height: 1; color: var(--hvit);">{{ lenke }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{}">
+const GRAD = {
+  "Enkel":    { lys: "#2E6B3E" },
+  "Middels":  { lys: "#316095" },
+  "Krevende": { lys: "#D82D20" },
+  "Ekspert":  { lys: "#111111" }
+};
+
+// To tekststørrelser. «Stor» er for turlag med mange seniorer blant deltakerne,
+// og tar plassen fra antall turer, ikke fra luften i designet.
+const TEKST = {
+  normal: {
+    chip: [116, 106, 96, 88], chipSmal: [100, 94, 88, 84],
+    dag: [22, 21, 20, 20], dato: [44, 40, 36, 34], datoSmal: [40, 37, 34, 32],
+    title: [34, 31, 28, 26], titleSmal: [31, 29, 27, 25],
+    meta: [26, 25, 24, 24], detalj: 24, tid: [36, 33, 30, 28]
+  },
+  stor: {
+    chip: [136, 124, 110, 98], chipSmal: [118, 110, 100, 92],
+    dag: [26, 24, 23, 21], dato: [54, 48, 43, 38], datoSmal: [48, 44, 40, 36],
+    title: [44, 39, 34, 30], titleSmal: [39, 35, 31, 28],
+    meta: [32, 30, 27, 25], detalj: 26, tid: [46, 41, 36, 32]
+  }
+};
+
+const FORMATER = {
+  feed:    { bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
+  kvadrat: { bredde: 1080, hoyde: 1080, tekst: "1080 × 1080 px" },
+  story:   { bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" }
+};
+
+const OPPSETT = {
+  topp:     { tekst: "Bildet som bånd øverst. Mest plass til turene.", maks: { feed: 8, kvadrat: 6, story: 8 }, staaende: false },
+  stort:    { tekst: "Dobbelt så høyt bilde, turene i et hvitt kort.", maks: { feed: 5, kvadrat: 4, story: 7 }, staaende: false },
+  side:     { tekst: "Stående bilde i høyre kolonne. Passer stående bilder.", maks: { feed: 7, kvadrat: 5, story: 8 }, staaende: true },
+  bakgrunn: { tekst: "Bildet fyller hele flaten. Flottest, men strengest på plass.", maks: { feed: 7, kvadrat: 5, story: 8 }, staaende: true }
+};
+
+const PROMPT = "Du er designer for Lørenskog turlag. Lag en grafikk til Facebook og Instagram i 1080 × 1350 px med ukens turer.\n\nProfil som skal følges:\nFarger: DNT-rød #D82D20, lys beige #F2EDE3, hvit, sort tekst.\nFonter: Romek Bold til overskriften «Ukens turer», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\nOppsett: foto med mørk gradient øverst med overskriften «Ukens turer», «Lørenskog turlag» over den og uke/måned nederst i fotoet. Deretter én rad per tur som veksler mellom hvit og beige bakgrunn: et kvadratisk datofelt (rødt dagbånd med TIR/ONS osv. øverst, dato under), turmål, startsted, og klokkeslettet i rødt til høyre. Nederst et rødt bånd med «Alle turer: dnt.no/turvarsel».\nMinste tekststørrelse er 24 px — mange av deltakerne våre er seniorer.\nIngen KI-genererte bilder, ingen emoji.\n\nUkens turer:\n(lim inn dag, dato, turmål, startsted og klokkeslett her)";
+
+function nyTur(dag, dato, tid, tittel, sted) {
+  return { dag: dag || "TIR", dato: dato || "", tid: tid || "", tittel: tittel || "", sted: sted || "", turleder: "", varighet: "", grad: "", pamelding: false };
+}
+
+class Component extends DCLogic {
+  state = {
+    oppsett: "topp",
+    format: "feed",
+    tekst: "normal",
+    tittel: "Ukens turer",
+    turlag: "Fyll inn turlag",
+    lenke: "Fyll inn lenke til turkalender",
+    periode: "UKE 38 · SEPTEMBER",
+    bilde: "assets/tur-foto.png",
+    bildeStaaende: "assets/tur-foto-staaende.png",
+    egetBilde: false,
+    bildenavn: "Ingen fil valgt – bruker standardbildet",
+    utsnitt: {
+      feed:    { x: 50, y: 50, z: 115 },
+      kvadrat: { x: 50, y: 50, z: 115 },
+      story:   { x: 50, y: 50, z: 115 }
+    },
+    visPrompt: false,
+    kopiert: false,
+    laster: false,
+    turer: [
+      nyTur("TIR", "15", "10:30", "Trilletur til Lilloseter", "Ammerud utfartsparkering"),
+      nyTur("TIR", "15", "11:00", "Tirsdagstur fra SNØ – Gjelleråsen – Mortens kro", "Fra SNØ"),
+      nyTur("ONS", "16", "18:00", "Kveldstur med utsikt fra Marikollslottet og Bjønnåsen", "Sandbekken fotballbane"),
+      nyTur("SØN", "20", "10:00", "Søndagstur over Lutåsen til Sarabråten", "Fra Marihøltet P")
+    ]
+  };
+
+  componentDidMount() {
+    const a = document.getElementById("standardbilde");
+    const b = document.getElementById("standardbilde-staaende");
+    const neste = {};
+    if (a && a.src) neste.bilde = a.src;
+    if (b && b.src) neste.bildeStaaende = b.src;
+    if (Object.keys(neste).length) this.setState(neste);
+  }
+
+  // Beskjæringen avdempes slik at draging i skyveknappene ikke lager ett bilde
+  // per piksel. Utløses av handlingene som endrer utsnittet, ikke av hver render.
+
+
+  // Måler naturlig størrelse på et bilde én gang, og husker den.
+  malBilde(src) {
+    this._dim = this._dim || {};
+    if (this._dim[src] !== undefined) return this._dim[src];
+    this._dim[src] = null;
+    const img = new Image();
+    img.onload = () => {
+      this._dim[src] = { w: img.naturalWidth, h: img.naturalHeight };
+      this.forceUpdate();
+    };
+    img.onerror = () => { this._dim[src] = { w: 1, h: 1 }; };
+    img.src = src;
+    return null;
+  }
+
+  // Regner ut bakgrunnsstørrelse og -posisjon slik at bildet dekker flaten
+  // uten å strekkes, med zoom og panorering lagt på.
+  bakgrunn(src, boksB, boksH, u) {
+    const d = this.malBilde(src);
+    if (!d || !d.w || !d.h) return { bgStr: "cover", bgPos: "50% 50%" };
+    const dekning = Math.max(boksB / d.w, boksH / d.h) * (u.z / 100);
+    const bw = d.w * dekning, bh = d.h * dekning;
+    const px = (boksB - bw) * (u.x / 100), py = (boksH - bh) * (u.y / 100);
+    return {
+      bgStr: Math.round(bw) + "px " + Math.round(bh) + "px",
+      bgPos: Math.round(px) + "px " + Math.round(py) + "px"
+    };
+  }
+
+  // Beskjærer bildet til nøyaktig pikselstørrelsen på fotoflaten. Eksportmotoren
+  // støtter ikke object-fit, så bildet må være ferdig beskåret før det tegnes.
+
+
+  kildeBilde(boksB, boksH) {
+    const s = this.state;
+    if (s.egetBilde) return s.bilde;
+    return (boksB / boksH) < 1.15 ? s.bildeStaaende : s.bilde;
+  }
+
+  settUtsnitt(felt, verdi) {
+    this.setState(s => {
+      const u = Object.assign({}, s.utsnitt);
+      u[s.format] = Object.assign({}, u[s.format], { [felt]: verdi });
+      return { utsnitt: u };
+    });
+  }
+
+  oppdater(i, felt, verdi) {
+    this.setState(s => {
+      const turer = s.turer.slice();
+      turer[i] = Object.assign({}, turer[i], { [felt]: verdi });
+      return { turer };
+    });
+  }
+
+  flytt(i, retning) {
+    this.setState(s => {
+      const j = i + retning;
+      if (j < 0 || j >= s.turer.length) return null;
+      const turer = s.turer.slice();
+      const t = turer[i]; turer[i] = turer[j]; turer[j] = t;
+      return { turer };
+    });
+  }
+
+  async lastNed() {
+    if (this.state.laster) return;
+    const o = OPPSETT[this.state.oppsett];
+    const synl = this.state.turer.filter(t => (t.tittel || "").trim() || (t.sted || "").trim() || (t.dato || "").trim());
+    if (synl.length > o.maks[this.state.format]) return;
+    const node = document.getElementById("plakat");
+    const skala = document.getElementById("plakat-skala");
+    if (!node || !window.html2canvas) return;
+    this.setState({ laster: true });
+    const forrige = skala.style.transform;
+    skala.style.transform = "none";
+    try {
+      await document.fonts.ready;
+      const canvas = await window.html2canvas(node, {
+        scale: 1, useCORS: true, backgroundColor: null,
+        width: node.offsetWidth, height: node.offsetHeight,
+        windowWidth: node.offsetWidth, windowHeight: node.offsetHeight
+      });
+      const a = document.createElement("a");
+      a.download = "ukens-turer-" + this.state.format + ".png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      skala.style.transform = forrige;
+      this.setState({ laster: false });
+    }
+  }
+
+  knapp(aktiv) {
+    return aktiv
+      ? { bg: "#111111", fg: "#FFFFFF" }
+      : { bg: "#F2EDE3", fg: "#111111" };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const fmt = FORMATER[s.format];
+    const opp = OPPSETT[s.oppsett];
+    const synlige = s.turer.filter(t => (t.tittel || "").trim() || (t.sted || "").trim() || (t.dato || "").trim());
+    const n = Math.max(synlige.length, 1);
+    const stor = s.tekst === "stor";
+    const T = stor ? TEKST.stor : TEKST.normal;
+    const maks = Math.max(opp.maks[s.format] - (stor ? 1 : 0), 3);
+    const harDetaljer = s.turer.some(t => t.turleder || t.varighet || t.grad || t.pamelding);
+    const romslig = s.format === "story";
+    const kompakt = s.oppsett !== "topp";
+    let trinn = n <= 4 ? 0 : (n === 5 ? 1 : (n === 6 ? 2 : 3));
+    if (harDetaljer) trinn = Math.min(trinn + 1, 3);
+    if (kompakt && n > 4) trinn = Math.min(trinn + 1, 3);
+    if (romslig) trinn = Math.max(trinn - 1, 0);
+
+    const f = this.knapp(s.format === "feed");
+    const k = this.knapp(s.format === "kvadrat");
+    const st = this.knapp(s.format === "story");
+    const t1 = this.knapp(!stor);
+    const t2 = this.knapp(stor);
+    const o1 = this.knapp(s.oppsett === "topp");
+    const o2 = this.knapp(s.oppsett === "stort");
+    const o3 = this.knapp(s.oppsett === "side");
+    const o4 = this.knapp(s.oppsett === "bakgrunn");
+
+    const stortH = s.format === "story" ? 1180 : (s.format === "kvadrat" ? 470 : 760);
+    const u = s.utsnitt[s.format];
+
+    const v = {
+      bredde: fmt.bredde,
+      hoyde: fmt.hoyde,
+      skala: 540 / fmt.bredde,
+      previewW: 540,
+      previewH: Math.round(fmt.hoyde * (540 / fmt.bredde)),
+      heroH: s.format === "story" ? 780 : (s.format === "kvadrat" ? 286 : 330),
+      heroBunn: "rgba(20,30,22,0.58)",
+      stortH: stortH,
+      kortTopp: stortH - 80,
+      kortPad: s.format === "kvadrat" ? 24 : 32,
+
+      sideBredde: s.format === "kvadrat" ? 360 : 400,
+      chip: T.chip[trinn],
+      chipSmal: T.chipSmal[trinn],
+      dagSize: T.dag[trinn],
+      datoSize: T.dato[trinn],
+      datoSizeSmal: T.datoSmal[trinn],
+      titleSize: T.title[trinn],
+      titleSizeSmal: T.titleSmal[trinn],
+      metaSize: T.meta[trinn],
+      detaljSize: T.detalj,
+      tidSize: T.tid[trinn],
+      kortGap: [20, 16, 13, 11][trinn],
+      nedlastingBg: synlige.length > maks ? "#C9B9A6" : "#D82D20",
+      nedlastingPeker: synlige.length > maks ? "not-allowed" : "pointer",
+      normalBg: t1.bg, normalFg: t1.fg,
+      storBg: t2.bg, storFg: t2.fg,
+      feedBg: f.bg, feedFg: f.fg,
+      kvadratBg: k.bg, kvadratFg: k.fg,
+      storyBg: st.bg, storyFg: st.fg,
+      toppBg: o1.bg, toppFg: o1.fg,
+      stortBg: o2.bg, stortFg: o2.fg,
+      sideBg: o3.bg, sideFg: o3.fg,
+      bakgrunnBg: o4.bg, bakgrunnFg: o4.fg
+    };
+
+    const skjema = s.turer.map((t, i) => {
+      const detaljer = [t.turleder ? "Turleder " + t.turleder : "", t.varighet]
+        .filter(Boolean).join(" · ");
+      const g = GRAD[t.grad];
+      return Object.assign({}, t, {
+        nummer: i + 1,
+        radBakgrunn: i % 2 === 0 ? "#FFFFFF" : "#F2EDE3",
+        datoBakgrunn: i % 2 === 0 ? "#E8DFCC" : "#FFFFFF",
+        stedOgTid: [t.sted, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(" · "),
+        detaljer: detaljer,
+        harDetaljer: Boolean(detaljer || t.grad || t.pamelding),
+        gradFarge: g ? g.lys : "#111111",
+        endreDag: e => this.oppdater(i, "dag", e.target.value),
+        endreDato: e => this.oppdater(i, "dato", e.target.value),
+        endreTid: e => this.oppdater(i, "tid", e.target.value),
+        endreTittel: e => this.oppdater(i, "tittel", e.target.value),
+        endreSted: e => this.oppdater(i, "sted", e.target.value),
+        endreTurleder: e => this.oppdater(i, "turleder", e.target.value),
+        endreVarighet: e => this.oppdater(i, "varighet", e.target.value),
+        endreGrad: e => this.oppdater(i, "grad", e.target.value),
+        endrePamelding: e => this.oppdater(i, "pamelding", e.target.checked),
+        fjern: () => this.setState(state => ({ turer: state.turer.filter((_, k2) => k2 !== i) })),
+        flyttOpp: () => this.flytt(i, -1),
+        flyttNed: () => this.flytt(i, 1)
+      });
+    });
+
+    const turer = synlige.map((t, i) => {
+      const detaljer = [t.turleder ? "Turleder " + t.turleder : "", t.varighet]
+        .filter(Boolean).join(" · ");
+      const g = GRAD[t.grad];
+      return Object.assign({}, t, {
+        radBakgrunn: i % 2 === 0 ? "#FFFFFF" : "#F2EDE3",
+        datoBakgrunn: i % 2 === 0 ? "#E8DFCC" : "#FFFFFF",
+        stedOgTid: [t.sted, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(" · "),
+        detaljer: detaljer,
+        harDetaljer: Boolean(detaljer || t.grad || t.pamelding),
+        gradFarge: g ? g.lys : "#111111"
+      });
+    });
+
+    // Fotoflatens faktiske størrelse i plakatens piksler, per oppsett.
+    const fotoFlate = s.oppsett === "topp" ? [fmt.bredde, v.heroH]
+      : s.oppsett === "stort" ? [fmt.bredde, stortH]
+      : s.oppsett === "side" ? [v.sideBredde, fmt.hoyde - 100]
+      : [fmt.bredde, fmt.hoyde];
+    const bilde = this.kildeBilde(fotoFlate[0], fotoFlate[1]);
+    const bg = this.bakgrunn(bilde, fotoFlate[0], fotoFlate[1], u);
+    v.bgStr = bg.bgStr;
+    v.bgPos = bg.bgPos;
+    // Bildeadressen settes direkte på elementet. Data-URL-er inneholder komma
+    // og semikolon, og blir kuttet hvis de legges i en stilstreng.
+    this._sisteBilde = bilde;
+
+    return {
+      v: v,
+      turer: turer,
+      skjema: skjema,
+      erTopp: s.oppsett === "topp",
+      erStort: s.oppsett === "stort",
+      erSide: s.oppsett === "side",
+      erBakgrunn: s.oppsett === "bakgrunn",
+      periode: s.periode,
+      tittel: s.tittel,
+      endreTittel: e => this.setState({ tittel: e.target.value }),
+      turlag: s.turlag,
+      turlagVersaler: (s.turlag || "").toUpperCase(),
+      lenke: s.lenke,
+      endreTurlag: e => this.setState({ turlag: e.target.value }),
+      endreLenke: e => this.setState({ lenke: e.target.value }),
+      bilde: bilde,
+      fotoRef: (el) => {
+        if (!el) return;
+        const url = 'url("' + String(this._sisteBilde).replace(/"/g, "%22") + '")';
+        if (el.style.backgroundImage !== url) el.style.backgroundImage = url;
+      },
+      bildenavn: s.bildenavn,
+      bildeX: u.x,
+      bildeY: u.y,
+      bildeZoomTall: u.z,
+      endreBildeX: e => this.settUtsnitt("x", Number(e.target.value)),
+      endreBildeY: e => this.settUtsnitt("y", Number(e.target.value)),
+      endreBildeZoom: e => this.settUtsnitt("z", Number(e.target.value)),
+      nullstillBilde: () => this.setState(state => {
+        const uu = Object.assign({}, state.utsnitt);
+        uu[state.format] = { x: 50, y: 50, z: 115 };
+        return { utsnitt: uu };
+      }),
+      formatTekst: fmt.tekst,
+      oppsettTekst: opp.tekst + " Plass til " + maks + " turer i dette formatet.",
+      formange: synlige.length > maks,
+      formangeTekst: "Ukens " + synlige.length + " turer får ikke plass i dette oppsettet (maks " + maks + "). Velg «Bilde øverst», bytt til Story, eller del uka i to bilder.",
+      visPrompt: s.visPrompt,
+      prompttittel: s.visPrompt ? "Skjul reserveløsning" : "Reserveløsning: prompt til Claude",
+      promptTekst: PROMPT,
+      kopiertekst: s.kopiert ? "Kopiert" : "Kopier prompten",
+      nedlastingstekst: s.laster ? "Lager bildet …" : (synlige.length > maks ? "For mange turer for dette oppsettet" : "Last ned bildet"),
+      velgNormalTekst: () => this.setState({ tekst: "normal" }),
+      velgStorTekst: () => this.setState({ tekst: "stor" }),
+      tekstHjelp: stor
+        ? "Stor tekst: lettere å lese i feeden, men det blir plass til én tur mindre."
+        : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.",
+      velgFeed: () => this.setState({ format: "feed" }),
+      velgKvadrat: () => this.setState({ format: "kvadrat" }),
+      velgStory: () => this.setState({ format: "story" }),
+      velgTopp: () => this.setState({ oppsett: "topp" }),
+      velgStort: () => this.setState({ oppsett: "stort" }),
+      velgSide: () => this.setState({ oppsett: "side" }),
+      velgBakgrunn: () => this.setState({ oppsett: "bakgrunn" }),
+      endrePeriode: e => this.setState({ periode: e.target.value }),
+      endreBilde: e => {
+        const fil = e.target.files && e.target.files[0];
+        if (!fil) return;
+        const leser = new FileReader();
+        leser.onload = () => this.setState({
+          bilde: leser.result, egetBilde: true, bildenavn: fil.name,
+          utsnitt: { feed: { x: 50, y: 50, z: 115 }, kvadrat: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 } }
+        });
+        leser.readAsDataURL(fil);
+      },
+      leggTil: () => this.setState(state => state.turer.length >= 8 ? null : ({ turer: state.turer.concat([nyTur()]) })),
+      leggTilMaks: maks,
+      vekslePrompt: () => this.setState(state => ({ visPrompt: !state.visPrompt })),
+      kopierPrompt: () => {
+        navigator.clipboard.writeText(PROMPT).then(() => {
+          this.setState({ kopiert: true });
+          setTimeout(() => this.setState({ kopiert: false }), 2000);
+        });
+      },
+      lastNed: () => this.lastNed()
+    };
+  }
+}
+</script>
+
+
+</body></html>

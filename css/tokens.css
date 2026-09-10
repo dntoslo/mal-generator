@@ -1,0 +1,282 @@
+/* =========================================================
+   DNT Oslo og Omegn: designtokens
+   Farger, typografi, luft, radier, skygger og grunnstiler.
+   Fargene følger DNTs tidligere brandbook med fulle tonerekker.
+   Den nye, flate paletten (2026) ligger også her og er tillatt i nye
+   elementer. Bruk alltid tokens, aldri egne toner.
+   ========================================================= */
+
+/* ---------- Fonter ----------
+   ABC Social          -> brødtekst (Light er standard, Regular er "fet")
+   ABC Social Extended -> headinger og utheving av tekst
+   Romek               -> store overskrifter og display
+   Fontene er lisensierte. De skal ligge lokalt i assets/fonts,
+   ikke på et CDN, og ikke byttes ut uten avklaring. */
+
+@font-face {
+  font-family: "ABC Social";
+  src: url("../assets/fonts/ABCSocial-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social";
+  src: url("../assets/fonts/ABCSocial-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social";
+  src: url("../assets/fonts/ABCSocial-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social";
+  src: url("../assets/fonts/ABCSocial-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("../assets/fonts/ABCSocialExtended-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("../assets/fonts/ABCSocialExtended-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("../assets/fonts/ABCSocialExtended-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("../assets/fonts/ABCSocialExtended-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Social Extended";
+  src: url("../assets/fonts/ABCSocialExtended-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("../assets/fonts/Romek-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("../assets/fonts/Romek-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Romek";
+  src: url("../assets/fonts/Romek-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Merkevarefarger: tidligere brandbook (hovedsett) ---------- */
+  --dnt-rod:        #D82D20;  /* DNT Rød, hovedaksent, aldri bakgrunn for mengdetekst */
+  --rod-2:          #F3877F;
+  --rod-3:          #F7D5D2;
+  --gronn:          #71C17A;
+  --gronn-2:        #97D69E;
+  --gronn-3:        #D8F1DB;
+  --bla:            #5B87BF;
+  --bla-2:          #9FB8D8;
+  --bla-3:          #C2D6ED;
+  --gul:            #FFF086;
+  --gul-2:          #FFF3A0;
+  --gul-3:          #FEFADC;
+  --oransje:        #FDA85B;
+  --oransje-2:      #FFC289;
+  --oransje-3:      #FFDEBF;
+  --beige-mork:     #E8D7B6;  /* datofelt på hvite rader */
+  --beige:          #F2E6D0;  /* annenhver rad, knapper, sidebakgrunn */
+  --beige-lys:      #F8F2E4;  /* plakatbakgrunn, skjemabokser */
+  --beige-hvit:     #FFFCF6;
+  --hvit:           #FFFFFF;
+  --sort:           #0F0F0F;
+
+  /* ---------- Merkevarefarger: ny palett (2026), også tillatt ---------- */
+  /* Brukes ikke i plakaten i dag, men kan brukes i nye elementer. */
+  --ny-dnt-rod:     #D6001C;
+  --ny-lys-rod:     #FFC8C3;
+  --ny-lys-gronn:   #EDF2E4;
+  --ny-mork-gronn:  #597E61;
+  --ny-bla:         #C5DCEA;
+  --ny-gul:         #FFF097;
+  --ny-oransje:     #FFB674;
+  --ny-beige:       #F8F2E4;
+
+  /* ---------- Flatetokens ---------- */
+  --bg:             var(--beige-lys);
+  --bg-alt:         var(--beige);
+  --bg-cool:        var(--bla-3);
+  --bg-fresh:       var(--gronn-3);
+  --bg-forest:      var(--gronn);
+  --bg-paper:       var(--hvit);
+
+  /* ---------- Teksttokens ---------- */
+  --fg:             var(--sort);       /* standard tekst på alle bakgrunner og bilder */
+  --fg-invert:      var(--hvit);       /* tekst på mørk flate / foto */
+  --fg-muted:       color-mix(in srgb, var(--sort) 62%, transparent);
+  --fg-faint:       color-mix(in srgb, var(--sort) 38%, transparent);
+  --accent:         var(--dnt-rod);
+
+  /* ---------- Kantlinjer ---------- */
+  --border:         color-mix(in srgb, var(--sort) 14%, transparent);
+  --border-strong:  var(--sort);
+
+  /* ---------- Funksjonsfarger fra nettflatene ---------- */
+  /* Samplet fra dnt.no og hyttebestilling.dnt.no. Supplerer brandbook-
+     paletten i UI-sammenheng; brukes ikke i print/kampanje. */
+  --mork-bla:   #316095;  /* funksjonsblå: lenker, blå kortoverskrifter, sekundærknapp, feltkanter */
+  --bla-kant:   #B2C9E4;  /* tykk ramme på temakort (dnt.no) */
+  --varm-hvit:  #FFFCF6;  /* artikkelbakgrunn på dnt.no, aldri ren hvit flate */
+  --nett-beige: #F6F0E2;  /* seksjons-/sidebakgrunn på nett, kjøligere enn Lys beige */
+  --nett-kort:  #FBF7EF;  /* kortbakgrunn (hyttebestilling) */
+  --nett-kant:  #E8D7B5;  /* tan hairline-kant og footer (hyttebestilling) */
+  --chip-gronn: #DCF3E0;  /* «DNTs tilbud»-chip (ca.-verdi) */
+  --rod-hover:  #B52418;  /* primærknapp hover, avledet av DNT Rød */
+
+  /* ---------- Radier ---------- */
+  /* DNTs formspråk er mykt avrundet: T-logoen, ikonstrøkene og
+     hyttene deler samme runde avslutninger. Hjørnene følger etter. */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:   14px;
+  --r-lg:   24px;
+  --r-xl:   40px;
+  --r-pill: 999px;
+
+  /* ---------- Luft (4px-basert) ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ---------- Skygger ---------- */
+  /* Lavmælte og varme, aldri harde. Tenk mykt dagslys på papir. */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,0.12);
+  --shadow-inset: inset 0 0 0 1px var(--border);
+
+  /* ---------- Lesbarhetsgradient til foto ---------- */
+  --photo-scrim: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 40%,
+    rgba(0,0,0,0.55) 100%
+  ); /* @kind other */
+
+  /* ---------- Typografi ---------- */
+  --font-display: "Romek", "Times New Roman", serif;
+  --font-heading: "ABC Social Extended", "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:    "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Typeskala, laget for skjerm. Romek Light bærer de store
+     overskriftene, Social Extended de mindre, Social all mengdetekst. */
+  --fs-display-xl: clamp(56px, 8vw, 120px); /* @kind font */
+  --fs-display:    clamp(44px, 5.5vw, 80px); /* @kind font */
+  --fs-h1:         clamp(36px, 4vw, 56px); /* @kind font */
+  --fs-h2:         clamp(28px, 3vw, 40px); /* @kind font */
+  --fs-h3:         22px;
+  --fs-h4:         18px;
+  --fs-body:       17px;
+  --fs-body-sm:    15px;
+  --fs-caption:    13px;
+  --fs-micro:      11px;
+
+  --lh-tight:  1.05; /* @kind font */
+  --lh-snug:   1.15; /* @kind font */
+  --lh-normal: 1.45; /* @kind font */
+  --lh-loose:  1.6; /* @kind font */
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+}
+
+/* =========================================================
+   Grunnstiler, gjelder automatisk når arket er lastet.
+   Trygt å bygge videre på.
+   ========================================================= */
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  font-weight: 300;            /* Light er standard brødtekst */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;            /* Regular er standard headingvekt */
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+  margin: 0 0 var(--s-4);
+  text-wrap: balance;
+}
+
+/* Store overskrifter settes i Romek Light */
+h1 { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-h1); letter-spacing: var(--tracking-tight); }
+h2 { font-size: var(--fs-h2); letter-spacing: -0.01em; }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+
+p  { margin: 0 0 var(--s-4); text-wrap: pretty; }
+a  { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--dnt-rod); }
+
+strong, b { font-weight: 700; }  /* Bold, brandbookens uthevingsvekt */
+
+.eyebrow {
+  font-family: var(--font-heading);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Displaytype, brukes sparsomt på hero og seksjonsåpnere */
+.display    { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display);    line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+.display-xl { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display-xl); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+
+/* Rød aksenttekst, et klassisk DNT-grep: løft ett ord i DNT Rød. */
+.accent { color: var(--dnt-rod); }
