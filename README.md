@@ -1,14 +1,19 @@
 # Turkalender: malgenerator for turlag
 
-Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du legger inn turene for uka eller måneden, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal, fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+
+To maler:
+
+- **Turkalender**: flere turer i én liste, for uka eller måneden.
+- **Arrangement**: ett arrangement, som tur, kurs eller dugnad, med tittel, dato, tid, sted, kort tekst og valgfrie felt som pris, påmeldingsfrist eller hva man skal ta med. Kan også lastes ned liggende (1920 × 1080) til Facebook-arrangement og skjerm.
 
 ## Slik brukes det
 
-1. Velg format: Feed (1080 × 1350), Kvadrat (1080 × 1080) eller Story (1080 × 1920).
+1. Velg mal, og deretter format: Feed (1080 × 1350), Kvadrat (1080 × 1080), Story (1080 × 1920) eller, for arrangement, Liggende (1920 × 1080).
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
-4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og nettadresse (f.eks. dnt.no/lorenskog). Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
-5. Legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt.
+4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og nettadresse. Standard er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
+5. Turkalender: legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt. Arrangement: velg type (tur, kurs eller dugnad) og fyll inn feltene. Tomme felt vises ikke i plakaten. Får ikke innholdet plass, sier skjemaet fra.
 6. Trykk «Last ned bildet».
 
 Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt med turene dine som kan limes inn i Claude.
@@ -23,7 +28,7 @@ js/app.js             all logikk
 js/vendor/            html2canvas 1.4.1 (bildeeksport)
 assets/fonts/         ABC Social, ABC Social Extended, Romek (lisensierte)
 assets/img/           DNT-logo og T-ikon
-assets/img/eksempler/ 15 eksempelfoto som rullerer
+assets/img/eksempler/ 29 eksempelfoto som rullerer
 docs/design.md        begrunnelser bak størrelser og grenser
 CLAUDE.md             kontekst for videre arbeid med Claude Code
 ```
