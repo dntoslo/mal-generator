@@ -225,3 +225,73 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 
 /* Skjulte etiketter for skjermlesere */
 .skjult { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Skjema: arrangement ---------- */
+.tekstfelt--dag { flex: none !important; width: 150px; }
+textarea.tekstfelt { resize: vertical; line-height: 1.4; }
+.knapperad .pille[hidden] { display: none; }
+
+/* =========================================================
+   Arrangementsplakat. Kun px. Variabler fra JS:
+   --a-pad --a-chip --a-dag-size --a-dato-size --a-maaned-size
+   --a-tittel-size --a-under-size --a-etikett-size --a-verdi-size
+   --a-tekst-size --a-foto-h --a-foto-b
+   ========================================================= */
+.a-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; color: var(--sort); }
+.a-flate--foto { background: #2f3b33; }
+.a-rad { flex: 1; display: flex; min-height: 0; }
+
+.a-foto { position: relative; overflow: hidden; background: #2f3b33; flex: none; }
+.a-foto--fyll { position: absolute; inset: 0; }
+.a-foto--topp { height: var(--a-foto-h); }
+.a-foto--venstre { width: var(--a-foto-b); }
+.a-scrim { position: absolute; inset: 0; }
+.a-scrim--foto { background: linear-gradient(180deg, rgba(20,30,22,0.40) 0%, rgba(20,30,22,0.05) 28%, rgba(20,30,22,0.30) 52%, rgba(20,30,22,0.86) 100%); }
+.a-scrim--topp { background: linear-gradient(180deg, rgba(20,30,22,0.38) 0%, rgba(20,30,22,0.02) 45%, rgba(20,30,22,0.10) 100%); }
+.a-scrim--venstre { background: linear-gradient(180deg, rgba(20,30,22,0.32) 0%, rgba(20,30,22,0.02) 40%, rgba(20,30,22,0.14) 100%); }
+
+.a-overlinje { position: absolute; left: var(--a-pad); top: 56px; font-family: var(--font-heading); font-weight: 500; font-size: 26px; letter-spacing: 0.18em; color: var(--hvit); }
+.a-overlinje--sort { color: var(--dnt-rod); }
+.a-topplinje { flex: none; height: 22px; background: var(--dnt-rod); }
+
+.a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
+.a-innhold--fyll { flex: 1; }
+.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: 88px; color: var(--hvit); }
+.a-innhold--hvit { color: var(--hvit); }
+.a-innhold--midt { justify-content: center; }
+.a-flate--liggende .a-innhold--paa-foto { right: auto; width: 1180px; }
+
+.a-topp { display: flex; align-items: flex-start; gap: 36px; }
+.a-topp__tekst { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding-top: 6px; }
+
+.a-chip { flex: none; width: var(--a-chip); height: var(--a-chip); border-radius: 22px; overflow: hidden; background: var(--hvit); display: flex; flex-direction: column; color: var(--sort); }
+.a-chip__dag { background: var(--dnt-rod); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: var(--a-dag-size); letter-spacing: 0.1em; line-height: 1; padding: 10px 0 11px; text-align: center; text-transform: uppercase; }
+.a-chip__dato { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+.a-chip__tall { font-family: var(--font-display); font-weight: 700; font-size: var(--a-dato-size); line-height: 1; }
+.a-chip__maaned { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-maaned-size); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; }
+
+.a-tittel { font-family: var(--font-display); font-weight: 700; font-size: var(--a-tittel-size); line-height: 0.98; letter-spacing: -0.03em; white-space: nowrap; }
+.a-tittel--bryt { white-space: normal; }
+.a-under { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-under-size); line-height: 1.2; }
+.a-innhold--hvit .a-under, .a-innhold--paa-foto .a-under { color: rgba(255,255,255,0.9); }
+.a-flate:not(.a-flate--foto) .a-under { color: rgba(0,0,0,0.65); }
+
+.a-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 40px; }
+.a-info__rad { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.a-info__etikett { font-family: var(--font-heading); font-weight: 700; font-size: var(--a-etikett-size); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: rgba(0,0,0,0.55); }
+.a-info__verdi { font-family: var(--font-body); font-weight: 400; font-size: var(--a-verdi-size); line-height: 1.25; }
+.a-innhold--paa-foto .a-info__etikett, .a-innhold--hvit .a-info__etikett { color: rgba(255,255,255,0.72); }
+
+.a-tekst { font-family: var(--font-body); font-weight: 400; font-size: var(--a-tekst-size); line-height: 1.35; color: rgba(0,0,0,0.8); }
+.a-innhold--paa-foto .a-tekst, .a-innhold--hvit .a-tekst { color: rgba(255,255,255,0.92); }
+
+/* Liggende har plass til tre informasjonskolonner */
+.a-flate--liggende .a-info { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Liggende uten foto: to kolonner */
+.a-innhold--kolonner { flex-direction: row; align-items: center; gap: 64px; }
+.a-innhold--kolonner > .a-kolonne { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.a-innhold--kolonner > .a-kolonne--venstre { flex: 0 0 820px; }
+.a-innhold--kolonner > .a-kolonne--hoyre { flex: 1; }
+.a-innhold--kolonner .a-topp { flex-direction: column; gap: 28px; }
+.a-innhold--kolonner .a-topp__tekst { padding-top: 0; }
