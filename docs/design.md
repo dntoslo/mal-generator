@@ -80,3 +80,13 @@ Tonerekkene for rød, grønn, blå, gul og oransje (`--rod-2`, `--gronn-3` osv.)
 Prototypen fra Claude Design brukte tonene #FFF7E9, #F2EDE3, #E8DFCC og #E7E3DA, som ikke står i noen av palettene. De er erstattet med nærmeste tone fra brandbooken.
 
 Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krevende DNT rød, Ekspert sort) følger DNTs graderingsstandard for turer og skal gjenkjennes som gradering, ikke som merkevarefarger.
+
+## Arrangementsmalen
+
+Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og fire formater, inkludert liggende 1920 × 1080.
+
+- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst).
+- **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Romek Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
+- **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
+- **Størrelser:** tittel opptil 104 px i feed og story, 92 i kvadrat, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (27 i kvadrat, 31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
+- **Plass:** i stedet for maksgrenser måler `sjekkPlass()` om innholdet flyter over etter rendering, og skjemaet advarer. Tekstfeltet er begrenset til 180 tegn for å holde plakaten lesbar.
