@@ -1,5 +1,5 @@
 /* =========================================================
-   Malgenerator for turoversikt (DNT Oslo og Omegn)
+   Malgenerator for turkalender (DNT Oslo og Omegn)
    Ren JavaScript uten byggesteg. Én tilstand, to renderfunksjoner:
    renderSkjema() oppdaterer venstre kolonne, renderPlakat() bygger
    plakaten i høyre kolonne. Eksport skjer med html2canvas fra en
@@ -822,7 +822,7 @@
 
     el.formange.hidden = !b.forMange;
     el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
-      "). Velg «Bilde øverst», bytt til Story, eller del oversikten i to bilder.";
+      "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
 
     el.lastNed.disabled = b.forMange || state.laster;
     el.lastNed.textContent = state.laster ? "Lager bildet …" : (b.forMange ? "For mange turer for dette oppsettet" : "Last ned bildet");
@@ -863,7 +863,7 @@
     if (!linjer.length) linjer.push("- (fyll inn dag, dato, klokkeslett, turmål og startsted per tur)");
 
     return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en grafikk til Facebook og Instagram i " +
-      b.fmt.tekst + " med " + (state.tittel || "turoversikt").toLowerCase() + ".\n\n" +
+      b.fmt.tekst + " med " + (state.tittel || "turkalender").toLowerCase() + ".\n\n" +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, beige #F2E6D0 til radveksling, mørk beige #E8D7B6 til datofelt, hvit, sort tekst.\n" +
       "Fonter: Romek Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\n" +
@@ -974,7 +974,7 @@
         console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
       }
       var blob = await tilBlob(canvas);
-      lastNedBlob(blob, "turoversikt-" + slug(state.turlag) + "-" + state.format + ".png");
+      lastNedBlob(blob, "turkalender-" + slug(state.turlag) + "-" + state.format + ".png");
     } catch (e) {
       console.error(e);
       visFeil("Det gikk ikke å lage bildet: " + (e && e.message ? e.message : "ukjent feil") +
