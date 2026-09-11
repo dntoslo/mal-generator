@@ -820,9 +820,11 @@
 
     renderTurliste(byggTurlisteNy);
 
-    el.formange.hidden = !b.forMange;
-    el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
-      "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
+    if (!arr) {
+      el.formange.hidden = !b.forMange;
+      el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
+        "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
+    }
 
     el.lastNed.disabled = b.forMange || state.laster;
     el.lastNed.textContent = state.laster ? "Lager bildet …" : (b.forMange ? "For mange turer for dette oppsettet" : "Last ned bildet");
@@ -974,7 +976,8 @@
         console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
       }
       var blob = await tilBlob(canvas);
-      lastNedBlob(blob, "turkalender-" + slug(state.turlag) + "-" + state.format + ".png");
+      var navn = b.mal === "arrangement" ? "arrangement-" + slug(state.arrTittel) : "turkalender-" + slug(state.turlag);
+      lastNedBlob(blob, navn + "-" + state.format + ".png");
     } catch (e) {
       console.error(e);
       visFeil("Det gikk ikke å lage bildet: " + (e && e.message ? e.message : "ukjent feil") +
