@@ -479,11 +479,18 @@
     skalerForhandsvisning(b.fmt);
   }
 
+  // Forhåndsvisningen er maks 540 px bred. På brede skjermer er den festet
+  // (sticky) og krympes i tillegg så hele plakaten får plass i vinduet.
   function skalerForhandsvisning(fmt) {
     fmt = fmt || FORMATER[state.format];
-    var bredde = Math.min(540, el.ramme.clientWidth || 540);
-    var skala = bredde / fmt.bredde;
+    var kolonne = el.ramme.parentElement ? el.ramme.parentElement.clientWidth : 540;
+    var skala = Math.min(540, kolonne || 540) / fmt.bredde;
+    if (window.innerWidth >= 960) {
+      var maksHoyde = window.innerHeight - 28 - 30 - 28;
+      if (fmt.hoyde * skala > maksHoyde) skala = Math.max(maksHoyde / fmt.hoyde, 0.2);
+    }
     el.skala.style.transform = "scale(" + skala + ")";
+    el.ramme.style.width = Math.round(fmt.bredde * skala) + "px";
     el.ramme.style.height = Math.round(fmt.hoyde * skala) + "px";
   }
 
