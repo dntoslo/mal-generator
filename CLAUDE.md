@@ -1,6 +1,6 @@
-# Malgenerator for ukens turer
+# Malgenerator for turkalender
 
-Nettside som lar frivillige i DNT Oslo og Omegns turlag lage et ferdig bilde med ukens turer til Facebook og Instagram, låst til DNTs profil. Ren HTML, CSS og JavaScript uten byggesteg, laget for GitHub Pages.
+Nettside som lar frivillige i DNT Oslo og Omegns turlag lage et ferdig bilde med ukens eller månedens turer til Facebook og Instagram, låst til DNTs profil. Ren HTML, CSS og JavaScript uten byggesteg, laget for GitHub Pages.
 
 **Kjøre lokalt:** `python3 -m http.server 8765` i rotmappen, åpne http://127.0.0.1:8765/. Ikke åpne `index.html` direkte fra disk, da blokkerer nettleseren fonter og eksport.
 

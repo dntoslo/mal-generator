@@ -1,17 +1,17 @@
-# Ukens turer: malgenerator for turlag
+# Turkalender: malgenerator for turlag
 
-Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du fyller inn ukens turer, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du legger inn turene for uka eller måneden, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
 
 ## Slik brukes det
 
 1. Velg format: Feed (1080 × 1350), Kvadrat (1080 × 1080) eller Story (1080 × 1920).
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
-4. Fyll inn tittel, turlag, uke og nettadresse (f.eks. dnt.no/lorenskog). Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
+4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og nettadresse (f.eks. dnt.no/lorenskog). Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
 5. Legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt.
 6. Trykk «Last ned bildet».
 
-Det du fyller inn huskes i nettleseren til neste uke. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt med turene dine som kan limes inn i Claude.
+Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt med turene dine som kan limes inn i Claude.
 
 ## Mappestruktur
 
@@ -56,7 +56,7 @@ git add -A && git commit -m "Beskriv endringen" && git push
 
 Verdt å vite:
 
-- Repoet er offentlig, så både nettsiden og fontfilene kan lastes ned av alle. DNT har lisens på fontene, og eier har godkjent at de ligger her.
+- Repoet er offentlig inntil organisasjonen dntoslo får GitHub Team-lisens, og gjøres privat etter det (Settings, Danger zone, Change visibility). Pages fortsetter å virke fra privat repo på Team-planen. Nettsiden er uansett åpen for alle med lenken. DNT har lisens på fontene.
 - Bruk repoet bare til denne generatoren. Ikke legg inn deltakerlister eller andre personopplysninger.
 
 ## Eksempelbilder

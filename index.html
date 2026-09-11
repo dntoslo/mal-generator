@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ukens turer: malgenerator for turlag</title>
-<meta name="description" content="Lag et ferdig bilde med ukens turer til Facebook og Instagram, i DNTs profil.">
+<title>Turkalender: malgenerator for turlag</title>
+<meta name="description" content="Lag et ferdig bilde med ukens eller månedens turer til Facebook og Instagram, i DNTs profil.">
 <link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/app.css">
@@ -15,8 +15,8 @@
   <section class="panel" aria-label="Innstillinger">
 
     <header class="panel__intro">
-      <h1 class="panel__tittel">Ukens turer</h1>
-      <p class="panel__ingress">Fyll inn ukens turer, velg bilde og last ned ferdig bilde til Facebook og Instagram. Alt annet er låst til DNTs profil.</p>
+      <h1 class="panel__tittel">Turkalender til sosiale medier</h1>
+      <p class="panel__ingress">Legg inn turene for uka eller måneden, velg bilde og last ned et ferdig bilde til Facebook og Instagram. Logo, farger og fonter følger DNTs profil automatisk.</p>
     </header>
 
     <div class="felt">
@@ -47,6 +47,7 @@
         <button type="button" class="kort-knapp" data-verdi="bakgrunn">Bilde som bakgrunn</button>
       </div>
       <p class="hjelp" id="oppsett-hjelp"></p>
+      <label class="avkryssing" id="kort-glass-felt" hidden><input type="checkbox" id="kort-glass"><span>Gjennomskinnelig kort, fotoet skinner svakt gjennom</span></label>
     </div>
 
     <div class="felt">
@@ -73,13 +74,13 @@
     </div>
 
     <div class="felt">
-      <p class="felt__etikett">4. Tittel, turlag og uke</p>
+      <p class="felt__etikett">4. Tittel, turlag og periode</p>
       <label class="skjult" for="tittel">Tittel</label>
-      <input type="text" class="tekstfelt" id="tittel" data-felt="tittel" placeholder="Ukens turer">
+      <input type="text" class="tekstfelt" id="tittel" data-felt="tittel" placeholder="Ukens turer eller Turer i september">
       <label class="skjult" for="turlag">Turlag</label>
       <input type="text" class="tekstfelt" id="turlag" data-felt="turlag" placeholder="Navn på turlaget">
-      <label class="skjult" for="periode">Uke og måned</label>
-      <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38 · SEPTEMBER">
+      <label class="skjult" for="periode">Periode</label>
+      <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38 · SEPTEMBER eller SEPTEMBER 2026">
       <label class="skjult" for="lenke">Nettadresse</label>
       <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/lorenskog">
       <label class="avkryssing"><input type="checkbox" id="vis-logo" checked><span>Vis DNT-logo i bildet</span></label>
