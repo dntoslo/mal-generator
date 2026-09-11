@@ -1,4 +1,4 @@
-# Malgenerator for turkalender
+# Malgenerator for turoversikt
 
 Nettside som lar frivillige i DNT Oslo og Omegns turlag lage ferdige bilder til Facebook og Instagram, låst til DNTs profil. To maler: turkalender (flere turer i liste) og arrangement (ett arrangement, også i liggende format). Ren HTML, CSS og JavaScript uten byggesteg, laget for GitHub Pages.
 

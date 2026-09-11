@@ -1,4 +1,4 @@
-# Turkalender: malgenerator for turlag
+# Turoversikt: malgenerator for turlag
 
 Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal, fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
 
