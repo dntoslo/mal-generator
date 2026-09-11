@@ -12,7 +12,7 @@ To maler:
 1. Velg mal, og deretter format: Feed (1080 × 1350), Kvadrat (1080 × 1080), Story (1080 × 1920) eller, for arrangement, Liggende (1920 × 1080).
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
-4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og nettadresse (f.eks. dnt.no/lorenskog). Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
+4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og nettadresse. Standard er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen vises i det røde båndet nederst og kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske. Kryss av om DNT-logoen skal vises i bildet.
 5. Turkalender: legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt. Arrangement: velg type (tur, kurs eller dugnad) og fyll inn feltene. Tomme felt vises ikke i plakaten. Får ikke innholdet plass, sier skjemaet fra.
 6. Trykk «Last ned bildet».
 
