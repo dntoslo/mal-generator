@@ -42,6 +42,10 @@ Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen ned
 
 Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medium (28 og 27 i kortvariantene), altså under turmålene (34 px) og klokkeslettene (36 px) i hierarkiet. Ikonet er 36 px høyt og beholder sine egne proporsjoner.
 
+## Hvitt kort
+
+Kortet i «Stort bilde» og «Bilde som bakgrunn» er helt hvitt som standard. Avkryssingen «Gjennomskinnelig kort» setter det til 88 % hvitt, så fotoet skinner svakt gjennom. Lavere enn det gjør brødteksten vanskelig å lese over mørke fotopartier. Frostet glass (uskarpt foto bak kortet) er utelukket fordi html2canvas ikke støtter uskarphetsfilter, og eksporten da ville avvike fra forhåndsvisningen.
+
 ## Logo
 
 T-ikonet i det røde båndet nederst er alltid med som avsender. Den runde T-en i hvit sirkel oppe til høyre i fotoet kan skrus av med «Vis DNT-logo i bildet», for kanaler der avsenderen allerede er tydelig. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg.
