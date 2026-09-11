@@ -1,5 +1,5 @@
 /* =========================================================
-   Malgenerator for ukens turer (DNT Oslo og Omegn)
+   Malgenerator for turkalender (DNT Oslo og Omegn)
    Ren JavaScript uten byggesteg. Én tilstand, to renderfunksjoner:
    renderSkjema() oppdaterer venstre kolonne, renderPlakat() bygger
    plakaten i høyre kolonne. Eksport skjer med html2canvas fra en
@@ -118,6 +118,7 @@
       lenke: "Fyll inn nettadresse, f.eks. dnt.no/oslo",
       periode: gjeldendePeriode(),
       visLogo: true,
+      kortGlass: false,
       utsnitt: nyttUtsnitt(),
       turer: [
         nyTur("TIR", "15", "10:30", "Trilletur til Lilloseter", "Ammerud utfartsparkering"),
@@ -208,7 +209,7 @@
         var data = {
           oppsett: state.oppsett, format: state.format, tekst: state.tekst,
           tittel: state.tittel, turlag: state.turlag, lenke: state.lenke, periode: state.periode,
-          visLogo: state.visLogo, utsnitt: state.utsnitt, turer: state.turer
+          visLogo: state.visLogo, kortGlass: state.kortGlass, utsnitt: state.utsnitt, turer: state.turer
         };
         localStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(data));
       } catch (e) { /* privat modus eller full lagring: vi lever fint uten */ }
@@ -229,6 +230,7 @@
       });
       if (state.lenke === "Fyll inn lenke til turkalender") state.lenke = standardSkjema().lenke;
       if (typeof d.visLogo === "boolean") state.visLogo = d.visLogo;
+      if (typeof d.kortGlass === "boolean") state.kortGlass = d.kortGlass;
       if (d.utsnitt && typeof d.utsnitt === "object") {
         var u = nyttUtsnitt();
         Object.keys(u).forEach(function (f) {
@@ -424,7 +426,7 @@
           '<div class="p-hero__tekst"><span class="p-overlinje">' + esc(state.turlag.toUpperCase()) + ' · ' + esc(state.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(state.tittel) + '</span></div>' +
           malLogo() +
         '</div>' +
-        '<div class="p-kort">' +
+        '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
           malBunn("p-bunn--kort") +
         '</div>' +
@@ -447,7 +449,7 @@
         '<div class="p-foto p-foto--fyll" data-foto></div><div class="p-scrim p-scrim--bakgrunn"></div>' +
         '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(state.turlag.toUpperCase()) + ' · ' + esc(state.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(state.tittel) + '</span></div>' +
         malLogo("p-logo--lav") +
-        '<div class="p-kort">' +
+        '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
           malBunn("p-bunn--tett") +
         '</div>' +
@@ -552,13 +554,15 @@
 
     $$("[data-utsnitt]").forEach(function (r) { settVerdi(r, b.u[r.getAttribute("data-utsnitt")]); });
     ["tittel", "turlag", "periode", "lenke"].forEach(function (k) { settVerdi($("#" + k), state[k]); });
-    settVerdi($("#vis-logo"), state.visLogo);
+    if ($("#vis-logo")) settVerdi($("#vis-logo"), state.visLogo);
+    if ($("#kort-glass")) settVerdi($("#kort-glass"), state.kortGlass);
+    if ($("#kort-glass-felt")) $("#kort-glass-felt").hidden = !(state.oppsett === "stort" || state.oppsett === "bakgrunn");
 
     renderTurliste(byggTurlisteNy);
 
     el.formange.hidden = !b.forMange;
-    el.formange.textContent = "Ukens " + b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
-      "). Velg «Bilde øverst», bytt til Story, eller del uka i to bilder.";
+    el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
+      "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
 
     el.lastNed.disabled = b.forMange || state.laster;
     el.lastNed.textContent = state.laster ? "Lager bildet …" : (b.forMange ? "For mange turer for dette oppsettet" : "Last ned bildet");
@@ -598,12 +602,13 @@
     if (!linjer.length) linjer.push("- (fyll inn dag, dato, klokkeslett, turmål og startsted per tur)");
 
     return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en grafikk til Facebook og Instagram i " +
-      b.fmt.tekst + " med " + (state.tittel || "ukens turer").toLowerCase() + ".\n\n" +
+      b.fmt.tekst + " med " + (state.tittel || "turkalender").toLowerCase() + ".\n\n" +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, beige #F2E6D0 til radveksling, mørk beige #E8D7B6 til datofelt, hvit, sort tekst.\n" +
       "Fonter: Romek Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\n" +
       "Oppsett: " + b.opp.prompt + " Nederst et rødt bånd med nettadressen «" + state.lenke + "» i liten, medium skrift, mindre enn turmålene." +
-      (state.visLogo ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre i fotoet." : " Ingen logo i fotoet.") + "\n" +
+      (state.visLogo ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre i fotoet." : " Ingen logo i fotoet.") +
+      (state.kortGlass && (state.oppsett === "stort" || state.oppsett === "bakgrunn") ? " Kortet er svakt gjennomskinnelig (88 % hvitt) så fotoet skinner gjennom." : "") + "\n" +
       "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto fra turlaget.\n\n" +
       state.tittel + " for " + turlag + ", " + state.periode + ":\n" + linjer.join("\n");
@@ -687,7 +692,7 @@
         console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
       }
       var blob = await tilBlob(canvas);
-      lastNedBlob(blob, "ukens-turer-" + slug(state.turlag) + "-" + state.format + ".png");
+      lastNedBlob(blob, "turkalender-" + slug(state.turlag) + "-" + state.format + ".png");
     } catch (e) {
       console.error(e);
       visFeil("Det gikk ikke å lage bildet: " + (e && e.message ? e.message : "ukjent feil") +
@@ -711,7 +716,7 @@
       });
     });
 
-    // Tekstfelter for tittel, turlag, uke og nettadresse
+    // Tekstfelter for tittel, turlag, periode og nettadresse
     $$("input[data-felt].tekstfelt").forEach(function (input) {
       input.addEventListener("input", function () {
         var patch = {}; patch[input.getAttribute("data-felt")] = input.value;
@@ -719,7 +724,10 @@
       });
     });
 
-    $("#vis-logo").addEventListener("change", function (e) { oppdater({ visLogo: e.target.checked }); });
+    // Avkryssinger. Sjekkes for null, så en hurtigbufret index.html uten
+    // elementene ikke stopper resten av oppstarten.
+    if ($("#vis-logo")) $("#vis-logo").addEventListener("change", function (e) { oppdater({ visLogo: e.target.checked }); });
+    if ($("#kort-glass")) $("#kort-glass").addEventListener("change", function (e) { oppdater({ kortGlass: e.target.checked }); });
 
     // Utsnitt
     $$("[data-utsnitt]").forEach(function (r) {
