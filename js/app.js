@@ -41,10 +41,37 @@
   };
 
   var FORMATER = {
-    feed:    { bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
-    kvadrat: { bredde: 1080, hoyde: 1080, tekst: "1080 × 1080 px" },
-    story:   { bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" }
+    feed:     { bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
+    kvadrat:  { bredde: 1080, hoyde: 1080, tekst: "1080 × 1080 px" },
+    story:    { bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" },
+    liggende: { bredde: 1920, hoyde: 1080, tekst: "1920 × 1080 px" }  // bare arrangement
   };
+
+  // Malene. Turkalender er den opprinnelige, arrangement kom til 11. september 2026.
+  var MALVALG = {
+    turkalender: { hjelp: "Flere turer i én liste, for uka eller måneden." },
+    arrangement: { hjelp: "Ett arrangement: tur, kurs eller dugnad. Kan også eksporteres liggende." }
+  };
+
+  var ARR_OPPSETT = {
+    foto:  { tekst: "Fotoet fyller flaten, teksten ligger nederst.", prompt: "foto som fyller hele flaten med mørk gradient nederst, og all tekst i hvitt nede til venstre: et kvadratisk datofelt (rødt dagbånd øverst, stor dato og måned under), tittel, undertittel, og informasjon i to kolonner med små etiketter." },
+    kort:  { tekst: "Foto øverst, teksten på beige flate under.", prompt: "foto øverst (til venstre i liggende), og all tekst på lys beige flate: datofelt ved siden av tittelen, undertittel, informasjon i to kolonner med små etiketter, og kort tekst." },
+    flate: { tekst: "Bare tekst på beige. For deg uten godt foto.", prompt: "ingen foto, lys beige flate med en tynn rød linje øverst, datofelt ved siden av tittelen, undertittel, informasjon i to kolonner og kort tekst." }
+  };
+
+  var ARR_TYPER = {
+    arrangement: { hjelp: "Tur eller annet enkelt arrangement. Feltene «Passer for» og «Påmelding» er valgfrie." },
+    kurs:        { hjelp: "Kurs med pris og påmeldingsfrist. Tomme felt vises ikke i plakaten." },
+    dugnad:      { hjelp: "Dugnad med hva folk skal ta med og hva som serveres. Tomme felt vises ikke." }
+  };
+
+  // Feltene som vises som etikett og verdi i plakaten, i denne rekkefølgen.
+  var ARR_INFO = [
+    ["arrTid", "Tid"], ["arrSted", "Sted"], ["arrPasserFor", "Passer for"], ["arrPris", "Pris"],
+    ["arrFrist", "Påmeldingsfrist"], ["arrTaMed", "Ta med"], ["arrServering", "Servering"], ["arrPamelding", "Påmelding"]
+  ];
+  var ARR_FELT = ["arrTittel", "arrUnder", "arrDag", "arrDato", "arrMaaned", "arrTid", "arrSted", "arrTekst",
+                  "arrPasserFor", "arrPris", "arrFrist", "arrTaMed", "arrServering", "arrPamelding"];
 
   var OPPSETT = {
     topp:     { tekst: "Bildet som bånd øverst. Mest plass til turene.", maks: { feed: 8, kvadrat: 6, story: 8 },
@@ -77,7 +104,23 @@
     { fil: "bovelstad.jpg",                    fotograf: "Marius Dalseg",   staaende: false },
     { fil: "losbyvassdraget.jpg",              fotograf: "Marius Dalseg",   staaende: false },
     { fil: "skog-liggende.jpg",                fotograf: null,              staaende: false },
-    { fil: "sti-staaende.jpg",                 fotograf: null,              staaende: true }
+    { fil: "sti-staaende.jpg",                 fotograf: null,              staaende: true },
+    // Lagt til 11. september 2026
+    { fil: "vettakollen-utsikt.jpg",           fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "vettakollen-to.jpg",               fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "vettakollen-par.jpg",              fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "gressholmen.jpg",                  fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "kobberhaughytta-stue.jpg",         fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "myrsetra-skog.jpg",                fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "fjorden-par.jpg",                  fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "liastua-utsikt.jpg",               fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "turbotur-liastua.jpg",             fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "ulsrudvann.jpg",                   fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "vannhuset.jpg",                    fotograf: "Daniel Jacobsen", staaende: false },
+    // Stående beskjæringer av liggende foto, så de stående oppsettene får variasjon
+    { fil: "vettakollen-utsikt-staaende.jpg",  fotograf: "Daniel Jacobsen", staaende: true },
+    { fil: "myrsetra-skog-staaende.jpg",       fotograf: "Daniel Jacobsen", staaende: true },
+    { fil: "ulsrudvann-staaende.jpg",          fotograf: "Daniel Jacobsen", staaende: true }
   ];
   var EKSEMPELNOKKEL = "dnt-ukens-turer-eksempel";
   var LOGO = "assets/img/dnt-logo.png";
@@ -93,7 +136,7 @@
   }
 
   function nyttUtsnitt() {
-    return { feed: { x: 50, y: 50, z: 115 }, kvadrat: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 } };
+    return { feed: { x: 50, y: 50, z: 115 }, kvadrat: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 }, liggende: { x: 50, y: 50, z: 115 } };
   }
 
   // ISO-ukenummer, slik at «UKE 38 · SEPTEMBER» stemmer med dagens dato.
@@ -110,12 +153,29 @@
   // Det som lagres i nettleseren og nullstilles av «Tøm skjemaet».
   function standardSkjema() {
     return {
+      mal: "turkalender",
+      arrType: "arrangement",
+      arrOppsett: "foto",
+      arrTittel: "Høsttur til Kikutstua",
+      arrUnder: "Fellestur for alle",
+      arrDag: "Søndag",
+      arrDato: "27",
+      arrMaaned: "september",
+      arrTid: "10:00 til 15:00",
+      arrSted: "Sognsvann, ved bommen",
+      arrTekst: "Vi går rundt Sognsvann og innover til Kikut. Ta med mat og drikke, vi tar en lang pause ved hytta.",
+      arrPasserFor: "Alle som er vant til å gå 15 km",
+      arrPris: "Gratis for medlemmer, 100 kr for andre",
+      arrFrist: "Torsdag 24. september",
+      arrTaMed: "Arbeidshansker og gode sko",
+      arrServering: "Vi serverer suppe og kaffe",
+      arrPamelding: "Ingen påmelding, bare møt opp",
       oppsett: "topp",
       format: "feed",
       tekst: "normal",
       tittel: "Ukens turer",
       turlag: "Fyll inn turlag",
-      lenke: "Fyll inn nettadresse, f.eks. dnt.no/oslo",
+      lenke: "dnt.no/oslo",
       periode: gjeldendePeriode(),
       visLogo: true,
       kortGlass: false,
@@ -207,10 +267,12 @@
     lagreTimer = setTimeout(function () {
       try {
         var data = {
+          mal: state.mal, arrType: state.arrType, arrOppsett: state.arrOppsett,
           oppsett: state.oppsett, format: state.format, tekst: state.tekst,
           tittel: state.tittel, turlag: state.turlag, lenke: state.lenke, periode: state.periode,
           visLogo: state.visLogo, kortGlass: state.kortGlass, utsnitt: state.utsnitt, turer: state.turer
         };
+        ARR_FELT.forEach(function (k) { data[k] = state[k]; });
         localStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(data));
       } catch (e) { /* privat modus eller full lagring: vi lever fint uten */ }
     }, 300);
@@ -222,13 +284,18 @@
       if (!raa) return;
       var d = JSON.parse(raa);
       if (!d || typeof d !== "object") return;
+      if (MALVALG[d.mal]) state.mal = d.mal;
+      if (ARR_TYPER[d.arrType]) state.arrType = d.arrType;
+      if (ARR_OPPSETT[d.arrOppsett]) state.arrOppsett = d.arrOppsett;
+      ARR_FELT.forEach(function (k) { if (typeof d[k] === "string") state[k] = d[k]; });
       if (OPPSETT[d.oppsett]) state.oppsett = d.oppsett;
       if (FORMATER[d.format]) state.format = d.format;
+      if (state.mal === "turkalender" && state.format === "liggende") state.format = "feed";
       if (TEKST[d.tekst]) state.tekst = d.tekst;
       ["tittel", "turlag", "lenke", "periode"].forEach(function (k) {
         if (typeof d[k] === "string") state[k] = d[k];
       });
-      if (state.lenke === "Fyll inn lenke til turkalender") state.lenke = standardSkjema().lenke;
+      if (state.lenke === "Fyll inn lenke til turkalender" || state.lenke === "Fyll inn nettadresse, f.eks. dnt.no/oslo") state.lenke = standardSkjema().lenke;
       if (typeof d.visLogo === "boolean") state.visLogo = d.visLogo;
       if (typeof d.kortGlass === "boolean") state.kortGlass = d.kortGlass;
       if (d.utsnitt && typeof d.utsnitt === "object") {
@@ -316,6 +383,83 @@
   }
 
   function beregn() {
+    return state.mal === "arrangement" ? beregnArrangement() : beregnTurkalender();
+  }
+
+  // Arrangementsplakaten: ett arrangement, tre oppsett, fire formater.
+  function beregnArrangement() {
+    var s = state;
+    var fmt = FORMATER[s.format];
+    var opp = ARR_OPPSETT[s.arrOppsett];
+    var liggende = s.format === "liggende";
+    var kvadrat = s.format === "kvadrat";
+    var stor = s.tekst === "stor";
+    var k = stor ? 1.12 : 1;
+    var pad = liggende ? 80 : (kvadrat ? 56 : 64);
+    var band = 88;
+
+    // Fotoflaten avhenger av oppsett og format.
+    var fotoH = s.format === "story" ? 1080 : (kvadrat ? 400 : 620);
+    var fotoB = 900;
+    var flate = s.arrOppsett === "flate";
+    var fotoFlate = s.arrOppsett === "foto" ? [fmt.bredde, fmt.hoyde]
+      : s.arrOppsett === "kort" ? (liggende ? [fotoB, fmt.hoyde - band] : [fmt.bredde, fotoH])
+      : null;
+    var u = s.utsnitt[s.format];
+    var bilde = fotoFlate ? kildeBilde(fotoFlate[0], fotoFlate[1]) : "";
+    var bg = fotoFlate ? bakgrunn(bilde, fotoFlate[0], fotoFlate[1], u) : { bgStr: "cover", bgPos: "50% 50%" };
+
+    // Bredden teksten har til rådighet, og største tittelstørrelse.
+    var tekstBredde = liggende
+      ? (s.arrOppsett === "foto" ? 1180 - pad : (s.arrOppsett === "kort" ? fmt.bredde - fotoB - 2 * pad : 820))
+      : fmt.bredde - 2 * pad;
+    var chip = Math.round((liggende ? 190 : (kvadrat ? 150 : 168)) * (stor ? 1.08 : 1));
+    // «Uten foto» har god plass, så tittelen og teksten får være litt større der.
+    var tittelMaks = liggende ? (s.arrOppsett === "kort" ? 100 : 120) : (kvadrat ? (flate ? 100 : 92) : (flate ? 116 : 104));
+    if (flate && !liggende) k *= 1.08;
+    if (liggende) k *= 1.08;
+    // I «kort» og «flate» står tittelen ved siden av datofeltet, så bredden er mindre.
+    // I liggende «uten foto» står datofeltet over tittelen, så tittelen får hele kolonnen.
+    var tittelBredde = (s.arrOppsett === "foto" || (flate && liggende)) ? tekstBredde : tekstBredde - chip - 36;
+    var tittel = tilpassStorrelse(s.arrTittel, '700 {px}px "Romek"', -0.03, tittelBredde, tittelMaks, kvadrat ? 56 : 60);
+
+    var info = ARR_INFO.filter(function (par) {
+      var verdi = (s[par[0]] || "").trim();
+      if (!verdi) return false;
+      // Feltene som ikke hører til typen skjules, selv om de har innhold fra før.
+      var felt = par[0];
+      if (felt === "arrPris" || felt === "arrFrist") return s.arrType === "kurs";
+      if (felt === "arrTaMed" || felt === "arrServering") return s.arrType === "dugnad";
+      if (felt === "arrPasserFor") return s.arrType !== "dugnad";
+      return true;
+    }).map(function (par) { return { etikett: par[1], verdi: s[par[0]].trim() }; });
+
+    return {
+      mal: "arrangement", fmt: fmt, opp: opp, u: u, stor: stor, forMange: false, synlige: [], maks: 0,
+      bilde: bilde,
+      eksempel: fotoFlate ? aktivtEksempel(fotoFlate[0], fotoFlate[1]) : null,
+      harFoto: Boolean(fotoFlate),
+      liggende: liggende,
+      tittelBryt: tittel.bryt,
+      info: info,
+      vars: {
+        "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
+        "--a-pad": pad + "px", "--a-chip": chip + "px",
+        "--a-dag-size": Math.round((liggende ? 26 : (kvadrat ? 22 : 24)) * k) + "px",
+        "--a-dato-size": Math.round((liggende ? 88 : (kvadrat ? 68 : 78)) * k) + "px",
+        "--a-maaned-size": Math.round((kvadrat ? 18 : 20) * k) + "px",
+        "--a-tittel-size": tittel.px + "px",
+        "--a-under-size": Math.round((liggende ? 36 : (kvadrat ? 30 : 34)) * k) + "px",
+        "--a-etikett-size": Math.round((liggende ? 23 : 22) * k) + "px",
+        "--a-verdi-size": Math.round((liggende ? 31 : (kvadrat ? 28 : 30)) * k) + "px",
+        "--a-tekst-size": Math.round((liggende ? 31 : (kvadrat ? 27 : 30)) * k) + "px",
+        "--a-foto-h": fotoH + "px", "--a-foto-b": fotoB + "px",
+        "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos
+      }
+    };
+  }
+
+  function beregnTurkalender() {
     var s = state;
     var fmt = FORMATER[s.format];
     var opp = OPPSETT[s.oppsett];
@@ -352,6 +496,7 @@
     var overlinje = tilpassStorrelse((s.turlag || "").toUpperCase() + " · " + s.periode, SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
 
     return {
+      mal: "turkalender", harFoto: true,
       fmt: fmt, opp: opp, synlige: synlige, maks: maks, stor: stor, trinn: trinn, u: u,
       forMange: synlige.length > maks,
       bilde: bilde,
@@ -457,6 +602,76 @@
     }
   };
 
+  /* ---------- Plakatmaler: arrangement ---------- */
+
+  function malArrChip() {
+    return '<div class="a-chip">' +
+      '<div class="a-chip__dag">' + esc(state.arrDag) + '</div>' +
+      '<div class="a-chip__dato"><span class="a-chip__tall">' + esc(state.arrDato) + '</span><span class="a-chip__maaned">' + esc(state.arrMaaned) + '</span></div>' +
+    '</div>';
+  }
+
+  function malArrTittel(b) {
+    return '<div class="a-tittel' + (b.tittelBryt ? " a-tittel--bryt" : "") + '">' + esc(state.arrTittel) + '</div>' +
+      (state.arrUnder ? '<div class="a-under">' + esc(state.arrUnder) + '</div>' : "");
+  }
+
+  function malArrInfo(b) {
+    if (!b.info.length) return "";
+    return '<div class="a-info">' + b.info.map(function (r) {
+      return '<div class="a-info__rad"><span class="a-info__etikett">' + esc(r.etikett) + '</span><span class="a-info__verdi">' + esc(r.verdi) + '</span></div>';
+    }).join("") + '</div>';
+  }
+
+  function malArrTekst() {
+    return state.arrTekst ? '<div class="a-tekst">' + esc(state.arrTekst) + '</div>' : "";
+  }
+
+  // Datofelt og tittel side om side, brukt i «kort» og «flate».
+  function malArrTopp(b) {
+    return '<div class="a-topp">' + malArrChip() + '<div class="a-topp__tekst">' + malArrTittel(b) + '</div></div>';
+  }
+
+  var MALER_ARR = {
+    foto: function (b) {
+      var klasse = "a-flate a-flate--foto" + (b.liggende ? " a-flate--liggende" : "");
+      return '<div class="' + klasse + '">' +
+        '<div class="a-foto a-foto--fyll"><div class="p-foto" data-foto></div><div class="a-scrim a-scrim--foto"></div></div>' +
+        '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' +
+        malLogo() +
+        '<div class="a-innhold a-innhold--paa-foto">' + malArrChip() + '<div>' + malArrTittel(b) + '</div>' + malArrInfo(b) + malArrTekst() + '</div>' +
+        '<div style="position:absolute;left:0;right:0;bottom:0;">' + malBunn() + '</div>' +
+      '</div>';
+    },
+    kort: function (b) {
+      var foto = '<div class="a-foto ' + (b.liggende ? "a-foto--venstre" : "a-foto--topp") + '">' +
+        '<div class="p-foto" data-foto></div><div class="a-scrim ' + (b.liggende ? "a-scrim--venstre" : "a-scrim--topp") + '"></div>' +
+        '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() +
+      '</div>';
+      var innhold = '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst() + '</div>';
+      return '<div class="a-flate' + (b.liggende ? " a-flate--liggende" : "") + '">' +
+        (b.liggende ? '<div class="a-rad">' + foto + innhold + '</div>' : foto + innhold) +
+        malBunn() +
+      '</div>';
+    },
+    flate: function (b) {
+      var innhold = b.liggende
+        ? '<div class="a-innhold a-innhold--fyll a-innhold--kolonner">' +
+            '<div class="a-kolonne a-kolonne--venstre">' + malArrTopp(b) + '</div>' +
+            '<div class="a-kolonne a-kolonne--hoyre">' + malArrInfo(b) + malArrTekst() + '</div>' +
+          '</div>'
+        : '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst() + '</div>';
+      return '<div class="a-flate' + (b.liggende ? " a-flate--liggende" : "") + '">' +
+        '<div class="a-topplinje"></div>' +
+        '<div style="position:relative;flex:none;height:0;">' +
+          '<div class="a-overlinje a-overlinje--sort">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() +
+        '</div>' +
+        innhold +
+        malBunn() +
+      '</div>';
+    }
+  };
+
   /* ---------- Rendering ---------- */
 
   var el = {};
@@ -473,12 +688,44 @@
     var b = beregn();
     var p = el.plakat;
     Object.keys(b.vars).forEach(function (k) { p.style.setProperty(k, b.vars[k]); });
-    p.setAttribute("data-oppsett", state.oppsett);
-    p.innerHTML = MALER[state.oppsett](b);
+    p.setAttribute("data-mal", state.mal);
+    p.setAttribute("data-format", state.format);
+    p.setAttribute("data-oppsett", b.mal === "arrangement" ? state.arrOppsett : state.oppsett);
+    p.innerHTML = b.mal === "arrangement" ? MALER_ARR[state.arrOppsett](b) : MALER[state.oppsett](b);
     // Bildeadressen settes direkte på elementet, ikke via CSS-variabel,
     // så data-URL-er fra egne bilder alltid overlever.
     $$("[data-foto]", p).forEach(function (f) { f.style.backgroundImage = 'url("' + String(b.bilde).replace(/"/g, "%22") + '")'; });
     skalerForhandsvisning(b.fmt);
+    if (b.mal === "arrangement") sjekkPlass(p);
+  }
+
+  // Arrangementsplakaten har ingen maksgrense som turkalenderen. I stedet måles
+  // det om innholdet faktisk får plass, og brukeren advares hvis ikke.
+  function sjekkPlass(p) {
+    var innhold = $(".a-innhold", p);
+    var trangt = false;
+    if (innhold) {
+      // Innholdet er sentrert og kan flyte ut både oppe og nede, så vi måler
+      // barnas samlede utstrekning mot innholdsboksen, ikke scrollHeight.
+      var r = innhold.getBoundingClientRect();
+      var cs = getComputedStyle(innhold);
+      // Forhåndsvisningen er skalert med transform, så padding må skaleres likt som rektanglene.
+      var skala = innhold.offsetWidth ? r.width / innhold.offsetWidth : 1;
+      var padT = (parseFloat(cs.paddingTop) || 0) * skala, padB = (parseFloat(cs.paddingBottom) || 0) * skala;
+      var barn = Array.prototype.slice.call(innhold.children);
+      if (barn.length) {
+        var topp = Math.min.apply(null, barn.map(function (e) { return e.getBoundingClientRect().top; }));
+        var bunn = Math.max.apply(null, barn.map(function (e) { return e.getBoundingClientRect().bottom; }));
+        // Innholdet får bruke halve paddingen før vi sier fra.
+        trangt = topp < r.top + padT / 2 - 1 || bunn > r.bottom - padB / 2 + 1;
+      }
+      // På foto ligger innholdet nederst og vokser oppover. Overlinjen slutter ved ca. 82 px.
+      if (!trangt && innhold.classList.contains("a-innhold--paa-foto")) {
+        trangt = innhold.offsetTop + (parseFloat(cs.paddingTop) || 0) < 96;
+      }
+    }
+    el.formange.hidden = !trangt;
+    if (trangt) el.formange.textContent = "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Story eller Liggende.";
   }
 
   // Forhåndsvisningen er maks 540 px bred. På brede skjermer er den festet
@@ -536,14 +783,24 @@
       });
     });
 
+    var arr = state.mal === "arrangement";
+    $$(".panel [data-mal]").forEach(function (e) { e.hidden = e.getAttribute("data-mal") !== state.mal; });
+    $$("[data-kun-mal]").forEach(function (e) { e.hidden = e.getAttribute("data-kun-mal") !== state.mal; });
+    $$("[data-arr-type]").forEach(function (e) { e.hidden = e.getAttribute("data-arr-type").split(" ").indexOf(state.arrType) < 0; });
+    if ($("#mal-hjelp")) $("#mal-hjelp").textContent = MALVALG[state.mal].hjelp;
+    if ($("#arr-oppsett-hjelp")) $("#arr-oppsett-hjelp").textContent = ARR_OPPSETT[state.arrOppsett].tekst;
+    if ($("#arr-type-hjelp")) $("#arr-type-hjelp").textContent = ARR_TYPER[state.arrType].hjelp;
+    if ($("#bilde-felt")) $("#bilde-felt").hidden = !b.harFoto;
+
     $("#format-hjelp").textContent = b.fmt.tekst;
-    $("#tekst-hjelp").textContent = b.stor
-      ? "Stor tekst: lettere å lese i feeden, men det blir plass til én tur mindre."
-      : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.";
-    $("#oppsett-hjelp").textContent = b.opp.tekst + " Plass til " + b.maks + " turer i dette formatet.";
+    $("#tekst-hjelp").textContent = arr
+      ? (b.stor ? "Stor tekst: litt større informasjon og brødtekst." : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.")
+      : (b.stor ? "Stor tekst: lettere å lese i feeden, men det blir plass til én tur mindre."
+                : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.");
+    if (!arr) $("#oppsett-hjelp").textContent = b.opp.tekst + " Plass til " + b.maks + " turer i dette formatet.";
     el.bildenavn.textContent = state.bildenavn;
     el.nyttEksempel.hidden = state.egetBilde;
-    if (state.egetBilde) {
+    if (state.egetBilde || !b.harFoto) {
       el.kreditering.hidden = true;
     } else {
       el.kreditering.hidden = false;
@@ -553,16 +810,21 @@
     }
 
     $$("[data-utsnitt]").forEach(function (r) { settVerdi(r, b.u[r.getAttribute("data-utsnitt")]); });
-    ["tittel", "turlag", "periode", "lenke"].forEach(function (k) { settVerdi($("#" + k), state[k]); });
+    $$(".tekstfelt[data-felt]").forEach(function (f) {
+      var k = f.getAttribute("data-felt");
+      if (state[k] !== undefined) settVerdi(f, state[k]);
+    });
     if ($("#vis-logo")) settVerdi($("#vis-logo"), state.visLogo);
     if ($("#kort-glass")) settVerdi($("#kort-glass"), state.kortGlass);
-    if ($("#kort-glass-felt")) $("#kort-glass-felt").hidden = !(state.oppsett === "stort" || state.oppsett === "bakgrunn");
+    if ($("#kort-glass-felt")) $("#kort-glass-felt").hidden = arr || !(state.oppsett === "stort" || state.oppsett === "bakgrunn");
 
     renderTurliste(byggTurlisteNy);
 
-    el.formange.hidden = !b.forMange;
-    el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
-      "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
+    if (!arr) {
+      el.formange.hidden = !b.forMange;
+      el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
+        "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
+    }
 
     el.lastNed.disabled = b.forMange || state.laster;
     el.lastNed.textContent = state.laster ? "Lager bildet …" : (b.forMange ? "For mange turer for dette oppsettet" : "Last ned bildet");
@@ -588,6 +850,7 @@
   /* ---------- Reserveprompt ---------- */
 
   function byggPrompt(b) {
+    if (b.mal === "arrangement") return byggPromptArrangement(b);
     var turlag = (state.turlag || "").trim() || "turlaget";
     var linjer = b.synlige.map(function (t) {
       var deler = [];
@@ -612,6 +875,27 @@
       "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto fra turlaget.\n\n" +
       state.tittel + " for " + turlag + ", " + state.periode + ":\n" + linjer.join("\n");
+  }
+
+  function byggPromptArrangement(b) {
+    var turlag = (state.turlag || "").trim() || "turlaget";
+    var linjer = [
+      "Tittel: " + state.arrTittel,
+      state.arrUnder ? "Undertittel: " + state.arrUnder : "",
+      "Dato: " + [state.arrDag, state.arrDato + ".", state.arrMaaned].filter(Boolean).join(" ")
+    ].concat(b.info.map(function (r) { return r.etikett + ": " + r.verdi; }))
+     .concat(state.arrTekst ? ["Tekst: " + state.arrTekst] : []).filter(Boolean);
+
+    return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en plakat til sosiale medier i " + b.fmt.tekst +
+      " for ett arrangement.\n\n" +
+      "Profil som skal følges:\n" +
+      "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, hvit, sort tekst.\n" +
+      "Fonter: Romek Bold til tittelen, ABC Social Extended til undertittel og etiketter, ABC Social til brødtekst.\n" +
+      "Oppsett: " + b.opp.prompt + " Nederst et rødt bånd med nettadressen «" + state.lenke + "» i liten, medium skrift." +
+      (state.visLogo && b.harFoto ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre." : "") + "\n" +
+      "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
+      "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto fra turlaget.\n\n" +
+      "Innhold:\n- " + linjer.join("\n- ");
   }
 
   /* ---------- Eksport ---------- */
@@ -692,7 +976,8 @@
         console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
       }
       var blob = await tilBlob(canvas);
-      lastNedBlob(blob, "turkalender-" + slug(state.turlag) + "-" + state.format + ".png");
+      var navn = b.mal === "arrangement" ? "arrangement-" + slug(state.arrTittel) : "turkalender-" + slug(state.turlag);
+      lastNedBlob(blob, navn + "-" + state.format + ".png");
     } catch (e) {
       console.error(e);
       visFeil("Det gikk ikke å lage bildet: " + (e && e.message ? e.message : "ukjent feil") +
@@ -712,16 +997,20 @@
         var kn = e.target.closest("button[data-verdi]");
         if (!kn) return;
         var patch = {}; patch[gruppe.getAttribute("data-gruppe")] = kn.getAttribute("data-verdi");
+        // Liggende finnes bare for arrangement.
+        if (patch.mal === "turkalender" && state.format === "liggende") patch.format = "feed";
         oppdater(patch);
       });
     });
 
-    // Tekstfelter for tittel, turlag, periode og nettadresse
-    $$("input[data-felt].tekstfelt").forEach(function (input) {
-      input.addEventListener("input", function () {
-        var patch = {}; patch[input.getAttribute("data-felt")] = input.value;
+    // Tekstfelter, nedtrekk og tekstområder utenfor turlisten
+    $$(".tekstfelt[data-felt]").forEach(function (felt) {
+      var handler = function () {
+        var patch = {}; patch[felt.getAttribute("data-felt")] = felt.value;
         oppdater(patch);
-      });
+      };
+      felt.addEventListener("input", handler);
+      if (felt.tagName === "SELECT") felt.addEventListener("change", handler);
     });
 
     // Avkryssinger. Sjekkes for null, så en hurtigbufret index.html uten
@@ -809,7 +1098,8 @@
     $("#tom-skjema").addEventListener("click", function () {
       if (!window.confirm("Vil du tømme skjemaet? Alle turer og tekster nullstilles til eksempelinnholdet.")) return;
       tomLagring();
-      Object.assign(state, standardSkjema(), brukEksempelbilder());
+      var mal = state.mal;
+      Object.assign(state, standardSkjema(), brukEksempelbilder(), { mal: mal });
       $("#bilde-fil").value = "";
       visFeil("");
       render({ turliste: true, lagre: false });
