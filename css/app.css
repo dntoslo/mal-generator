@@ -196,6 +196,7 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 
 /* Hvitt kort (stort og bakgrunn) */
 .p-kort { position: absolute; left: 40px; right: 40px; bottom: 40px; background: var(--hvit); border-radius: 26px; display: flex; flex-direction: column; overflow: hidden; }
+.p-kort--glass { background: rgba(255,255,255,0.88); }
 .p-kort__liste { display: flex; flex-direction: column; gap: var(--kort-gap); padding: var(--kort-pad) 40px; }
 .p-kort__liste--bakgrunn { padding: 32px 40px 28px; }
 .p-kort .p-rad { gap: 22px; }
