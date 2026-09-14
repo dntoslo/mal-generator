@@ -21,12 +21,14 @@ Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `det
 
 `OPPSETT[...].maks` angir hvor mange turer det er plass til per format. «Stor tekst» trekker fra én, men aldri under tre. Grensene er satt ved å teste visuelt i Claude Design, ikke regnet ut. Endrer du høyder (`heroH`, `stortH`, `sideBredde` i `beregn()`), må grensene sjekkes på nytt.
 
-| Oppsett | Feed | Kvadrat | Story |
-|---|---|---|---|
-| Bilde øverst | 8 | 6 | 8 |
-| Stort bilde | 5 | 4 | 7 |
-| Stående til høyre | 7 | 5 | 8 |
-| Bilde som bakgrunn | 7 | 5 | 8 |
+| Oppsett | Feed | Story |
+|---|---|---|
+| Bilde øverst | 8 | 8 |
+| Stort bilde | 5 | 7 |
+| Stående til høyre | 7 | 8 |
+| Bilde som bakgrunn | 7 | 8 |
+
+Formatet kvadrat (1080 × 1080) fantes fram til 14. september 2026, men ble tatt ut fordi feed og story dekker behovet i Facebook og Instagram.
 
 ## Hvorfor «Stor tekst» tar fra antall turer
 
@@ -36,7 +38,7 @@ Alternativet var å krympe luften i designet. Det gir en trangere plakat som bry
 
 Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen), fra 82 til 52 px i «Stående til høyre». Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen «TURLAG · UKE · MÅNED» skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
 
-Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» (feed og kvadrat).
+Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i feed.
 
 ## Båndet nederst
 
@@ -46,9 +48,13 @@ Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medi
 
 Kortet i «Stort bilde» og «Bilde som bakgrunn» er helt hvitt som standard. Avkryssingen «Gjennomskinnelig kort» setter det til 88 % hvitt, så fotoet skinner svakt gjennom. Lavere enn det gjør brødteksten vanskelig å lese over mørke fotopartier. Frostet glass (uskarpt foto bak kortet) er utelukket fordi html2canvas ikke støtter uskarphetsfilter, og eksporten da ville avvike fra forhåndsvisningen.
 
-## Logo
+## Logo og bånd
 
-T-ikonet i det røde båndet nederst er alltid med som avsender. Den runde T-en i hvit sirkel oppe til høyre i fotoet kan skrus av med «Vis DNT-logo i bildet», for kanaler der avsenderen allerede er tydelig. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg.
+Den runde T-en i hvit sirkel oppe til høyre i fotoet og det røde båndet med nettadresse nederst er begge valgfrie, og av som standard fra 14. september 2026, fordi bildet gjør seg best i sosiale medier uten avsenderelementer. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg. Når båndet er av, faller høyden 88 px bort: radene i «Bilde øverst» og flatene i arrangementsmalen fyller ned til kanten, fotokolonnen i «Stående til høyre» og fotoflaten i liggende «Foto og tekstfelt» går helt ned, og kortet i «Stort bilde» og «Bilde som bakgrunn» avsluttes etter listen. Nettadressefeltet i skjemaet vises bare når båndet er på.
+
+## Turbo
+
+Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde», «Bilde som bakgrunn»), nederst i fotokolonnen («Stående til høyre»), og 24 px over det røde båndet nede til høyre i arrangementsmalen (over bunnkanten når båndet er av), der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (240 i liggende, 160 der figuren står under logoen eller i sidekolonnen).
 
 ## Eksempelbilder
 
@@ -83,10 +89,10 @@ Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krev
 
 ## Arrangementsmalen
 
-Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og fire formater, inkludert liggende 1920 × 1080.
+Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og tre formater: feed, story og liggende 1920 × 1080.
 
 - **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst).
 - **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Romek Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
 - **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
-- **Størrelser:** tittel opptil 104 px i feed og story, 92 i kvadrat, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (27 i kvadrat, 31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
+- **Størrelser:** tittel opptil 104 px i feed og story, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
 - **Plass:** i stedet for maksgrenser måler `sjekkPlass()` om innholdet flyter over etter rendering, og skjemaet advarer. Tekstfeltet er begrenset til 180 tegn for å holde plakaten lesbar.
