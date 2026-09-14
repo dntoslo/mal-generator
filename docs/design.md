@@ -50,6 +50,10 @@ Kortet i «Stort bilde» og «Bilde som bakgrunn» er helt hvitt som standard. A
 
 T-ikonet i det røde båndet nederst er alltid med som avsender. Den runde T-en i hvit sirkel oppe til høyre i fotoet kan skrus av med «Vis DNT-logo i bildet», for kanaler der avsenderen allerede er tydelig. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg.
 
+## Turbo
+
+Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde», «Bilde som bakgrunn»), nederst i fotokolonnen («Stående til høyre»), og over det røde båndet nede til høyre i arrangementsmalen, der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (170 i kvadrat, 240 i liggende, 160 der figuren står under logoen eller i sidekolonnen).
+
 ## Eksempelbilder
 
 Når ingen laster opp eget bilde vises et eksempelbilde fra `assets/img/eksempler/`. Ved hver åpning trekkes ett liggende og ett stående bilde tilfeldig. Forrige trekk huskes i nettleseren (`dnt-ukens-turer-eksempel`) og unngås, så det aldri blir samme bilde to ganger på rad. Knappen «Nytt eksempelbilde» trekker på nytt.

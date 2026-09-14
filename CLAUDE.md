@@ -15,6 +15,7 @@ Nettside som lar frivillige i DNT Oslo og Omegns turlag lage ferdige bilder til 
 - Turkalenderen har maksgrenser per oppsett. Arrangementsmalen har ingen grense, men `sjekkPlass()` måler etter rendering om innholdet flyter over, og viser advarsel. Formatet liggende finnes bare for arrangement.
 - Skjemaet lagres i `localStorage` under nøkkelen `dnt-ukens-turer-v1`. Opplastede bilder lagres bevisst ikke.
 - Fontene ABC Social, ABC Social Extended og Romek er lisensierte. De skal ligge lokalt i `assets/fonts`, ikke på et CDN, og ikke byttes ut uten avklaring.
+- Turbo (`assets/img/turbo.png`, transparent PNG) er en valgfri figur nede til høyre som alltid står i tillegg til DNT-logoen, aldri i stedet for. Plassering per oppsett i `malTurbo()`-kallene, størrelse via `--turbo-h`.
 - Eksempelbildene i `assets/img/eksempler` er ekte foto med fotograf oppgitt i `EKSEMPELBILDER` i app.js. Ett liggende og ett stående trekkes tilfeldig ved hver åpning. Tre av de stående er beskjæringer av liggende foto. Ikke legg inn KI-genererte bilder. Det er et poeng med hele verktøyet.
 - Fargene følger DNTs tidligere brandbook (fulle tonerekker) og er definert i `css/tokens.css`. Den nye, flate paletten ligger der også (`--ny-*`) og er tillatt i nye elementer. Bruk tokens, ikke egne toner. Graderingsfargene i `GRAD` følger DNTs graderingsstandard.
 

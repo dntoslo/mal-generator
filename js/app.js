@@ -124,6 +124,7 @@
   ];
   var EKSEMPELNOKKEL = "dnt-ukens-turer-eksempel";
   var LOGO = "assets/img/dnt-logo.png";
+  var TURBO = "assets/img/turbo.png";
   var T_IKON = "assets/img/dnt-t-ikon.png";
 
   var MANEDER = ["JANUAR", "FEBRUAR", "MARS", "APRIL", "MAI", "JUNI", "JULI", "AUGUST", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
@@ -178,6 +179,7 @@
       lenke: "dnt.no/oslo",
       periode: gjeldendePeriode(),
       visLogo: true,
+      visTurbo: false,
       kortGlass: false,
       utsnitt: nyttUtsnitt(),
       turer: [
@@ -270,7 +272,7 @@
           mal: state.mal, arrType: state.arrType, arrOppsett: state.arrOppsett,
           oppsett: state.oppsett, format: state.format, tekst: state.tekst,
           tittel: state.tittel, turlag: state.turlag, lenke: state.lenke, periode: state.periode,
-          visLogo: state.visLogo, kortGlass: state.kortGlass, utsnitt: state.utsnitt, turer: state.turer
+          visLogo: state.visLogo, visTurbo: state.visTurbo, kortGlass: state.kortGlass, utsnitt: state.utsnitt, turer: state.turer
         };
         ARR_FELT.forEach(function (k) { data[k] = state[k]; });
         localStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(data));
@@ -297,6 +299,7 @@
       });
       if (state.lenke === "Fyll inn lenke til turkalender" || state.lenke === "Fyll inn nettadresse, f.eks. dnt.no/oslo") state.lenke = standardSkjema().lenke;
       if (typeof d.visLogo === "boolean") state.visLogo = d.visLogo;
+      if (typeof d.visTurbo === "boolean") state.visTurbo = d.visTurbo;
       if (typeof d.kortGlass === "boolean") state.kortGlass = d.kortGlass;
       if (d.utsnitt && typeof d.utsnitt === "object") {
         var u = nyttUtsnitt();
@@ -454,6 +457,7 @@
         "--a-verdi-size": Math.round((liggende ? 31 : (kvadrat ? 28 : 30)) * k) + "px",
         "--a-tekst-size": Math.round((liggende ? 31 : (kvadrat ? 27 : 30)) * k) + "px",
         "--a-foto-h": fotoH + "px", "--a-foto-b": fotoB + "px",
+        "--turbo-h": (liggende ? 240 : (kvadrat ? 170 : 200)) + "px",
         "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos
       }
     };
@@ -513,7 +517,8 @@
         "--kort-gap": [20, 16, 13, 11][trinn] + "px", "--kort-pad": (s.format === "kvadrat" ? 24 : 32) + "px",
         "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos,
         "--tittel-size": tittelHero.px + "px", "--tittel-size-side": tittelSide.px + "px",
-        "--overlinje-size": overlinje.px + "px"
+        "--overlinje-size": overlinje.px + "px",
+        "--turbo-h": (s.format === "kvadrat" ? 160 : 200) + "px"
       }
     };
   }
@@ -547,6 +552,12 @@
     return '<div class="p-logo ' + (klasse || "") + '"><img src="' + LOGO + '" alt="DNT"></div>';
   }
 
+  // Turbo, Barnas Turlags maskot. Valgfri, står alltid i tillegg til DNT-logoen.
+  function malTurbo(klasse) {
+    if (!state.visTurbo) return "";
+    return '<img class="p-turbo ' + (klasse || "") + '" src="' + TURBO + '" alt="Turbo">';
+  }
+
   function malBunn(klasse) {
     return '<div class="p-bunn ' + (klasse || "") + '"><img src="' + T_IKON + '" alt=""><span>' + esc(state.lenke) + '</span></div>';
   }
@@ -557,7 +568,7 @@
         '<div class="p-hero">' +
           '<div class="p-foto" data-foto></div><div class="p-scrim p-scrim--topp"></div>' +
           '<div class="p-hero__tekst"><span class="p-overlinje p-overlinje--topp">' + esc(state.turlag.toUpperCase()) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(state.tittel) + '</span></div>' +
-          malLogo() +
+          malLogo() + malTurbo("p-turbo--hero") +
           '<div class="p-periode">' + esc(state.periode) + '</div>' +
         '</div>' +
         '<div class="p-rader">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
@@ -569,7 +580,7 @@
         '<div class="p-hero p-hero--stort">' +
           '<div class="p-foto" data-foto></div><div class="p-scrim p-scrim--stort"></div>' +
           '<div class="p-hero__tekst"><span class="p-overlinje">' + esc(state.turlag.toUpperCase()) + ' · ' + esc(state.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(state.tittel) + '</span></div>' +
-          malLogo() +
+          malLogo() + malTurbo("p-turbo--underlogo") +
         '</div>' +
         '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
@@ -584,7 +595,7 @@
             '<div class="p-side__topp"><span class="p-side__periode">' + esc(state.periode) + '</span><span class="p-side__tittel' + (b.tittelSideBryt ? " p-side__tittel--bryt" : "") + '">' + esc(state.tittel) + '</span><span class="p-side__turlag">' + esc(state.turlag) + '</span></div>' +
             '<div class="p-side__liste">' + b.synlige.map(function (t) { return malRad(t, false, true); }).join("") + '</div>' +
           '</div>' +
-          '<div class="p-side__foto"><div class="p-foto" data-foto></div><div class="p-scrim p-scrim--side"></div>' + malLogo("p-logo--liten") + '</div>' +
+          '<div class="p-side__foto"><div class="p-foto" data-foto></div><div class="p-scrim p-scrim--side"></div>' + malLogo("p-logo--liten") + malTurbo("p-turbo--side") + '</div>' +
         '</div>' +
         malBunn("p-bunn--side") +
       '</div>';
@@ -593,7 +604,7 @@
       return '<div class="p-flate p-flate--bakgrunn">' +
         '<div class="p-foto p-foto--fyll" data-foto></div><div class="p-scrim p-scrim--bakgrunn"></div>' +
         '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(state.turlag.toUpperCase()) + ' · ' + esc(state.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(state.tittel) + '</span></div>' +
-        malLogo("p-logo--lav") +
+        malLogo("p-logo--lav") + malTurbo("p-turbo--underlogo") +
         '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
           malBunn("p-bunn--tett") +
@@ -638,15 +649,15 @@
       return '<div class="' + klasse + '">' +
         '<div class="a-foto a-foto--fyll"><div class="p-foto" data-foto></div><div class="a-scrim a-scrim--foto"></div></div>' +
         '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' +
-        malLogo() +
-        '<div class="a-innhold a-innhold--paa-foto">' + malArrChip() + '<div>' + malArrTittel(b) + '</div>' + malArrInfo(b) + malArrTekst() + '</div>' +
+        malLogo() + malTurbo("p-turbo--band") +
+        '<div class="a-innhold a-innhold--paa-foto' + (state.visTurbo ? " a-innhold--turbo" : "") + '">' + malArrChip() + '<div>' + malArrTittel(b) + '</div>' + malArrInfo(b) + malArrTekst() + '</div>' +
         '<div style="position:absolute;left:0;right:0;bottom:0;">' + malBunn() + '</div>' +
       '</div>';
     },
     kort: function (b) {
       var foto = '<div class="a-foto ' + (b.liggende ? "a-foto--venstre" : "a-foto--topp") + '">' +
         '<div class="p-foto" data-foto></div><div class="a-scrim ' + (b.liggende ? "a-scrim--venstre" : "a-scrim--topp") + '"></div>' +
-        '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() +
+        '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() + malTurbo("p-turbo--fotoflate") +
       '</div>';
       var innhold = '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst() + '</div>';
       return '<div class="a-flate' + (b.liggende ? " a-flate--liggende" : "") + '">' +
@@ -655,14 +666,15 @@
       '</div>';
     },
     flate: function (b) {
+      var turbo = state.visTurbo ? " a-innhold--turbo" : "";
       var innhold = b.liggende
-        ? '<div class="a-innhold a-innhold--fyll a-innhold--kolonner">' +
+        ? '<div class="a-innhold a-innhold--fyll a-innhold--kolonner' + turbo + '">' +
             '<div class="a-kolonne a-kolonne--venstre">' + malArrTopp(b) + '</div>' +
             '<div class="a-kolonne a-kolonne--hoyre">' + malArrInfo(b) + malArrTekst() + '</div>' +
           '</div>'
-        : '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst() + '</div>';
+        : '<div class="a-innhold a-innhold--fyll a-innhold--midt' + turbo + '">' + malArrTopp(b) + malArrInfo(b) + malArrTekst() + '</div>';
       return '<div class="a-flate' + (b.liggende ? " a-flate--liggende" : "") + '">' +
-        '<div class="a-topplinje"></div>' +
+        '<div class="a-topplinje"></div>' + malTurbo("p-turbo--band") +
         '<div style="position:relative;flex:none;height:0;">' +
           '<div class="a-overlinje a-overlinje--sort">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() +
         '</div>' +
@@ -815,6 +827,7 @@
       if (state[k] !== undefined) settVerdi(f, state[k]);
     });
     if ($("#vis-logo")) settVerdi($("#vis-logo"), state.visLogo);
+    if ($("#vis-turbo")) settVerdi($("#vis-turbo"), state.visTurbo);
     if ($("#kort-glass")) settVerdi($("#kort-glass"), state.kortGlass);
     if ($("#kort-glass-felt")) $("#kort-glass-felt").hidden = arr || !(state.oppsett === "stort" || state.oppsett === "bakgrunn");
 
@@ -871,6 +884,7 @@
       "Fonter: Romek Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\n" +
       "Oppsett: " + b.opp.prompt + " Nederst et rødt bånd med nettadressen «" + state.lenke + "» i liten, medium skrift, mindre enn turmålene." +
       (state.visLogo ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre i fotoet." : " Ingen logo i fotoet.") +
+      (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre i fotoet." : "") +
       (state.kortGlass && (state.oppsett === "stort" || state.oppsett === "bakgrunn") ? " Kortet er svakt gjennomskinnelig (88 % hvitt) så fotoet skinner gjennom." : "") + "\n" +
       "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto fra turlaget.\n\n" +
@@ -892,7 +906,8 @@
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, hvit, sort tekst.\n" +
       "Fonter: Romek Bold til tittelen, ABC Social Extended til undertittel og etiketter, ABC Social til brødtekst.\n" +
       "Oppsett: " + b.opp.prompt + " Nederst et rødt bånd med nettadressen «" + state.lenke + "» i liten, medium skrift." +
-      (state.visLogo && b.harFoto ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre." : "") + "\n" +
+      (state.visLogo && b.harFoto ? " Rund DNT-logo (T i hvit sirkel) oppe til høyre." : "") +
+      (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre." : "") + "\n" +
       "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto fra turlaget.\n\n" +
       "Innhold:\n- " + linjer.join("\n- ");
@@ -1017,6 +1032,7 @@
     // elementene ikke stopper resten av oppstarten.
     if ($("#vis-logo")) $("#vis-logo").addEventListener("change", function (e) { oppdater({ visLogo: e.target.checked }); });
     if ($("#kort-glass")) $("#kort-glass").addEventListener("change", function (e) { oppdater({ kortGlass: e.target.checked }); });
+    if ($("#vis-turbo")) $("#vis-turbo").addEventListener("change", function (e) { oppdater({ visTurbo: e.target.checked }); });
 
     // Utsnitt
     $$("[data-utsnitt]").forEach(function (r) {
