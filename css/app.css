@@ -256,7 +256,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 .a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
 .a-innhold--fyll { flex: 1; }
-.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: 88px; color: var(--hvit); }
+.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: var(--band-h, 88px); color: var(--hvit); }
 .a-innhold--hvit { color: var(--hvit); }
 .a-innhold--midt { justify-content: center; }
 .a-flate--liggende .a-innhold--paa-foto { right: auto; width: 1180px; }
@@ -301,7 +301,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .p-turbo--hero { right: 46px; bottom: 28px; }
 .p-turbo--underlogo { right: 46px; top: 150px; height: calc(var(--turbo-h, 200px) * 0.8); }
 .p-turbo--side { right: 30px; bottom: 28px; height: calc(var(--turbo-h, 200px) * 0.8); }
-.p-turbo--band { right: var(--a-pad, 64px); bottom: 112px; z-index: 1; }
+.p-turbo--band { right: var(--a-pad, 64px); bottom: calc(var(--band-h, 88px) + 24px); z-index: 1; }
 .p-turbo--fotoflate { right: 40px; bottom: 24px; }
 .a-innhold--turbo { padding-right: calc(var(--turbo-h, 200px) + 100px); }
 /* I liggende foto er teksten allerede begrenset til 1180 px, Turbo står til høyre for den. */
