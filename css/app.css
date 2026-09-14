@@ -256,7 +256,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 .a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
 .a-innhold--fyll { flex: 1; }
-.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: 88px; color: var(--hvit); }
+.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: var(--band-h, 88px); color: var(--hvit); }
 .a-innhold--hvit { color: var(--hvit); }
 .a-innhold--midt { justify-content: center; }
 .a-flate--liggende .a-innhold--paa-foto { right: auto; width: 1180px; }
@@ -295,3 +295,17 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .a-innhold--kolonner > .a-kolonne--hoyre { flex: 1; }
 .a-innhold--kolonner .a-topp { flex-direction: column; gap: 28px; }
 .a-innhold--kolonner .a-topp__tekst { padding-top: 0; }
+
+/* ---------- Turbo, Barnas Turlags maskot ---------- */
+.p-turbo { position: absolute; height: var(--turbo-h, 200px); width: auto; display: block; pointer-events: none; }
+.p-turbo--hero { right: 46px; bottom: 28px; }
+.p-turbo--underlogo { right: 46px; top: 150px; height: calc(var(--turbo-h, 200px) * 0.8); }
+.p-turbo--side { right: 30px; bottom: 28px; height: calc(var(--turbo-h, 200px) * 0.8); }
+.p-turbo--band { right: var(--a-pad, 64px); bottom: calc(var(--band-h, 88px) + 24px); z-index: 1; }
+.p-turbo--fotoflate { right: 40px; bottom: 24px; }
+.a-innhold--turbo { padding-right: calc(var(--turbo-h, 200px) + 100px); }
+/* I liggende foto er teksten allerede begrenset til 1180 px, Turbo står til høyre for den. */
+.a-flate--liggende .a-innhold--paa-foto.a-innhold--turbo { padding-right: var(--a-pad, 80px); }
+/* I liggende flate står Turbo under høyre kolonne, så kolonnen får mindre polstring og to infokolonner. */
+.a-flate--liggende .a-innhold--kolonner.a-innhold--turbo { padding-right: calc(var(--turbo-h, 240px) + 40px); }
+.a-flate--liggende .a-innhold--kolonner.a-innhold--turbo .a-info { grid-template-columns: repeat(2, minmax(0, 1fr)); }
