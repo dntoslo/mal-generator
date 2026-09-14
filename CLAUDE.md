@@ -11,10 +11,12 @@ Nettside som lar frivillige i DNT Oslo og Omegns turlag lage ferdige bilder til 
 - Plakaten (`#plakat`) rendres alltid i 1080 px bredde og skaleres kun visuelt med `transform`. All plakat-CSS må derfor være i px, aldri rem, vw eller prosent.
 - Eksporten bruker html2canvas 1.4.1, som ikke støtter `object-fit`. Fotoet legges derfor som `background-image` med utregnet `background-size` i px (`bakgrunn()` i app.js). Bildeadressen settes direkte på elementet, ikke via CSS-variabel.
 - Tittel og overlinje skaleres ned til én linje med canvas `measureText` (`tilpassStorrelse()`). Det krever lastede fonter, derfor rendres plakaten på nytt ved `document.fonts.ready`. Klipp ikke denne omrenderingen.
-- Utsnitt (x, y, zoom) lagres per format, så feed, kvadrat, story og liggende kan ha ulikt utsnitt av samme bilde.
+- Utsnitt (x, y, zoom) lagres per format, så feed, story og liggende kan ha ulikt utsnitt av samme bilde. Kvadrat (1080 × 1080) ble fjernet 14. september 2026, ikke legg det inn igjen uten avklaring.
 - Turkalenderen har maksgrenser per oppsett. Arrangementsmalen har ingen grense, men `sjekkPlass()` måler etter rendering om innholdet flyter over, og viser advarsel. Formatet liggende finnes bare for arrangement.
 - Skjemaet lagres i `localStorage` under nøkkelen `dnt-ukens-turer-v1`. Opplastede bilder lagres bevisst ikke.
 - Fontene ABC Social, ABC Social Extended og Romek er lisensierte. De skal ligge lokalt i `assets/fonts`, ikke på et CDN, og ikke byttes ut uten avklaring.
+- Logo, Turbo og det røde båndet nederst er alle av som standard (`visLogo`, `visTurbo`, `visBand`), fordi bildet skal fungere som ren SoMe-post. Turbo (`assets/img/turbo.png`, transparent PNG) står alltid i tillegg til DNT-logoen, aldri i stedet for. Plassering per oppsett i `malTurbo()`-kallene, størrelse via `--turbo-h`.
+- Båndets høyde 88 px finnes bare som `band` i `beregn*()` og som `--band-h` i CSS. Når båndet er av er den 0, og fotokolonnen i «Stående til høyre», fotoflaten i liggende «Foto og tekstfelt», innholdet på foto i arrangement og Turbo over båndet følger med ned.
 - Eksempelbildene i `assets/img/eksempler` er ekte foto med fotograf oppgitt i `EKSEMPELBILDER` i app.js. Ett liggende og ett stående trekkes tilfeldig ved hver åpning. Tre av de stående er beskjæringer av liggende foto. Ikke legg inn KI-genererte bilder. Det er et poeng med hele verktøyet.
 - Fargene følger DNTs tidligere brandbook (fulle tonerekker) og er definert i `css/tokens.css`. Den nye, flate paletten ligger der også (`--ny-*`) og er tillatt i nye elementer. Bruk tokens, ikke egne toner. Graderingsfargene i `GRAD` følger DNTs graderingsstandard.
 

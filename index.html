@@ -32,7 +32,6 @@
       <p class="felt__etikett">2. Velg format</p>
       <div class="knapperad" data-gruppe="format" role="group" aria-label="Format">
         <button type="button" class="pille" data-verdi="feed">Feed</button>
-        <button type="button" class="pille" data-verdi="kvadrat">Kvadrat</button>
         <button type="button" class="pille" data-verdi="story">Story</button>
         <button type="button" class="pille" data-verdi="liggende" data-kun-mal="arrangement" hidden>Liggende</button>
       </div>
@@ -89,7 +88,7 @@
         <label class="glider"><span>Vannrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="x"></label>
         <label class="glider"><span>Loddrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="y"></label>
         <label class="glider"><span>Zoom</span><input type="range" min="100" max="200" step="1" data-utsnitt="z"></label>
-        <p class="hjelp">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så feed, kvadrat og story kan ha ulikt.</p>
+        <p class="hjelp">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så feed og story kan ha ulikt.</p>
       </div>
     </div>
 
@@ -131,9 +130,13 @@
       <p class="felt__etikett">6. Turlag, nettadresse og logo</p>
       <label class="skjult" for="turlag">Turlag</label>
       <input type="text" class="tekstfelt" id="turlag" data-felt="turlag" placeholder="Navn på turlaget">
-      <label class="skjult" for="lenke">Nettadresse</label>
-      <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/oslo">
-      <label class="avkryssing"><input type="checkbox" id="vis-logo" checked><span>Vis DNT-logo i bildet</span></label>
+      <label class="avkryssing"><input type="checkbox" id="vis-band"><span>Vis rødt bånd med nettadresse nederst</span></label>
+      <div id="lenke-felt" hidden>
+        <label class="skjult" for="lenke">Nettadresse</label>
+        <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/oslo">
+      </div>
+      <label class="avkryssing"><input type="checkbox" id="vis-logo"><span>Vis DNT-logo i bildet</span></label>
+      <label class="avkryssing"><input type="checkbox" id="vis-turbo"><span>Vis Turbo (Barnas Turlag)</span></label>
     </div>
 
     <div class="felt felt--romslig" data-mal="turkalender">
