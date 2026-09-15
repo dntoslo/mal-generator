@@ -1,4 +1,4 @@
-# Designbeslutninger i malgeneratoren
+# Designbeslutninger i Turplakaten
 
 Kort om det som ikke er opplagt fra koden. Leses ved behov.
 
@@ -13,7 +13,7 @@ Kort om det som ikke er opplagt fra koden. Leses ved behov.
 | 6 | 2 |
 | 7 eller flere | 3 |
 
-Deretter justeres det: pluss ett trinn hvis noen tur har detaljer (turleder, varighet, gradering eller påmelding), pluss ett hvis oppsettet ikke er «Bilde øverst» og det er mer enn fire turer, minus ett i Story-format fordi det er mer plass. Trinnet klemmes alltid til 0 til 3.
+Deretter justeres det: pluss ett trinn hvis noen tur har detaljer (turleder, varighet, gradering eller påmelding), pluss ett hvis oppsettet ikke er «Bilde øverst» og det er mer enn fire turer, minus ett i historie-format fordi det er mer plass. Trinnet klemmes alltid til 0 til 3.
 
 Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `detalj`). Det er nedre grense for lesbarhet på mobil, og skal ikke senkes.
 
@@ -21,14 +21,14 @@ Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `det
 
 `OPPSETT[...].maks` angir hvor mange turer det er plass til per format. «Stor tekst» trekker fra én, men aldri under tre. Grensene er satt ved å teste visuelt i Claude Design, ikke regnet ut. Endrer du høyder (`heroH`, `stortH`, `sideBredde` i `beregn()`), må grensene sjekkes på nytt.
 
-| Oppsett | Feed | Story |
+| Oppsett | Innlegg | Historie |
 |---|---|---|
 | Bilde øverst | 8 | 8 |
 | Stort bilde | 5 | 7 |
 | Stående til høyre | 7 | 8 |
 | Bilde som bakgrunn | 7 | 8 |
 
-Formatet kvadrat (1080 × 1080) fantes fram til 14. september 2026, men ble tatt ut fordi feed og story dekker behovet i Facebook og Instagram.
+Formatet kvadrat (1080 × 1080) fantes fram til 14. september 2026, men ble tatt ut fordi innlegg og historie dekker behovet i Facebook og Instagram.
 
 ## Hvorfor «Stor tekst» tar fra antall turer
 
@@ -38,7 +38,7 @@ Alternativet var å krympe luften i designet. Det gir en trangere plakat som bry
 
 Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen), fra 82 til 52 px i «Stående til høyre». Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen «TURLAG · UKE · MÅNED» skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
 
-Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i feed.
+Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i innlegg.
 
 ## Båndet nederst
 
@@ -89,10 +89,10 @@ Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krev
 
 ## Arrangementsmalen
 
-Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og tre formater: feed, story og liggende 1920 × 1080.
+Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og tre formater: innlegg, historie og liggende 1920 × 1080. Internt heter de fortsatt `feed`, `story` og `liggende`.
 
 - **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst).
 - **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Romek Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
 - **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
-- **Størrelser:** tittel opptil 104 px i feed og story, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
+- **Størrelser:** tittel opptil 104 px i innlegg og historie, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
 - **Plass:** i stedet for maksgrenser måler `sjekkPlass()` om innholdet flyter over etter rendering, og skjemaet advarer. Tekstfeltet er begrenset til 180 tegn for å holde plakaten lesbar.
