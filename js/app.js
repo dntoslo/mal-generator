@@ -1,5 +1,5 @@
 /* =========================================================
-   Malgenerator for turkalender (DNT Oslo og Omegn)
+   Turplakaten (DNT Oslo og Omegn)
    Ren JavaScript uten byggesteg. Én tilstand, to renderfunksjoner:
    renderSkjema() oppdaterer venstre kolonne, renderPlakat() bygger
    plakaten i høyre kolonne. Eksport skjer med html2canvas fra en
@@ -41,9 +41,10 @@
   };
 
   var FORMATER = {
-    feed:     { bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
-    story:    { bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" },
-    liggende: { bredde: 1920, hoyde: 1080, tekst: "1920 × 1080 px" }  // bare arrangement
+    // Nøklene er interne og lagres i skjemaet. Navnene er dem Facebook og Instagram bruker på norsk.
+    feed:     { navn: "Innlegg",  bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
+    story:    { navn: "Historie", bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" },
+    liggende: { navn: "Liggende", bredde: 1920, hoyde: 1080, tekst: "1920 × 1080 px" }  // bare arrangement
   };
 
   // Malene. Turkalender er den opprinnelige, arrangement kom til 11. september 2026.
@@ -741,7 +742,7 @@
       }
     }
     el.formange.hidden = !trangt;
-    if (trangt) el.formange.textContent = "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Story eller Liggende.";
+    if (trangt) el.formange.textContent = "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Historie eller Liggende.";
   }
 
   // Forhåndsvisningen er maks 540 px bred. På brede skjermer er den festet
@@ -808,7 +809,7 @@
     if ($("#arr-type-hjelp")) $("#arr-type-hjelp").textContent = ARR_TYPER[state.arrType].hjelp;
     if ($("#bilde-felt")) $("#bilde-felt").hidden = !b.harFoto;
 
-    $("#format-hjelp").textContent = b.fmt.tekst;
+    $("#format-hjelp").textContent = b.fmt.navn + ", " + b.fmt.tekst;
     $("#tekst-hjelp").textContent = arr
       ? (b.stor ? "Stor tekst: litt større informasjon og brødtekst." : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.")
       : (b.stor ? "Stor tekst: lettere å lese i feeden, men det blir plass til én tur mindre."
@@ -842,7 +843,7 @@
     if (!arr) {
       el.formange.hidden = !b.forMange;
       el.formange.textContent = b.synlige.length + " turer får ikke plass i dette oppsettet (maks " + b.maks +
-        "). Velg «Bilde øverst», bytt til Story, eller del kalenderen i to bilder.";
+        "). Velg «Bilde øverst», bytt til Historie, eller del kalenderen i to bilder.";
     }
 
     el.lastNed.disabled = b.forMange || state.laster;
@@ -883,8 +884,8 @@
     });
     if (!linjer.length) linjer.push("- (fyll inn dag, dato, klokkeslett, turmål og startsted per tur)");
 
-    return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en grafikk til Facebook og Instagram i " +
-      b.fmt.tekst + " med " + (state.tittel || "turkalender").toLowerCase() + ".\n\n" +
+    return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en grafikk til Facebook og Instagram som " +
+      b.fmt.navn.toLowerCase() + " (" + b.fmt.tekst + ") med " + (state.tittel || "turkalender").toLowerCase() + ".\n\n" +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, beige #F2E6D0 til radveksling, mørk beige #E8D7B6 til datofelt, hvit, sort tekst.\n" +
       "Fonter: Romek Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\n" +
@@ -906,7 +907,7 @@
     ].concat(b.info.map(function (r) { return r.etikett + ": " + r.verdi; }))
      .concat(state.arrTekst ? ["Tekst: " + state.arrTekst] : []).filter(Boolean);
 
-    return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en plakat til sosiale medier i " + b.fmt.tekst +
+    return "Du er designer for " + turlag + " i DNT Oslo og Omegn. Lag en plakat til sosiale medier som " + b.fmt.navn.toLowerCase() + " (" + b.fmt.tekst + ")" +
       " for ett arrangement.\n\n" +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, hvit, sort tekst.\n" +
