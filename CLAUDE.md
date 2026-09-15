@@ -1,4 +1,4 @@
-# Malgenerator for turkalender
+# Turplakaten
 
 Nettside som lar frivillige i DNT Oslo og Omegns turlag lage ferdige bilder til Facebook og Instagram, låst til DNTs profil. To maler: turkalender (flere turer i liste) og arrangement (ett arrangement, også i liggende format). Ren HTML, CSS og JavaScript uten byggesteg, laget for GitHub Pages.
 
@@ -11,7 +11,7 @@ Nettside som lar frivillige i DNT Oslo og Omegns turlag lage ferdige bilder til 
 - Plakaten (`#plakat`) rendres alltid i 1080 px bredde og skaleres kun visuelt med `transform`. All plakat-CSS må derfor være i px, aldri rem, vw eller prosent.
 - Eksporten bruker html2canvas 1.4.1, som ikke støtter `object-fit`. Fotoet legges derfor som `background-image` med utregnet `background-size` i px (`bakgrunn()` i app.js). Bildeadressen settes direkte på elementet, ikke via CSS-variabel.
 - Tittel og overlinje skaleres ned til én linje med canvas `measureText` (`tilpassStorrelse()`). Det krever lastede fonter, derfor rendres plakaten på nytt ved `document.fonts.ready`. Klipp ikke denne omrenderingen.
-- Utsnitt (x, y, zoom) lagres per format, så feed, story og liggende kan ha ulikt utsnitt av samme bilde. Kvadrat (1080 × 1080) ble fjernet 14. september 2026, ikke legg det inn igjen uten avklaring.
+- Utsnitt (x, y, zoom) lagres per format, så innlegg, historie og liggende kan ha ulikt utsnitt av samme bilde. Formatene heter Innlegg, Historie og Liggende utad, men nøklene i `FORMATER`, lagringen og filnavnene er fortsatt `feed`, `story` og `liggende`. Kvadrat (1080 × 1080) ble fjernet 14. september 2026, ikke legg det inn igjen uten avklaring.
 - Turkalenderen har maksgrenser per oppsett. Arrangementsmalen har ingen grense, men `sjekkPlass()` måler etter rendering om innholdet flyter over, og viser advarsel. Formatet liggende finnes bare for arrangement.
 - Skjemaet lagres i `localStorage` under nøkkelen `dnt-ukens-turer-v1`. Opplastede bilder lagres bevisst ikke.
 - Fontene ABC Social, ABC Social Extended og Romek er lisensierte. De skal ligge lokalt i `assets/fonts`, ikke på et CDN, og ikke byttes ut uten avklaring.

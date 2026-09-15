@@ -1,6 +1,6 @@
-# Turkalender: malgenerator for turlag
+# Turplakaten
 
-Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal, fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal (turkalender eller arrangement), fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
 
 To maler:
 
@@ -9,7 +9,7 @@ To maler:
 
 ## Slik brukes det
 
-1. Velg mal, og deretter format: Feed (1080 × 1350), Story (1080 × 1920) eller, for arrangement, Liggende (1920 × 1080).
+1. Velg mal, og deretter format: Innlegg (1080 × 1350), Historie (1080 × 1920) eller, for arrangement, Liggende (1920 × 1080).
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
 4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og eventuelt nettadresse. Det røde båndet med nettadresse nederst, DNT-logoen oppe til høyre og Turbo (Barnas Turlags maskot) nede til høyre er alle av som standard, fordi bildet gjør seg best i sosiale medier uten. Kryss av for det du vil ha med. Standardadressen er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske.
@@ -62,7 +62,7 @@ git add -A && git commit -m "Beskriv endringen" && git push
 Verdt å vite:
 
 - Repoet er offentlig inntil organisasjonen dntoslo får GitHub Team-lisens, og gjøres privat etter det (Settings, Danger zone, Change visibility). Pages fortsetter å virke fra privat repo på Team-planen. Nettsiden er uansett åpen for alle med lenken. DNT har lisens på fontene.
-- Bruk repoet bare til denne generatoren. Ikke legg inn deltakerlister eller andre personopplysninger.
+- Bruk repoet bare til Turplakaten. Ikke legg inn deltakerlister eller andre personopplysninger.
 
 ## Eksempelbilder
 
