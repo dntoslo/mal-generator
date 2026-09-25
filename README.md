@@ -1,11 +1,12 @@
 # Turplakaten
 
-Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal (turkalender eller arrangement), fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal (turkalender, arrangement eller turtips), fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
 
-To maler:
+Tre maler:
 
 - **Turkalender**: flere turer i én liste, for uka eller måneden.
 - **Arrangement**: ett arrangement, som tur, kurs eller dugnad, med tittel, dato, tid, sted, kort tekst og valgfrie felt som pris, påmeldingsfrist eller hva man skal ta med. Kan også lastes ned liggende (1920 × 1080) til Facebook-arrangement og skjerm.
+- **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet, gradering, start, kollektivt, hvem turen passer for, hytte eller rasteplass underveis og beste tid på året.
 
 ## Slik brukes det
 
@@ -13,7 +14,7 @@ To maler:
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
 4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og eventuelt nettadresse. Det røde båndet med nettadresse nederst, DNT-logoen oppe til høyre og Turbo (Barnas Turlags maskot) nede til høyre er alle av som standard, fordi bildet gjør seg best i sosiale medier uten. Kryss av for det du vil ha med. Standardadressen er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske.
-5. Turkalender: legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt. Arrangement: velg type (tur, kurs eller dugnad) og fyll inn feltene. Tomme felt vises ikke i plakaten. Får ikke innholdet plass, sier skjemaet fra.
+5. Turkalender: legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt. Arrangement: velg type (tur, kurs eller dugnad) og fyll inn feltene. Turtips: fyll inn turmål og de faktaene du vil ha med. Tomme felt vises ikke i plakaten. Får ikke innholdet plass, sier skjemaet fra.
 6. Trykk «Last ned bildet».
 
 Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt med turene dine som kan limes inn i Claude.
@@ -26,8 +27,8 @@ css/tokens.css        DNTs designtokens og fonter
 css/app.css           stiler for skjema og plakat
 js/app.js             all logikk
 js/vendor/            html2canvas 1.4.1 (bildeeksport)
-assets/fonts/         ABC Social, ABC Social Extended, Romek (lisensierte)
-assets/img/           DNT-logo og T-ikon
+assets/fonts/         ABC Social, ABC Social Extended, Whitman (lisensierte)
+assets/img/           DNT-logo og Turbo
 assets/img/eksempler/ 29 eksempelfoto som rullerer
 docs/design.md        begrunnelser bak størrelser og grenser
 CLAUDE.md             kontekst for videre arbeid med Claude Code
@@ -74,4 +75,4 @@ Fotografer i dag: Daniel Jacobsen og Marius Dalseg. To bilder fra den opprinneli
 
 ## Fonter og bilder
 
-Fontene ABC Social (Dinamo) og Romek (The Designers Foundry) er lisensierte og skal bare brukes i DNTs egne flater. Eksempelbildene er ekte foto. Verktøyet skal ikke bruke KI-genererte bilder.
+Fontene ABC Social (Dinamo) og Whitman (Font Bureau) er lisensierte og skal bare brukes i DNTs egne flater. Eksempelbildene er ekte foto. Verktøyet skal ikke bruke KI-genererte bilder.

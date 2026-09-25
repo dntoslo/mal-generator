@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Turplakaten: bilder til sosiale medier for turlag</title>
-<meta name="description" content="Lag ferdige bilder til Facebook og Instagram med turkalender eller arrangement, i DNTs profil.">
+<meta name="description" content="Lag ferdige bilder til Facebook og Instagram i DNTs profil, med turkalender, arrangement eller turtips.">
 <link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/app.css">
@@ -16,7 +16,8 @@
 
     <header class="panel__intro">
       <h1 class="panel__tittel">Turplakaten</h1>
-      <p class="panel__ingress">Lag et ferdig bilde til Facebook og Instagram med ukens turer eller ett arrangement. Farger, fonter og oppsett følger DNTs profil, du fyller bare inn.</p>
+      <p class="panel__ingress">Lag ferdige bilder til Facebook og Instagram i DNTs profil. Velg en mal, fyll inn og last ned.</p>
+      <p class="panel__tips"><strong>Tips:</strong> Innlegg som ligner hverandre blir fort oversett. Bland gjerne malene her med egne bilder og korte filmer, så blir ikke innleggene like fra uke til uke.</p>
     </header>
 
     <div class="felt">
@@ -24,6 +25,7 @@
       <div class="knapperad" data-gruppe="mal" role="group" aria-label="Mal">
         <button type="button" class="pille" data-verdi="turkalender">Turkalender</button>
         <button type="button" class="pille" data-verdi="arrangement">Arrangement</button>
+        <button type="button" class="pille" data-verdi="turtips">Turtips</button>
       </div>
       <p class="hjelp" id="mal-hjelp"></p>
     </div>
@@ -51,9 +53,7 @@
       <p class="felt__etikett">3. Velg bildeoppsett</p>
       <div class="knapperad knapperad--grid" data-gruppe="oppsett" role="group" aria-label="Bildeoppsett">
         <button type="button" class="kort-knapp" data-verdi="topp">Bilde øverst</button>
-        <button type="button" class="kort-knapp" data-verdi="stort">Stort bilde</button>
-        <button type="button" class="kort-knapp" data-verdi="side">Stående til høyre</button>
-        <button type="button" class="kort-knapp" data-verdi="bakgrunn">Bilde som bakgrunn</button>
+        <button type="button" class="kort-knapp" data-verdi="bakgrunn">Stort bilde</button>
       </div>
       <p class="hjelp" id="oppsett-hjelp"></p>
       <label class="avkryssing" id="kort-glass-felt" hidden><input type="checkbox" id="kort-glass"><span>Gjennomskinnelig kort, fotoet skinner svakt gjennom</span></label>
@@ -64,9 +64,18 @@
       <div class="knapperad knapperad--grid" data-gruppe="arrOppsett" role="group" aria-label="Oppsett for arrangement">
         <button type="button" class="kort-knapp" data-verdi="foto">Stort foto</button>
         <button type="button" class="kort-knapp" data-verdi="kort">Foto og tekstfelt</button>
-        <button type="button" class="kort-knapp" data-verdi="flate">Uten foto</button>
+        <button type="button" class="kort-knapp" data-verdi="flate" data-ikke-format="liggende">Uten foto</button>
       </div>
       <p class="hjelp" id="arr-oppsett-hjelp"></p>
+    </div>
+
+    <div class="felt" data-mal="turtips" hidden>
+      <p class="felt__etikett">3. Velg oppsett</p>
+      <div class="knapperad knapperad--grid" data-gruppe="tipsOppsett" role="group" aria-label="Oppsett for turtips">
+        <button type="button" class="kort-knapp" data-verdi="foto">Stort foto</button>
+        <button type="button" class="kort-knapp" data-verdi="kort">Foto og tekstfelt</button>
+      </div>
+      <p class="hjelp" id="tips-oppsett-hjelp"></p>
     </div>
 
     <div class="felt" id="bilde-felt">
@@ -124,6 +133,30 @@
       <input type="text" class="tekstfelt" data-felt="arrTaMed" data-arr-type="dugnad" aria-label="Ta med" placeholder="Ta med, f.eks. arbeidshansker og gode sko">
       <input type="text" class="tekstfelt" data-felt="arrServering" data-arr-type="dugnad" aria-label="Servering" placeholder="Servering, f.eks. vi serverer suppe og kaffe">
       <input type="text" class="tekstfelt" data-felt="arrPamelding" aria-label="Påmelding" placeholder="Påmelding, f.eks. via nettadressen under, eller ingen påmelding">
+    </div>
+
+    <div class="felt" data-mal="turtips" hidden>
+      <p class="felt__etikett">5. Innhold</p>
+      <input type="text" class="tekstfelt" data-felt="tipsTittel" aria-label="Turmål" placeholder="Turmål, f.eks. Sognsvann rundt">
+      <input type="text" class="tekstfelt" data-felt="tipsUnder" aria-label="Undertittel" placeholder="Undertittel, f.eks. En enkel tur for hele familien">
+      <textarea class="tekstfelt" data-felt="tipsTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om turen, maks to setninger"></textarea>
+      <div class="tur__rad">
+        <input type="text" class="tekstfelt" data-felt="tipsLengde" aria-label="Lengde" placeholder="Lengde, f.eks. 3,3 km">
+        <input type="text" class="tekstfelt" data-felt="tipsVarighet" aria-label="Varighet" placeholder="Varighet, f.eks. 1 time">
+      </div>
+      <select class="tekstfelt" data-felt="tipsGrad" aria-label="Gradering">
+        <option value="">Ingen gradering</option>
+        <option value="Enkel">Enkel (grønn)</option>
+        <option value="Middels">Middels (blå)</option>
+        <option value="Krevende">Krevende (rød)</option>
+        <option value="Ekspert">Ekspert (svart)</option>
+      </select>
+      <input type="text" class="tekstfelt" data-felt="tipsStart" aria-label="Start" placeholder="Start eller parkering, f.eks. Sognsvann T-banestasjon">
+      <input type="text" class="tekstfelt" data-felt="tipsKollektiv" aria-label="Kollektivt" placeholder="Kollektivt, f.eks. T-bane linje 5 til Sognsvann">
+      <input type="text" class="tekstfelt" data-felt="tipsPasserFor" aria-label="Passer for" placeholder="Passer for, f.eks. hele familien, også med barnevogn">
+      <input type="text" class="tekstfelt" data-felt="tipsUnderveis" aria-label="Underveis" placeholder="Hytte eller rasteplass underveis, f.eks. benker og bålplasser">
+      <input type="text" class="tekstfelt" data-felt="tipsSesong" aria-label="Beste tid" placeholder="Beste tid på året, f.eks. hele året">
+      <p class="hjelp">Tomme felt vises ikke i bildet.</p>
     </div>
 
     <div class="felt">

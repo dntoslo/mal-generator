@@ -9,7 +9,7 @@
 /* ---------- Fonter ----------
    ABC Social          -> brødtekst (Light er standard, Regular er "fet")
    ABC Social Extended -> headinger og utheving av tekst
-   Romek               -> store overskrifter og display
+   Whitman             -> store overskrifter og display (byttet fra Romek 25. september 2026)
    Fontene er lisensierte. De skal ligge lokalt i assets/fonts,
    ikke på et CDN, og ikke byttes ut uten avklaring. */
 
@@ -76,23 +76,19 @@
   font-style: normal;
   font-display: swap;
 }
+/* Whitman fra Font Bureau. LF-utgavene (linjetall) er valgt fordi
+   datoene i datofeltene settes i display-fonten. Whitman har ingen
+   Light-vekt, så 300 faller tilbake til Roman. */
 @font-face {
-  font-family: "Romek";
-  src: url("../assets/fonts/Romek-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Romek";
-  src: url("../assets/fonts/Romek-Regular.otf") format("opentype");
+  font-family: "Whitman";
+  src: url("../assets/fonts/Whitman-RomanLF.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Romek";
-  src: url("../assets/fonts/Romek-Bold.otf") format("opentype");
+  font-family: "Whitman";
+  src: url("../assets/fonts/Whitman-BoldLF.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -202,11 +198,11 @@
   ); /* @kind other */
 
   /* ---------- Typografi ---------- */
-  --font-display: "Romek", "Times New Roman", serif;
+  --font-display: "Whitman", Georgia, "Times New Roman", serif;
   --font-heading: "ABC Social Extended", "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body:    "ABC Social", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Typeskala, laget for skjerm. Romek Light bærer de store
+  /* Typeskala, laget for skjerm. Whitman bærer de store
      overskriftene, Social Extended de mindre, Social all mengdetekst. */
   --fs-display-xl: clamp(56px, 8vw, 120px); /* @kind font */
   --fs-display:    clamp(44px, 5.5vw, 80px); /* @kind font */
@@ -254,8 +250,8 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-/* Store overskrifter settes i Romek Light */
-h1 { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-h1); letter-spacing: var(--tracking-tight); }
+/* Store overskrifter settes i Whitman */
+h1 { font-family: var(--font-display); font-weight: 400; font-size: var(--fs-h1); letter-spacing: var(--tracking-tight); }
 h2 { font-size: var(--fs-h2); letter-spacing: -0.01em; }
 h3 { font-size: var(--fs-h3); }
 h4 { font-size: var(--fs-h4); }
@@ -275,8 +271,8 @@ strong, b { font-weight: 700; }  /* Bold, brandbookens uthevingsvekt */
 }
 
 /* Displaytype, brukes sparsomt på hero og seksjonsåpnere */
-.display    { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display);    line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
-.display-xl { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-display-xl); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+.display    { font-family: var(--font-display); font-weight: 400; font-size: var(--fs-display);    line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+.display-xl { font-family: var(--font-display); font-weight: 400; font-size: var(--fs-display-xl); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
 
 /* Rød aksenttekst, et klassisk DNT-grep: løft ett ord i DNT Rød. */
 .accent { color: var(--dnt-rod); }
