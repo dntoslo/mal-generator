@@ -19,14 +19,14 @@ Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `det
 
 ## Maksgrenser per oppsett
 
-`OPPSETT[...].maks` angir hvor mange turer det er plass til per format. «Stor tekst» trekker fra én, men aldri under tre. Grensene er satt ved å teste visuelt i Claude Design, ikke regnet ut. Endrer du høyder (`heroH`, `stortH`, `sideBredde` i `beregn()`), må grensene sjekkes på nytt.
+`OPPSETT[...].maks` angir hvor mange turer det er plass til per format. «Stor tekst» trekker fra én, men aldri under tre. Grensene er satt ved å teste visuelt i Claude Design, ikke regnet ut. Endrer du høyder (`heroH` i `beregnTurkalender()`), må grensene sjekkes på nytt.
 
 | Oppsett | Innlegg | Historie |
 |---|---|---|
-| Bilde øverst | 8 | 8 |
-| Stort bilde | 5 | 7 |
-| Stående til høyre | 7 | 8 |
-| Bilde som bakgrunn | 7 | 8 |
+| Bilde øverst (`topp`) | 8 | 8 |
+| Stort bilde (`bakgrunn`) | 7 | 8 |
+
+Fram til 25. september 2026 fantes også «Stort bilde» med beige flate under fotoet (5 og 7 turer) og «Stående til høyre» (7 og 8). De ble tatt ut for å gjøre valgene enklere. Det nye «Stort bilde» er det som før het «Bilde som bakgrunn», fordi det gir plass til flest turer og viser mest av fotoet.
 
 Formatet kvadrat (1080 × 1080) fantes fram til 14. september 2026, men ble tatt ut fordi innlegg og historie dekker behovet i Facebook og Instagram.
 
@@ -36,25 +36,25 @@ Alternativet var å krympe luften i designet. Det gir en trangere plakat som bry
 
 ## Tittel som tilpasser seg
 
-Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen), fra 82 til 52 px i «Stående til høyre». Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen «TURLAG · UKE · MÅNED» skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
+Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen). Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen «TURLAG · UKE · MÅNED» skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
 
 Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i innlegg.
 
 ## Båndet nederst
 
-Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medium (28 og 27 i kortvariantene), altså under turmålene (34 px) og klokkeslettene (36 px) i hierarkiet. Ikonet er 36 px høyt og beholder sine egne proporsjoner.
+Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medium (27 i kortet i «Stort bilde»), altså under turmålene (34 px) og klokkeslettene (36 px) i hierarkiet. Til venstre står DNT-logoen (`dnt-logo.png`) i en hvit sirkel på 48 px med logoen i 33 px, samme forhold som logoen oppe i fotoet (88 og 60 px). Den røde T-en ville ellers forsvinne mot det røde båndet. Fram til 25. september 2026 brukte båndet en egen hvit T (`dnt-t-ikon.png`) som var smalere enn T-en i logoen, bredde delt på høyde 0,75 mot 0,93, og som derfor så ut som en annen logo.
 
 ## Hvitt kort
 
-Kortet i «Stort bilde» og «Bilde som bakgrunn» er helt hvitt som standard. Avkryssingen «Gjennomskinnelig kort» setter det til 88 % hvitt, så fotoet skinner svakt gjennom. Lavere enn det gjør brødteksten vanskelig å lese over mørke fotopartier. Frostet glass (uskarpt foto bak kortet) er utelukket fordi html2canvas ikke støtter uskarphetsfilter, og eksporten da ville avvike fra forhåndsvisningen.
+Kortet i «Stort bilde» er helt hvitt som standard. Avkryssingen «Gjennomskinnelig kort» setter det til 88 % hvitt, så fotoet skinner svakt gjennom. Lavere enn det gjør brødteksten vanskelig å lese over mørke fotopartier. Frostet glass (uskarpt foto bak kortet) er utelukket fordi html2canvas ikke støtter uskarphetsfilter, og eksporten da ville avvike fra forhåndsvisningen.
 
 ## Logo og bånd
 
-Den runde T-en i hvit sirkel oppe til høyre i fotoet og det røde båndet med nettadresse nederst er begge valgfrie, og av som standard fra 14. september 2026, fordi bildet gjør seg best i sosiale medier uten avsenderelementer. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg. Når båndet er av, faller høyden 88 px bort: radene i «Bilde øverst» og flatene i arrangementsmalen fyller ned til kanten, fotokolonnen i «Stående til høyre» og fotoflaten i liggende «Foto og tekstfelt» går helt ned, og kortet i «Stort bilde» og «Bilde som bakgrunn» avsluttes etter listen. Nettadressefeltet i skjemaet vises bare når båndet er på.
+Den runde T-en i hvit sirkel oppe til høyre i fotoet og det røde båndet med nettadresse nederst er begge valgfrie, og av som standard fra 14. september 2026, fordi bildet gjør seg best i sosiale medier uten avsenderelementer. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg. Når båndet er av, faller høyden 88 px bort: radene i «Bilde øverst» og flatene i arrangement og turtips fyller ned til kanten, fotoflaten i liggende «Foto og tekstfelt» går helt ned, og kortet i «Stort bilde» avsluttes etter listen. Nettadressefeltet i skjemaet vises bare når båndet er på.
 
 ## Turbo
 
-Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde», «Bilde som bakgrunn»), nederst i fotokolonnen («Stående til høyre»), og 24 px over det røde båndet nede til høyre i arrangementsmalen (over bunnkanten når båndet er av), der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (240 i liggende, 160 der figuren står under logoen eller i sidekolonnen).
+Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde»), og 24 px over det røde båndet nede til høyre i arrangement og turtips (over bunnkanten når båndet er av), der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (240 i liggende, 160 der figuren står under logoen).
 
 ## Eksempelbilder
 
@@ -87,12 +87,27 @@ Prototypen fra Claude Design brukte tonene #FFF7E9, #F2EDE3, #E8DFCC og #E7E3DA,
 
 Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krevende DNT rød, Ekspert sort) følger DNTs graderingsstandard for turer og skal gjenkjennes som gradering, ikke som merkevarefarger.
 
+## Fonter
+
+Display-fonten er Whitman fra Font Bureau, fra 25. september 2026. Den erstattet Romek. Bare to filer brukes: `Whitman-RomanLF.ttf` (400) og `Whitman-BoldLF.ttf` (700). LF betyr linjetall. Datoene i datofeltene settes i display-fonten, og med gammeldagse tall (OsF) ville sifrene hoppet opp og ned. Whitman har ingen Light-vekt, så vekt 300 faller tilbake til Roman. Resten av Whitman-filene (Italic, SmallCaps og OsF) ligger utenfor repoet i `original/`.
+
+Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i app.js og som `letter-spacing` på `.p-tittel` og `.a-tittel`. De to må være like, ellers regner `tilpassStorrelse()` feil bredde.
+
 ## Arrangementsmalen
 
 Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og tre formater: innlegg, historie og liggende 1920 × 1080. Internt heter de fortsatt `feed`, `story` og `liggende`.
 
-- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst).
-- **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Romek Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
+- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst). «Uten foto» finnes ikke i liggende fra 25. september 2026. Knappen skjules da, og velges liggende mens «Uten foto» er valgt, byttes oppsettet til «Stort foto».
+- **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Whitman Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
 - **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
 - **Størrelser:** tittel opptil 104 px i innlegg og historie, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
 - **Plass:** i stedet for maksgrenser måler `sjekkPlass()` om innholdet flyter over etter rendering, og skjemaet advarer. Tekstfeltet er begrenset til 180 tegn for å holde plakaten lesbar.
+
+## Turtips
+
+Lagt til 25. september 2026. Ett turmål, i innlegg og historie (ikke liggende), med de to fotooppsettene fra arrangement: «Stort foto» og «Foto og tekstfelt». Koden deles med arrangement i `beregnEnkelt()` og `MALER_ARR`.
+
+- **I stedet for datofelt** står en rød merkelapp med ordet TURTIPS over tittelen (`.a-merke`). Tittelen får derfor hele bredden også i «Foto og tekstfelt».
+- **Fakta** (`TIPS_INFO`, i denne rekkefølgen): lengde, varighet, gradering, start, kollektivt, passer for, underveis (hytte eller rasteplass) og beste tid. Tomme felt vises ikke.
+- **Gradering** vises som en prikk i graderingsfargen foran ordet (`.a-grad`). På foto får prikken hvit kant, så også blå og svart syns mot mørk bakgrunn.
+- **Eksempelinnholdet** (Sognsvann rundt) viser fire fakta. Med seks fakta, altså tre rader, flyter «Foto og tekstfelt» i innlegg med stor tekst over med 20 px. Det er greit når brukeren selv fyller inn mye, for `sjekkPlass()` sier fra, men standardinnholdet skal aldri gi advarsel.
