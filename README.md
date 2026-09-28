@@ -5,12 +5,12 @@ Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal (
 Tre maler:
 
 - **Turkalender**: flere turer i én liste, for uka eller måneden.
-- **Arrangement**: ett arrangement, som tur, kurs eller dugnad, med tittel, dato, tid, sted, kort tekst og valgfrie felt som pris, påmeldingsfrist eller hva man skal ta med. Kan også lastes ned liggende (1920 × 1080) til Facebook-arrangement og skjerm.
+- **Arrangement**: ett arrangement, som tur, kurs eller dugnad, med tittel, dato, tid, sted, kort tekst og valgfrie felt som pris, påmeldingsfrist eller hva man skal ta med.
 - **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet, gradering, start, kollektivt, hvem turen passer for, hytte eller rasteplass underveis og beste tid på året.
 
 ## Slik brukes det
 
-1. Velg mal, og deretter format: Innlegg (1080 × 1350), Historie (1080 × 1920) eller, for arrangement, Liggende (1920 × 1080).
+1. Velg mal, og deretter format: Innlegg (1080 × 1350) eller Historie (1080 × 1920).
 2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
 3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
 4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og eventuelt nettadresse. Det røde båndet med nettadresse nederst, DNT-logoen oppe til høyre og Turbo (Barnas Turlags maskot) nede til høyre er alle av som standard, fordi bildet gjør seg best i sosiale medier uten. Kryss av for det du vil ha med. Standardadressen er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske.

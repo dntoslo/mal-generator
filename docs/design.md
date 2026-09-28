@@ -50,11 +50,11 @@ Kortet i «Stort bilde» er helt hvitt som standard. Avkryssingen «Gjennomskinn
 
 ## Logo og bånd
 
-Den runde T-en i hvit sirkel oppe til høyre i fotoet og det røde båndet med nettadresse nederst er begge valgfrie, og av som standard fra 14. september 2026, fordi bildet gjør seg best i sosiale medier uten avsenderelementer. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg. Når båndet er av, faller høyden 88 px bort: radene i «Bilde øverst» og flatene i arrangement og turtips fyller ned til kanten, fotoflaten i liggende «Foto og tekstfelt» går helt ned, og kortet i «Stort bilde» avsluttes etter listen. Nettadressefeltet i skjemaet vises bare når båndet er på.
+Den runde T-en i hvit sirkel oppe til høyre i fotoet og det røde båndet med nettadresse nederst er begge valgfrie, og av som standard fra 14. september 2026, fordi bildet gjør seg best i sosiale medier uten avsenderelementer. Heroteksten holder samme bredde uansett, så layouten ikke flytter seg. Når båndet er av, faller høyden 88 px bort: radene i «Bilde øverst» og flatene i arrangement og turtips fyller ned til kanten, og kortet i «Stort bilde» avsluttes etter listen. Nettadressefeltet i skjemaet vises bare når båndet er på.
 
 ## Turbo
 
-Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde»), og 24 px over det røde båndet nede til høyre i arrangement og turtips (over bunnkanten når båndet er av), der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (240 i liggende, 160 der figuren står under logoen).
+Barnas Turlags maskot kan slås på med «Vis Turbo». Figuren er «Turbo med stor sekk» som transparent PNG (`assets/img/turbo.png`, 640 px høy), og står alltid i tillegg til DNT-logoen. Plassering: nede til høyre i heroen («Bilde øverst»), under logoen oppe til høyre der kortet dekker fotoets nedre del («Stort bilde»), og 24 px over det røde båndet nede til høyre i arrangement og turtips (over bunnkanten når båndet er av), der innholdet får høyre-padding så teksten ikke går under figuren. Størrelse 200 px (160 der figuren står under logoen).
 
 ## Eksempelbilder
 
@@ -89,25 +89,36 @@ Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krev
 
 ## Fonter
 
-Display-fonten er Whitman fra Font Bureau, fra 25. september 2026. Den erstattet Romek. Bare to filer brukes: `Whitman-RomanLF.ttf` (400) og `Whitman-BoldLF.ttf` (700). LF betyr linjetall. Datoene i datofeltene settes i display-fonten, og med gammeldagse tall (OsF) ville sifrene hoppet opp og ned. Whitman har ingen Light-vekt, så vekt 300 faller tilbake til Roman. Resten av Whitman-filene (Italic, SmallCaps og OsF) ligger utenfor repoet i `original/`.
+Display-fonten er Whitman fra Font Bureau, fra 25. september 2026. Den erstattet Romek. Bare to filer brukes: `Whitman-RomanLF.ttf` (400) og `Whitman-BoldLF.ttf` (700). LF betyr linjetall, så tall i en tittel («Turer i 2026») står på linje. Med gammeldagse tall (OsF) ville sifrene hoppet opp og ned. Fra 28. september 2026 brukes Whitman bare i titler, ikke i datofeltene. Whitman har ingen Light-vekt, så vekt 300 faller tilbake til Roman. Resten av Whitman-filene (Italic, SmallCaps og OsF) ligger utenfor repoet i `original/`.
 
 Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i app.js og som `letter-spacing` på `.p-tittel` og `.a-tittel`. De to må være like, ellers regner `tilpassStorrelse()` feil bredde.
 
 ## Arrangementsmalen
 
-Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i tre oppsett og tre formater: innlegg, historie og liggende 1920 × 1080. Internt heter de fortsatt `feed`, `story` og `liggende`.
+Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i to oppsett og to formater, innlegg og historie.
 
-- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst), «Foto og tekstfelt» (foto øverst, eller til venstre i liggende, tekst på lys beige) og «Uten foto» (bare tekst på lys beige med en rød linje øverst). «Uten foto» finnes ikke i liggende fra 25. september 2026. Knappen skjules da, og velges liggende mens «Uten foto» er valgt, byttes oppsettet til «Stort foto».
-- **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`), tittel i Whitman Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
+- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst) og «Foto og tekstfelt» (foto øverst, tekst på lys beige).
+- **Fjernet 28. september 2026:** formatet liggende (1920 × 1080) og oppsettet «Uten foto», for å gjøre valgene enklere. Lagrede valg av dem faller tilbake til innlegg og «Stort foto».
+- **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`, se «Datofeltene» under), tittel i Whitman Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
 - **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
-- **Størrelser:** tittel opptil 104 px i innlegg og historie, 120 i liggende, og litt større i «Uten foto» fordi flaten har plass. Brødtekst 30 px (31 i liggende). «Stor tekst» ganger informasjon og brødtekst med 1,12.
+- **Størrelser:** tittel opptil 104 px, brødtekst 30 px. «Stor tekst» ganger informasjon og brødtekst med 1,12.
 - **Plass:** i stedet for maksgrenser måler `sjekkPlass()` om innholdet flyter over etter rendering, og skjemaet advarer. Tekstfeltet er begrenset til 180 tegn for å holde plakaten lesbar.
 
 ## Turtips
 
-Lagt til 25. september 2026. Ett turmål, i innlegg og historie (ikke liggende), med de to fotooppsettene fra arrangement: «Stort foto» og «Foto og tekstfelt». Koden deles med arrangement i `beregnEnkelt()` og `MALER_ARR`.
+Lagt til 25. september 2026. Ett turmål, i innlegg og historie, med de samme to fotooppsettene som arrangement: «Stort foto» og «Foto og tekstfelt». Koden deles med arrangement i `beregnEnkelt()` og `MALER_ARR`.
 
 - **I stedet for datofelt** står en rød merkelapp med ordet TURTIPS over tittelen (`.a-merke`). Tittelen får derfor hele bredden også i «Foto og tekstfelt».
 - **Fakta** (`TIPS_INFO`, i denne rekkefølgen): lengde, varighet, gradering, start, kollektivt, passer for, underveis (hytte eller rasteplass) og beste tid. Tomme felt vises ikke.
 - **Gradering** vises som en prikk i graderingsfargen foran ordet (`.a-grad`). På foto får prikken hvit kant, så også blå og svart syns mot mørk bakgrunn.
 - **Eksempelinnholdet** (Sognsvann rundt) viser fire fakta. Med seks fakta, altså tre rader, flyter «Foto og tekstfelt» i innlegg med stor tekst over med 20 px. Det er greit når brukeren selv fyller inn mye, for `sjekkPlass()` sier fra, men standardinnholdet skal aldri gi advarsel.
+
+## Datofeltene
+
+Strammet opp 28. september 2026, etter at Daniel valgte variant B blant fire skisser.
+
+- **Arrangement** (`.a-chip`): 184 px (199 med stor tekst). Dagsnavnet står i rødt bånd i 24 px ABC Social Extended Bold med sporing 0,08 em. Tallet er 70 px ABC Social Extended Bold med linjehøyde 0,8. Måneden er 24 px ABC Social Medium med sporing 0,06 em, og en negativ høyremarg på 0,06 em så ordet står midt i feltet. Med stor tekst ganges alle tre med 1,12.
+- **Turkalender** (`.p-chip`): feltstørrelsene i `TEKST` er uendret, så radhøyder og maksgrenser står som før. Dagsnavnet er minst 24 px på alle trinn, og tallet er ABC Social Extended Bold, omtrent 5 % større enn Whitman-tallet var.
+- **Hvorfor:** Før var feltet 168 px med måneden i 20 px. «SEPTEMBER» gikk nesten ut til kantene, og det var 21 px luft over tallet mot 8 px under måneden. Måneden og turkalenderens dagsnavn (20 til 22 px) var under minstegrensen på 24 px. Whitman-tallet så lett og boklig ut i et lite ikon med sans rundt.
+- **Plass:** Med 184 px har det lengste månedsnavnet (september) minst 14 px luft til kanten, også med stor tekst. Det lengste dagsnavnet (torsdag) har minst 24 px.
+- **Balanse:** Linjehøyde 0,8 på tallet og 6 px ekstra luft nederst (2 px i turkalenderen) gjør at tallblokken står optisk midt under båndet.
