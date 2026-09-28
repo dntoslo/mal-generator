@@ -174,8 +174,10 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .p-chip { flex: none; width: var(--chip); height: var(--chip); border-radius: 16px; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; }
 .p-rader .p-rad:nth-child(odd)  .p-chip { background: var(--beige-mork); }
 .p-rader .p-rad:nth-child(even) .p-chip { background: var(--hvit); }
-.p-chip__dag { background: var(--dnt-rod); padding: 6px 0 7px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: var(--dag-size); letter-spacing: 0.1em; line-height: 1; color: var(--hvit); }
-.p-chip__dato { flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: var(--dato-size); line-height: 1; color: var(--sort); }
+/* Datofeltet: dagsnavn i båndet og tall i ABC Social Extended Bold. Linjehøyde 0,8 og litt
+   luft nederst gjør at tallet står optisk midt under båndet. */
+.p-chip__dag { background: var(--dnt-rod); padding: 7px 0 6px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: var(--dag-size); letter-spacing: 0.08em; line-height: 1; color: var(--hvit); }
+.p-chip__dato { flex: 1; display: flex; align-items: center; justify-content: center; padding-bottom: 2px; font-family: var(--font-heading); font-weight: 700; font-size: var(--dato-size); letter-spacing: -0.02em; line-height: 0.8; color: var(--sort); }
 
 .p-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .p-info__tittel { font-family: var(--font-heading); font-weight: 700; font-size: var(--title-size); line-height: 1.1; color: var(--sort); }
@@ -210,7 +212,7 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 [data-oppsett="bakgrunn"] .p-chip { width: var(--chip-smal); height: var(--chip-smal); }
 [data-oppsett="bakgrunn"] .p-chip__dato { font-size: var(--dato-size-smal); }
 [data-oppsett="bakgrunn"] .p-info__tittel { font-size: var(--title-size-smal); }
-[data-oppsett="bakgrunn"] .p-chip__dag { padding: 5px 0 6px; }
+[data-oppsett="bakgrunn"] .p-chip__dag { padding: 6px 0 5px; }
 
 /* Skjult klone brukt ved eksport */
 .eksport-klone { position: fixed; left: -12000px; top: 0; pointer-events: none; }
@@ -221,37 +223,29 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 /* ---------- Skjema: arrangement ---------- */
 .tekstfelt--dag { flex: none !important; width: 150px; }
 textarea.tekstfelt { resize: vertical; line-height: 1.4; }
-.knapperad .pille[hidden] { display: none; }
 
 /* =========================================================
    Enkeltplakat (arrangement og turtips). Kun px. Variabler fra JS:
    --a-pad --a-chip --a-dag-size --a-dato-size --a-maaned-size
    --a-merke-size --a-tittel-size --a-under-size --a-etikett-size
-   --a-verdi-size --a-tekst-size --a-foto-h --a-foto-b
+   --a-verdi-size --a-tekst-size --a-foto-h
    ========================================================= */
 .a-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; color: var(--sort); }
 .a-flate--foto { background: #2f3b33; }
-.a-rad { flex: 1; display: flex; min-height: 0; }
 
 .a-foto { position: relative; overflow: hidden; background: #2f3b33; flex: none; }
 .a-foto--fyll { position: absolute; inset: 0; }
 .a-foto--topp { height: var(--a-foto-h); }
-.a-foto--venstre { width: var(--a-foto-b); }
 .a-scrim { position: absolute; inset: 0; }
 .a-scrim--foto { background: linear-gradient(180deg, rgba(20,30,22,0.40) 0%, rgba(20,30,22,0.05) 28%, rgba(20,30,22,0.30) 52%, rgba(20,30,22,0.86) 100%); }
 .a-scrim--topp { background: linear-gradient(180deg, rgba(20,30,22,0.38) 0%, rgba(20,30,22,0.02) 45%, rgba(20,30,22,0.10) 100%); }
-.a-scrim--venstre { background: linear-gradient(180deg, rgba(20,30,22,0.32) 0%, rgba(20,30,22,0.02) 40%, rgba(20,30,22,0.14) 100%); }
 
 .a-overlinje { position: absolute; left: var(--a-pad); top: 56px; font-family: var(--font-heading); font-weight: 500; font-size: 26px; letter-spacing: 0.18em; color: var(--hvit); }
-.a-overlinje--sort { color: var(--dnt-rod); }
-.a-topplinje { flex: none; height: 22px; background: var(--dnt-rod); }
 
 .a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
 .a-innhold--fyll { flex: 1; }
 .a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: var(--band-h, 88px); color: var(--hvit); }
-.a-innhold--hvit { color: var(--hvit); }
 .a-innhold--midt { justify-content: center; }
-.a-flate--liggende .a-innhold--paa-foto { right: auto; width: 1180px; }
 
 .a-topp { display: flex; align-items: flex-start; gap: 36px; }
 .a-topp__tekst { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding-top: 6px; }
@@ -261,32 +255,32 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 .a-merke { align-self: flex-start; flex: none; background: var(--dnt-rod); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: var(--a-merke-size, 26px); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; padding: 14px 24px 13px; border-radius: 999px; }
 
+/* Datofeltet (variant B, 28. september 2026): 184 px, dagsnavn og måned i 24 px, tall i
+   ABC Social Extended Bold. Månedens sporing trekkes inn igjen med negativ høyremarg,
+   så ordet står midt i feltet. Litt luft nederst balanserer tallblokken under båndet. */
 .a-chip { flex: none; width: var(--a-chip); height: var(--a-chip); border-radius: 22px; overflow: hidden; background: var(--hvit); display: flex; flex-direction: column; color: var(--sort); }
-.a-chip__dag { background: var(--dnt-rod); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: var(--a-dag-size); letter-spacing: 0.1em; line-height: 1; padding: 10px 0 11px; text-align: center; text-transform: uppercase; }
-.a-chip__dato { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
-.a-chip__tall { font-family: var(--font-display); font-weight: 700; font-size: var(--a-dato-size); line-height: 1; }
-.a-chip__maaned { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-maaned-size); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; }
+.a-chip__dag { background: var(--dnt-rod); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: var(--a-dag-size); letter-spacing: 0.08em; line-height: 1; padding: 11px 0 10px; text-align: center; text-transform: uppercase; }
+.a-chip__dato { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-bottom: 6px; }
+.a-chip__tall { font-family: var(--font-heading); font-weight: 700; font-size: var(--a-dato-size); letter-spacing: -0.02em; line-height: 0.8; }
+.a-chip__maaned { font-family: var(--font-body); font-weight: 500; font-size: var(--a-maaned-size); letter-spacing: 0.06em; margin-right: -0.06em; text-transform: uppercase; line-height: 1; }
 
 .a-tittel { font-family: var(--font-display); font-weight: 700; font-size: var(--a-tittel-size); line-height: 0.98; letter-spacing: -0.02em; white-space: nowrap; }
 .a-tittel--bryt { white-space: normal; }
 .a-under { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-under-size); line-height: 1.2; }
-.a-innhold--hvit .a-under, .a-innhold--paa-foto .a-under { color: rgba(255,255,255,0.9); }
+.a-innhold--paa-foto .a-under { color: rgba(255,255,255,0.9); }
 .a-flate:not(.a-flate--foto) .a-under { color: rgba(0,0,0,0.65); }
 
 .a-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 40px; }
 .a-info__rad { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .a-info__etikett { font-family: var(--font-heading); font-weight: 700; font-size: var(--a-etikett-size); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: rgba(0,0,0,0.55); }
 .a-info__verdi { font-family: var(--font-body); font-weight: 400; font-size: var(--a-verdi-size); line-height: 1.25; }
-.a-innhold--paa-foto .a-info__etikett, .a-innhold--hvit .a-info__etikett { color: rgba(255,255,255,0.72); }
+.a-innhold--paa-foto .a-info__etikett { color: rgba(255,255,255,0.72); }
 /* Graderingsprikk i turtips. Hvit kant på foto, så også blå og svart syns mot mørk bakgrunn. */
 .a-grad { display: inline-block; width: 22px; height: 22px; border-radius: 999px; margin-right: 12px; vertical-align: -1px; }
 .a-innhold--paa-foto .a-grad { border: 3px solid var(--hvit); }
 
 .a-tekst { font-family: var(--font-body); font-weight: 400; font-size: var(--a-tekst-size); line-height: 1.35; color: rgba(0,0,0,0.8); }
-.a-innhold--paa-foto .a-tekst, .a-innhold--hvit .a-tekst { color: rgba(255,255,255,0.92); }
-
-/* Liggende har plass til tre informasjonskolonner */
-.a-flate--liggende .a-info { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.a-innhold--paa-foto .a-tekst { color: rgba(255,255,255,0.92); }
 
 /* ---------- Turbo, Barnas Turlags maskot ---------- */
 .p-turbo { position: absolute; height: var(--turbo-h, 200px); width: auto; display: block; pointer-events: none; }
@@ -295,5 +289,3 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .p-turbo--band { right: var(--a-pad, 64px); bottom: calc(var(--band-h, 88px) + 24px); z-index: 1; }
 .p-turbo--fotoflate { right: 40px; bottom: 24px; }
 .a-innhold--turbo { padding-right: calc(var(--turbo-h, 200px) + 100px); }
-/* I liggende foto er teksten allerede begrenset til 1180 px, Turbo står til høyre for den. */
-.a-flate--liggende .a-innhold--paa-foto.a-innhold--turbo { padding-right: var(--a-pad, 80px); }
