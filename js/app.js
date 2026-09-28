@@ -25,16 +25,17 @@
   // To tekststørrelser. «Stor» er for turlag med mange seniorer blant deltakerne,
   // og tar plassen fra antall turer, ikke fra luften i designet.
   // Hver liste har fire trinn: trinn 0 er romsligst, trinn 3 er tettest.
+  // Dagsnavnet i datofeltet er aldri under 24 px. Datotallet er i ABC Social Extended Bold.
   var TEKST = {
     normal: {
       chip: [116, 106, 96, 88], chipSmal: [100, 94, 88, 84],
-      dag: [22, 21, 20, 20], dato: [44, 40, 36, 34], datoSmal: [40, 37, 34, 32],
+      dag: [24, 24, 24, 24], dato: [46, 42, 38, 35], datoSmal: [42, 39, 36, 33],
       title: [34, 31, 28, 26], titleSmal: [31, 29, 27, 25],
       meta: [26, 25, 24, 24], detalj: 24, tid: [36, 33, 30, 28]
     },
     stor: {
       chip: [136, 124, 110, 98], chipSmal: [118, 110, 100, 92],
-      dag: [26, 24, 23, 21], dato: [54, 48, 43, 38], datoSmal: [48, 44, 40, 36],
+      dag: [26, 25, 24, 24], dato: [56, 50, 45, 40], datoSmal: [50, 46, 42, 38],
       title: [44, 39, 34, 30], titleSmal: [39, 35, 31, 28],
       meta: [32, 30, 27, 25], detalj: 26, tid: [46, 41, 36, 32]
     }
@@ -43,15 +44,15 @@
   var FORMATER = {
     // Nøklene er interne og lagres i skjemaet. Navnene er dem Facebook og Instagram bruker på norsk.
     feed:     { navn: "Innlegg",  bredde: 1080, hoyde: 1350, tekst: "1080 × 1350 px" },
-    story:    { navn: "Historie", bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" },
-    liggende: { navn: "Liggende", bredde: 1920, hoyde: 1080, tekst: "1920 × 1080 px" }  // bare arrangement
+    story:    { navn: "Historie", bredde: 1080, hoyde: 1920, tekst: "1080 × 1920 px" }
+    // Liggende (1920 × 1080) ble fjernet 28. september 2026. Lagret «liggende» blir Innlegg i hent().
   };
 
   // Malene. Turkalender er den opprinnelige, arrangement kom til 11. september 2026
   // og turtips 25. september 2026. Arrangement og turtips deler beregnEnkelt() og MALER_ARR.
   var MALVALG = {
     turkalender: { hjelp: "Flere turer i én liste, for uka eller måneden." },
-    arrangement: { hjelp: "Ett arrangement: tur, kurs eller dugnad. Kan også eksporteres liggende." },
+    arrangement: { hjelp: "Ett arrangement: tur, kurs eller dugnad." },
     turtips:     { hjelp: "Tips om ett turmål, med lengde, gradering og hvordan du kommer deg dit." }
   };
 
@@ -62,8 +63,8 @@
 
   var ARR_OPPSETT = {
     foto:  { tekst: "Fotoet fyller flaten, teksten ligger nederst.", prompt: "foto som fyller hele flaten med mørk gradient nederst, og all tekst i hvitt nede til venstre: et kvadratisk datofelt (rødt dagbånd øverst, stor dato og måned under), tittel, undertittel, og informasjon i to kolonner med små etiketter." },
-    kort:  { tekst: "Foto øverst, teksten på beige flate under.", prompt: "foto øverst (til venstre i liggende), og all tekst på lys beige flate: datofelt ved siden av tittelen, undertittel, informasjon i to kolonner med små etiketter, og kort tekst." },
-    flate: { tekst: "Bare tekst på beige. For deg uten godt foto. Finnes ikke liggende.", prompt: "ingen foto, lys beige flate med en tynn rød linje øverst, datofelt ved siden av tittelen, undertittel, informasjon i to kolonner og kort tekst." }
+    kort:  { tekst: "Foto øverst, teksten på beige flate under.", prompt: "foto øverst, og all tekst på lys beige flate: datofelt ved siden av tittelen, undertittel, informasjon i to kolonner med små etiketter, og kort tekst." }
+    // «Uten foto» ble fjernet 28. september 2026. Lagret «flate» blir «Stort foto» i hent().
   };
 
   // Turtips bruker de to fotooppsettene fra arrangement, med merkelapp i stedet for datofelt.
@@ -155,7 +156,7 @@
   }
 
   function nyttUtsnitt() {
-    return { feed: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 }, liggende: { x: 50, y: 50, z: 115 } };
+    return { feed: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 } };
   }
 
   // ISO-ukenummer, slik at «UKE 38 · SEPTEMBER» stemmer med dagens dato.
@@ -324,10 +325,8 @@
       ARR_FELT.concat(TIPS_FELT).forEach(function (k) { if (typeof d[k] === "string") state[k] = d[k]; });
       if (OPPSETT[d.oppsett]) state.oppsett = d.oppsett;
       else if (d.oppsett === "stort" || d.oppsett === "side") state.oppsett = "bakgrunn";
+      // Lagret «liggende» og «flate» finnes ikke lenger og faller tilbake til Innlegg og «Stort foto».
       if (FORMATER[d.format]) state.format = d.format;
-      // Liggende finnes bare for arrangement, og ikke med «Uten foto».
-      if (state.mal !== "arrangement" && state.format === "liggende") state.format = "feed";
-      if (state.format === "liggende" && state.arrOppsett === "flate") state.arrOppsett = "foto";
       if (TEKST[d.tekst]) state.tekst = d.tekst;
       ["tittel", "turlag", "lenke", "periode"].forEach(function (k) {
         if (typeof d[k] === "string") state[k] = d[k];
@@ -455,70 +454,57 @@
     return { tittel: s.tipsTittel, under: s.tipsUnder, tekst: s.tipsTekst, info: info, dato: null, merke: "Turtips" };
   }
 
-  // Enkeltplakaten: ett arrangement eller ett turtips. Arrangement har tre oppsett
-  // og tre formater, turtips to oppsett (foto og kort) og ikke liggende.
+  // Enkeltplakaten: ett arrangement eller ett turtips, med to oppsett (foto og kort)
+  // i innlegg og historie. Arrangement har datofelt, turtips merkelapp.
   function beregnEnkelt() {
     var s = state;
     var tips = s.mal === "turtips";
     var oppsett = tips ? s.tipsOppsett : s.arrOppsett;
     var fmt = FORMATER[s.format];
     var opp = (tips ? TIPS_OPPSETT : ARR_OPPSETT)[oppsett];
-    var liggende = s.format === "liggende";
     var stor = s.tekst === "stor";
     var k = stor ? 1.12 : 1;
-    var pad = liggende ? 80 : 64;
+    var pad = 64;
     // Båndet nederst er valgfritt. Høyden brukes bare her og som --band-h i CSS.
     var band = state.visBand ? 88 : 0;
 
-    // Fotoflaten avhenger av oppsett og format. «Uten foto» finnes ikke liggende.
+    // «Stort foto» fyller hele flaten, «Foto og tekstfelt» har foto øverst.
     var fotoH = s.format === "story" ? 1080 : 620;
-    var fotoB = 900;
-    var flate = oppsett === "flate";
-    var fotoFlate = oppsett === "foto" ? [fmt.bredde, fmt.hoyde]
-      : oppsett === "kort" ? (liggende ? [fotoB, fmt.hoyde - band] : [fmt.bredde, fotoH])
-      : null;
+    var fotoFlate = oppsett === "foto" ? [fmt.bredde, fmt.hoyde] : [fmt.bredde, fotoH];
     var u = s.utsnitt[s.format];
-    var bilde = fotoFlate ? kildeBilde(fotoFlate[0], fotoFlate[1]) : "";
-    var bg = fotoFlate ? bakgrunn(bilde, fotoFlate[0], fotoFlate[1], u) : { bgStr: "cover", bgPos: "50% 50%" };
+    var bilde = kildeBilde(fotoFlate[0], fotoFlate[1]);
+    var bg = bakgrunn(bilde, fotoFlate[0], fotoFlate[1], u);
 
-    // Bredden teksten har til rådighet, og største tittelstørrelse.
-    var tekstBredde = liggende
-      ? (oppsett === "foto" ? 1180 - pad : fmt.bredde - fotoB - 2 * pad)
-      : fmt.bredde - 2 * pad;
-    var chip = Math.round((liggende ? 190 : 168) * (stor ? 1.08 : 1));
-    // «Uten foto» har god plass, så tittelen og teksten får være litt større der.
-    var tittelMaks = liggende ? (oppsett === "kort" ? 100 : 120) : (flate ? 116 : 104);
-    if (flate) k *= 1.08;
-    if (liggende) k *= 1.08;
-    // I «kort» og «flate» står datofeltet ved siden av tittelen, så bredden er mindre.
+    // Datofeltet er 184 px, så hele månedsnavnet får plass i 24 px (se docs/design.md).
+    var tekstBredde = fmt.bredde - 2 * pad;
+    var chip = Math.round(184 * (stor ? 1.08 : 1));
+    // I «kort» står datofeltet ved siden av tittelen, så bredden er mindre.
     // Turtips har merkelappen over tittelen, så tittelen får hele bredden.
     var tittelBredde = (oppsett === "foto" || tips) ? tekstBredde : tekstBredde - chip - 36;
     var innhold = tips ? innholdTurtips() : innholdArrangement();
-    var tittel = tilpassStorrelse(innhold.tittel, TITTELFONT, TITTELSPORING, tittelBredde, tittelMaks, 60);
+    var tittel = tilpassStorrelse(innhold.tittel, TITTELFONT, TITTELSPORING, tittelBredde, 104, 60);
 
     return {
       mal: s.mal, oppsett: oppsett, fmt: fmt, opp: opp, u: u, stor: stor, forMange: false, synlige: [], maks: 0,
       bilde: bilde,
-      eksempel: fotoFlate ? aktivtEksempel(fotoFlate[0], fotoFlate[1]) : null,
-      harFoto: Boolean(fotoFlate),
-      liggende: liggende,
+      eksempel: aktivtEksempel(fotoFlate[0], fotoFlate[1]),
       tittelBryt: tittel.bryt,
       innhold: innhold,
       info: innhold.info,
       vars: {
         "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
         "--a-pad": pad + "px", "--a-chip": chip + "px",
-        "--a-dag-size": Math.round((liggende ? 26 : 24) * k) + "px",
-        "--a-dato-size": Math.round((liggende ? 88 : 78) * k) + "px",
-        "--a-maaned-size": Math.round(20 * k) + "px",
+        "--a-dag-size": Math.round(24 * k) + "px",
+        "--a-dato-size": Math.round(70 * k) + "px",
+        "--a-maaned-size": Math.round(24 * k) + "px",
         "--a-merke-size": Math.round(26 * k) + "px",
         "--a-tittel-size": tittel.px + "px",
-        "--a-under-size": Math.round((liggende ? 36 : 34) * k) + "px",
-        "--a-etikett-size": Math.round((liggende ? 23 : 22) * k) + "px",
-        "--a-verdi-size": Math.round((liggende ? 31 : 30) * k) + "px",
-        "--a-tekst-size": Math.round((liggende ? 31 : 30) * k) + "px",
-        "--a-foto-h": fotoH + "px", "--a-foto-b": fotoB + "px",
-        "--turbo-h": (liggende ? 240 : 200) + "px", "--band-h": band + "px",
+        "--a-under-size": Math.round(34 * k) + "px",
+        "--a-etikett-size": Math.round(22 * k) + "px",
+        "--a-verdi-size": Math.round(30 * k) + "px",
+        "--a-tekst-size": Math.round(30 * k) + "px",
+        "--a-foto-h": fotoH + "px",
+        "--turbo-h": "200px", "--band-h": band + "px",
         "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos
       }
     };
@@ -556,7 +542,7 @@
     var overlinje = tilpassStorrelse((s.turlag || "").toUpperCase() + " · " + s.periode, SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
 
     return {
-      mal: "turkalender", harFoto: true,
+      mal: "turkalender",
       fmt: fmt, opp: opp, synlige: synlige, maks: maks, stor: stor, trinn: trinn, u: u,
       forMange: synlige.length > maks,
       bilde: bilde,
@@ -678,7 +664,7 @@
     return b.innhold.tekst ? '<div class="a-tekst">' + esc(b.innhold.tekst) + '</div>' : "";
   }
 
-  // Datofelt og tittel side om side, brukt i «kort» og «flate».
+  // Datofelt og tittel side om side, brukt i «kort».
   // Turtips har merkelappen over tittelen i stedet.
   function malArrTopp(b) {
     return '<div class="a-topp' + (b.innhold.dato ? "" : " a-topp--merke") + '">' + malArrChip(b) +
@@ -687,8 +673,7 @@
 
   var MALER_ARR = {
     foto: function (b) {
-      var klasse = "a-flate a-flate--foto" + (b.liggende ? " a-flate--liggende" : "");
-      return '<div class="' + klasse + '">' +
+      return '<div class="a-flate a-flate--foto">' +
         '<div class="a-foto a-foto--fyll"><div class="p-foto" data-foto></div><div class="a-scrim a-scrim--foto"></div></div>' +
         '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' +
         malLogo() + malTurbo("p-turbo--band") +
@@ -697,26 +682,12 @@
       '</div>';
     },
     kort: function (b) {
-      var foto = '<div class="a-foto ' + (b.liggende ? "a-foto--venstre" : "a-foto--topp") + '">' +
-        '<div class="p-foto" data-foto></div><div class="a-scrim ' + (b.liggende ? "a-scrim--venstre" : "a-scrim--topp") + '"></div>' +
-        '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() + malTurbo("p-turbo--fotoflate") +
-      '</div>';
-      var innhold = '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst(b) + '</div>';
-      return '<div class="a-flate' + (b.liggende ? " a-flate--liggende" : "") + '">' +
-        (b.liggende ? '<div class="a-rad">' + foto + innhold + '</div>' : foto + innhold) +
-        malBunn() +
-      '</div>';
-    },
-    // Bare arrangement, og bare i innlegg og historie.
-    flate: function (b) {
-      var turbo = state.visTurbo ? " a-innhold--turbo" : "";
-      var innhold = '<div class="a-innhold a-innhold--fyll a-innhold--midt' + turbo + '">' + malArrTopp(b) + malArrInfo(b) + malArrTekst(b) + '</div>';
       return '<div class="a-flate">' +
-        '<div class="a-topplinje"></div>' + malTurbo("p-turbo--band") +
-        '<div style="position:relative;flex:none;height:0;">' +
-          '<div class="a-overlinje a-overlinje--sort">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() +
+        '<div class="a-foto a-foto--topp">' +
+          '<div class="p-foto" data-foto></div><div class="a-scrim a-scrim--topp"></div>' +
+          '<div class="a-overlinje">' + esc(state.turlag.toUpperCase()) + '</div>' + malLogo() + malTurbo("p-turbo--fotoflate") +
         '</div>' +
-        innhold +
+        '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malArrInfo(b) + malArrTekst(b) + '</div>' +
         malBunn() +
       '</div>';
     }
@@ -776,8 +747,7 @@
       }
     }
     el.formange.hidden = !trangt;
-    if (trangt) el.formange.textContent = "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til " +
-      (state.mal === "arrangement" ? "Historie eller Liggende." : "Historie.");
+    if (trangt) el.formange.textContent = "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Historie.";
   }
 
   // Forhåndsvisningen er maks 540 px bred. På brede skjermer er den festet
@@ -837,14 +807,11 @@
 
     var enkelt = state.mal !== "turkalender";
     $$(".panel [data-mal]").forEach(function (e) { e.hidden = e.getAttribute("data-mal") !== state.mal; });
-    $$("[data-kun-mal]").forEach(function (e) { e.hidden = e.getAttribute("data-kun-mal") !== state.mal; });
-    $$("[data-ikke-format]").forEach(function (e) { e.hidden = e.getAttribute("data-ikke-format") === state.format; });
     $$("[data-arr-type]").forEach(function (e) { e.hidden = e.getAttribute("data-arr-type").split(" ").indexOf(state.arrType) < 0; });
     if ($("#mal-hjelp")) $("#mal-hjelp").textContent = MALVALG[state.mal].hjelp;
     if ($("#arr-oppsett-hjelp")) $("#arr-oppsett-hjelp").textContent = ARR_OPPSETT[state.arrOppsett].tekst;
     if ($("#tips-oppsett-hjelp")) $("#tips-oppsett-hjelp").textContent = TIPS_OPPSETT[state.tipsOppsett].tekst;
     if ($("#arr-type-hjelp")) $("#arr-type-hjelp").textContent = ARR_TYPER[state.arrType].hjelp;
-    if ($("#bilde-felt")) $("#bilde-felt").hidden = !b.harFoto;
 
     $("#format-hjelp").textContent = b.fmt.navn + ", " + b.fmt.tekst;
     $("#tekst-hjelp").textContent = enkelt
@@ -854,7 +821,7 @@
     if (!enkelt) $("#oppsett-hjelp").textContent = b.opp.tekst + " Plass til " + b.maks + " turer i dette formatet.";
     el.bildenavn.textContent = state.bildenavn;
     el.nyttEksempel.hidden = state.egetBilde;
-    if (state.egetBilde || !b.harFoto) {
+    if (state.egetBilde) {
       el.kreditering.hidden = true;
     } else {
       el.kreditering.hidden = false;
@@ -925,7 +892,7 @@
       b.fmt.navn.toLowerCase() + " (" + b.fmt.tekst + ") med " + (state.tittel || "turkalender").toLowerCase() + ".\n\n" +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, beige #F2E6D0 til radveksling, mørk beige #E8D7B6 til datofelt, hvit, sort tekst.\n" +
-      "Fonter: Whitman Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål og klokkeslett, ABC Social til brødtekst.\n" +
+      "Fonter: Whitman Bold til overskriften «" + state.tittel + "», ABC Social Extended Bold til turmål, klokkeslett og datotall, ABC Social til brødtekst.\n" +
       "Oppsett: " + b.opp.prompt + (state.visBand ? " Nederst et rødt bånd med rund DNT-logo (rød T i hvit sirkel) og nettadressen «" + state.lenke + "» i liten, medium skrift, mindre enn turmålene." : " Ingen bånd nederst.") +
       (state.visLogo ? " Rund DNT-logo (rød T i hvit sirkel) oppe til høyre i fotoet." : " Ingen logo i fotoet.") +
       (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre i fotoet." : "") +
@@ -950,9 +917,9 @@
       (tips ? " med et turtips.\n\n" : " for ett arrangement.\n\n") +
       "Profil som skal følges:\n" +
       "Farger: DNT-rød #D82D20, lys beige #F8F2E4 til bakgrunn, hvit, sort tekst.\n" +
-      "Fonter: Whitman Bold til tittelen, ABC Social Extended til undertittel og etiketter, ABC Social til brødtekst.\n" +
+      "Fonter: Whitman Bold til tittelen, ABC Social Extended til undertittel, etiketter og datotall, ABC Social til brødtekst.\n" +
       "Oppsett: " + b.opp.prompt + (state.visBand ? " Nederst et rødt bånd med rund DNT-logo (rød T i hvit sirkel) og nettadressen «" + state.lenke + "» i liten, medium skrift." : " Ingen bånd nederst.") +
-      (state.visLogo && b.harFoto ? " Rund DNT-logo (rød T i hvit sirkel) oppe til høyre." : "") +
+      (state.visLogo ? " Rund DNT-logo (rød T i hvit sirkel) oppe til høyre." : "") +
       (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre." : "") +
       (tips && state.tipsGrad ? " Graderingen vises med en prikk i graderingsfargen: grønn for enkel, blå for middels, rød for krevende og svart for ekspert." : "") + "\n" +
       "Minste tekststørrelse er 24 px, mange av deltakerne er seniorer.\n" +
@@ -1059,9 +1026,6 @@
         var kn = e.target.closest("button[data-verdi]");
         if (!kn) return;
         var patch = {}; patch[gruppe.getAttribute("data-gruppe")] = kn.getAttribute("data-verdi");
-        // Liggende finnes bare for arrangement, og ikke med «Uten foto».
-        if (patch.mal && patch.mal !== "arrangement" && state.format === "liggende") patch.format = "feed";
-        if (patch.format === "liggende" && state.arrOppsett === "flate") patch.arrOppsett = "foto";
         oppdater(patch);
       });
     });
