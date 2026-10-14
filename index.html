@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turplakaten: bilder til sosiale medier for turlag</title>
-<meta name="description" content="Lag ferdige bilder til Facebook og Instagram i DNTs profil, med turkalender, arrangement eller turtips.">
+<title>Turposten: innlegg til sosiale medier for turlag og hytter</title>
+<meta name="description" content="Lag ferdige bilder til Facebook og Instagram i DNTs profil, for turlag og betjente hytter i DNT Oslo og Omegn.">
 <link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/app.css">
@@ -15,23 +15,56 @@
   <section class="panel" aria-label="Innstillinger">
 
     <header class="panel__intro">
-      <h1 class="panel__tittel">Turplakaten</h1>
-      <p class="panel__ingress">Lag ferdige bilder til Facebook og Instagram i DNTs profil. Velg en mal, fyll inn og last ned.</p>
-      <p class="panel__tips"><strong>Tips:</strong> Innlegg som ligner hverandre blir fort oversett. Bland gjerne malene her med egne bilder og korte filmer, så blir ikke innleggene like fra uke til uke.</p>
+      <h1 class="panel__tittel">Turposten</h1>
+      <p class="panel__ingress">Lag innlegg til Facebook og Instagram i DNTs profil. Velg hvem som poster og hva du vil fortelle, fyll inn og last ned.</p>
+      <p class="panel__tips"><strong>Tips:</strong> Innlegg som ligner hverandre blir fort oversett. Trykk «Prøv en annen variant», og bland gjerne med egne bilder og korte filmer.</p>
     </header>
 
     <div class="felt">
-      <p class="felt__etikett">1. Hva vil du lage?</p>
-      <div class="knapperad" data-gruppe="mal" role="group" aria-label="Mal">
-        <button type="button" class="pille" data-verdi="turkalender">Turkalender</button>
-        <button type="button" class="pille" data-verdi="arrangement">Arrangement</button>
-        <button type="button" class="pille" data-verdi="turtips">Turtips</button>
+      <p class="felt__etikett">1. Hvem poster?</p>
+      <div class="knapperad" data-gruppe="avsender" role="group" aria-label="Avsender">
+        <button type="button" class="pille" data-verdi="turlag">Turlag</button>
+        <button type="button" class="pille" data-verdi="hytte">Betjent hytte</button>
+      </div>
+      <div data-avsender="turlag">
+        <label class="skjult" for="turlag">Turlag</label>
+        <input type="text" class="tekstfelt" id="turlag" data-felt="turlag" placeholder="Navn på turlaget">
+      </div>
+      <div class="felt" data-avsender="hytte">
+        <label class="skjult" for="hytte-valg">Hytte</label>
+        <select class="tekstfelt" id="hytte-valg"></select>
+        <div class="boks" id="hytte-lenke" hidden>
+          <div class="felt__topp">
+            <span class="boks__etikett">Hyttas egen lenke</span>
+            <button type="button" class="liten-knapp" id="kopier-hyttelenke">Kopier lenken</button>
+          </div>
+          <p class="hjelp lenketekst" id="hytte-lenke-tekst"></p>
+          <p class="hjelp">Lagre lenken som bokmerke, så er hytta valgt neste gang.</p>
+        </div>
+      </div>
+      <p class="smaa-etikett">Målform i bildet og i forslaget til posttekst</p>
+      <div class="knapperad" data-gruppe="malform" role="group" aria-label="Målform">
+        <button type="button" class="pille" data-verdi="nb">Bokmål</button>
+        <button type="button" class="pille" data-verdi="nn">Nynorsk</button>
+      </div>
+    </div>
+
+    <div class="felt">
+      <p class="felt__etikett">2. Hva vil du fortelle?</p>
+      <div class="knapperad knapperad--grid" data-gruppe="mal" role="group" aria-label="Mal">
+        <button type="button" class="kort-knapp" data-verdi="turkalender" data-avsender="turlag">Turkalender</button>
+        <button type="button" class="kort-knapp" data-verdi="sesong" data-avsender="hytte">Sesong og booking</button>
+        <button type="button" class="kort-knapp" data-verdi="program" data-avsender="hytte">Program</button>
+        <button type="button" class="kort-knapp" data-verdi="meny" data-avsender="hytte">Mat og meny</button>
+        <button type="button" class="kort-knapp" data-verdi="arrangement">Arrangement</button>
+        <button type="button" class="kort-knapp" data-verdi="turtips">Turtips</button>
+        <button type="button" class="kort-knapp" data-verdi="postkort">Postkort</button>
       </div>
       <p class="hjelp" id="mal-hjelp"></p>
     </div>
 
     <div class="felt">
-      <p class="felt__etikett">2. Velg format</p>
+      <p class="felt__etikett">3. Velg format</p>
       <div class="knapperad" data-gruppe="format" role="group" aria-label="Format">
         <button type="button" class="pille" data-verdi="feed">Innlegg</button>
         <button type="button" class="pille" data-verdi="story">Historie</button>
@@ -48,8 +81,8 @@
       <p class="hjelp" id="tekst-hjelp"></p>
     </div>
 
-    <div class="felt" data-mal="turkalender">
-      <p class="felt__etikett">3. Velg bildeoppsett</p>
+    <div class="felt" data-mal="turkalender program">
+      <p class="felt__etikett">4. Velg bildeoppsett</p>
       <div class="knapperad knapperad--grid" data-gruppe="oppsett" role="group" aria-label="Bildeoppsett">
         <button type="button" class="kort-knapp" data-verdi="topp">Bilde øverst</button>
         <button type="button" class="kort-knapp" data-verdi="bakgrunn">Stort bilde</button>
@@ -58,26 +91,40 @@
       <label class="avkryssing" id="kort-glass-felt" hidden><input type="checkbox" id="kort-glass"><span>Gjennomskinnelig kort, fotoet skinner svakt gjennom</span></label>
     </div>
 
-    <div class="felt" data-mal="arrangement" hidden>
-      <p class="felt__etikett">3. Velg oppsett</p>
-      <div class="knapperad knapperad--grid" data-gruppe="arrOppsett" role="group" aria-label="Oppsett for arrangement">
-        <button type="button" class="kort-knapp" data-verdi="foto">Stort foto</button>
-        <button type="button" class="kort-knapp" data-verdi="kort">Foto og tekstfelt</button>
+    <div class="felt" data-mal="arrangement turtips sesong meny" hidden>
+      <p class="felt__etikett">4. Hvor mye tekst skal stå på bildet?</p>
+      <div class="knapperad knapperad--tre" data-gruppe="nivaa" role="group" aria-label="Tekstnivå">
+        <button type="button" class="kort-knapp" data-verdi="postkort">Postkort</button>
+        <button type="button" class="kort-knapp" data-verdi="merkelapp">Merkelapp</button>
+        <button type="button" class="kort-knapp" data-verdi="plakat">Plakat</button>
       </div>
-      <p class="hjelp" id="arr-oppsett-hjelp"></p>
+      <p class="hjelp" id="nivaa-hjelp"></p>
+      <p class="tips-gul"><strong>Tips:</strong> Husk at du kan formidle mye tekst i posteteksten.</p>
+      <div class="felt" data-nivaa="merkelapp plakat">
+        <p class="smaa-etikett">Farge på merkelappen</p>
+        <div class="knapperad knapperad--wrap" data-gruppe="farge" role="group" aria-label="Farge på merkelappen">
+          <button type="button" class="pille pille--liten" data-verdi="rod">Rød</button>
+          <button type="button" class="pille pille--liten" data-verdi="vinter">Vinter</button>
+          <button type="button" class="pille pille--liten" data-verdi="paske">Påske</button>
+          <button type="button" class="pille pille--liten" data-verdi="sommer">Sommer</button>
+          <button type="button" class="pille pille--liten" data-verdi="host">Høst</button>
+        </div>
+      </div>
     </div>
 
-    <div class="felt" data-mal="turtips" hidden>
-      <p class="felt__etikett">3. Velg oppsett</p>
-      <div class="knapperad knapperad--grid" data-gruppe="tipsOppsett" role="group" aria-label="Oppsett for turtips">
-        <button type="button" class="kort-knapp" data-verdi="foto">Stort foto</button>
-        <button type="button" class="kort-knapp" data-verdi="kort">Foto og tekstfelt</button>
+    <div class="felt" data-nivaa="postkort" hidden>
+      <p class="felt__etikett" data-mal="postkort">4. Velg signatur</p>
+      <p class="smaa-etikett" data-mal="arrangement turtips sesong meny">Signatur</p>
+      <div class="knapperad knapperad--tre" data-gruppe="signatur" role="group" aria-label="Signatur">
+        <button type="button" class="kort-knapp" data-verdi="a">Stor</button>
+        <button type="button" class="kort-knapp" data-verdi="b">Stempel</button>
+        <button type="button" class="kort-knapp" data-verdi="c">Postkort</button>
       </div>
-      <p class="hjelp" id="tips-oppsett-hjelp"></p>
+      <p class="hjelp" id="signatur-hjelp"></p>
     </div>
 
     <div class="felt" id="bilde-felt">
-      <p class="felt__etikett">4. Bilde</p>
+      <p class="felt__etikett">5. Bilde</p>
       <label class="opplasting">
         <span class="opplasting__tittel">Velg bilde fra maskinen</span>
         <span class="hjelp" id="bildenavn"></span>
@@ -100,15 +147,67 @@
     </div>
 
     <div class="felt" data-mal="turkalender">
-      <p class="felt__etikett">5. Tittel og periode</p>
+      <p class="felt__etikett">6. Tittel og periode</p>
       <label class="skjult" for="tittel">Tittel</label>
       <input type="text" class="tekstfelt" id="tittel" data-felt="tittel" placeholder="Ukens turer eller Turer i september">
       <label class="skjult" for="periode">Periode</label>
       <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38 · SEPTEMBER eller SEPTEMBER 2026">
     </div>
 
+    <div class="felt" data-mal="program" hidden>
+      <p class="felt__etikett">6. Tittel og periode</p>
+      <input type="text" class="tekstfelt" data-felt="programTittel" aria-label="Tittel" placeholder="Påskeprogram eller Ukeprogram">
+      <input type="text" class="tekstfelt" data-felt="programPeriode" aria-label="Periode" placeholder="PÅSKEN 2027 eller UKE 42">
+    </div>
+
+    <div class="felt" data-mal="sesong" hidden>
+      <p class="felt__etikett">6. Innhold</p>
+      <div class="knapperad knapperad--wrap" data-gruppe="sesongType" role="group" aria-label="Type">
+        <button type="button" class="pille pille--liten" data-verdi="apner">Vi åpner</button>
+        <button type="button" class="pille pille--liten" data-verdi="booking">Booking åpner</button>
+        <button type="button" class="pille pille--liten" data-verdi="ledig">Ledige senger</button>
+        <button type="button" class="pille pille--liten" data-verdi="takk">Takk for sesongen</button>
+        <button type="button" class="pille pille--liten" data-verdi="soker">Vi søker folk</button>
+      </div>
+      <p class="hjelp" id="sesong-type-hjelp"></p>
+      <input type="text" class="tekstfelt" data-felt="sesongMerke" aria-label="Merkelapp" placeholder="Merkelapp, f.eks. Påsken 2027">
+      <input type="text" class="tekstfelt" data-felt="sesongTittel" aria-label="Tittel" placeholder="Tittel, f.eks. Booking åpner 15. oktober">
+      <input type="text" class="tekstfelt" data-felt="sesongUnder" aria-label="Undertittel" placeholder="Undertittel (valgfri)">
+      <textarea class="tekstfelt" data-felt="sesongTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst, maks to setninger. Vises bare i Plakat."></textarea>
+      <label class="smaa-etikett" for="sesong-fakta1" id="sesong-fakta1-etikett">Periode</label>
+      <input type="text" class="tekstfelt" id="sesong-fakta1" data-felt="sesongFakta1">
+      <label class="smaa-etikett" for="sesong-fakta2" id="sesong-fakta2-etikett">Bestilling</label>
+      <input type="text" class="tekstfelt" id="sesong-fakta2" data-felt="sesongFakta2">
+      <p class="smaa-etikett">Datofelt (valgfritt, vises i Plakat)</p>
+      <div class="tur__rad">
+        <select class="tekstfelt tekstfelt--dag" data-felt="sesongDag" aria-label="Ukedag"><option value="">Ingen dato</option><option value="Mandag">Mandag</option><option value="Tirsdag">Tirsdag</option><option value="Onsdag">Onsdag</option><option value="Torsdag">Torsdag</option><option value="Fredag">Fredag</option><option value="Lørdag">Lørdag</option><option value="Søndag">Søndag</option></select>
+        <input type="text" class="tekstfelt" data-felt="sesongDato" aria-label="Dato" placeholder="Dato">
+        <input type="text" class="tekstfelt" data-felt="sesongMaaned" aria-label="Måned" placeholder="Måned">
+      </div>
+    </div>
+
+    <div class="felt" data-mal="meny" hidden>
+      <p class="felt__etikett">6. Innhold</p>
+      <input type="text" class="tekstfelt" data-felt="menyMerke" aria-label="Merkelapp" placeholder="Merkelapp, f.eks. Dagens middag eller Gourmethelg">
+      <input type="text" class="tekstfelt" data-felt="menyTittel" aria-label="Tittel" placeholder="Retten eller arrangementet, f.eks. Egenfisket aure">
+      <input type="text" class="tekstfelt" data-felt="menyUnder" aria-label="Undertittel" placeholder="Undertittel (valgfri)">
+      <textarea class="tekstfelt" data-felt="menyLinjer" rows="4" aria-label="Meny" placeholder="Menyen, én rett per linje. Vises bare i Plakat."></textarea>
+      <div class="tur__rad">
+        <input type="text" class="tekstfelt" data-felt="menyTid" aria-label="Servering" placeholder="Servering, f.eks. kl. 19.00">
+        <input type="text" class="tekstfelt" data-felt="menyPris" aria-label="Pris" placeholder="Pris (valgfri)">
+      </div>
+    </div>
+
+    <div class="felt" data-mal="postkort" hidden>
+      <p class="felt__etikett">6. Tekst i signaturen</p>
+      <input type="text" class="tekstfelt" data-felt="postOverlinje" aria-label="Liten tekst over navnet" placeholder="Liten tekst over navnet, f.eks. Hilsen fra">
+      <input type="text" class="tekstfelt" id="post-navn" data-felt="postNavn" aria-label="Navn">
+      <input type="text" class="tekstfelt" id="post-meta" data-felt="postMeta" aria-label="Linje under navnet">
+      <p class="hjelp">Tomme felt fylles med hyttas navn, høyde og område.</p>
+    </div>
+
     <div class="felt" data-mal="arrangement" hidden>
-      <p class="felt__etikett">5. Innhold</p>
+      <p class="felt__etikett">6. Innhold</p>
       <div class="knapperad" data-gruppe="arrType" role="group" aria-label="Type arrangement">
         <button type="button" class="pille" data-verdi="arrangement">Tur</button>
         <button type="button" class="pille" data-verdi="kurs">Kurs</button>
@@ -124,7 +223,7 @@
       </div>
       <input type="text" class="tekstfelt" data-felt="arrTid" aria-label="Klokkeslett" placeholder="Klokkeslett, f.eks. 10:00 til 15:00">
       <input type="text" class="tekstfelt" data-felt="arrSted" aria-label="Sted" placeholder="Sted eller oppmøte">
-      <textarea class="tekstfelt" data-felt="arrTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om arrangementet, maks to setninger"></textarea>
+      <textarea class="tekstfelt" data-felt="arrTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om arrangementet, maks to setninger. Vises bare i Plakat."></textarea>
       <input type="text" class="tekstfelt" data-felt="arrPasserFor" data-arr-type="arrangement kurs" aria-label="Passer for" placeholder="Passer for, f.eks. alle som går 10 km">
       <input type="text" class="tekstfelt" data-felt="arrPris" data-arr-type="kurs" aria-label="Pris" placeholder="Pris, f.eks. 500 kr, medlemmer 300 kr">
       <input type="text" class="tekstfelt" data-felt="arrFrist" data-arr-type="kurs" aria-label="Påmeldingsfrist" placeholder="Påmeldingsfrist, f.eks. 24. september">
@@ -134,10 +233,10 @@
     </div>
 
     <div class="felt" data-mal="turtips" hidden>
-      <p class="felt__etikett">5. Innhold</p>
+      <p class="felt__etikett">6. Innhold</p>
       <input type="text" class="tekstfelt" data-felt="tipsTittel" aria-label="Turmål" placeholder="Turmål, f.eks. Sognsvann rundt">
       <input type="text" class="tekstfelt" data-felt="tipsUnder" aria-label="Undertittel" placeholder="Undertittel, f.eks. En enkel tur for hele familien">
-      <textarea class="tekstfelt" data-felt="tipsTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om turen, maks to setninger"></textarea>
+      <textarea class="tekstfelt" data-felt="tipsTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om turen, maks to setninger. Vises bare i Plakat."></textarea>
       <div class="tur__rad">
         <input type="text" class="tekstfelt" data-felt="tipsLengde" aria-label="Lengde" placeholder="Lengde, f.eks. 3,3 km">
         <input type="text" class="tekstfelt" data-felt="tipsVarighet" aria-label="Varighet" placeholder="Varighet, f.eks. 1 time">
@@ -154,25 +253,24 @@
       <input type="text" class="tekstfelt" data-felt="tipsPasserFor" aria-label="Passer for" placeholder="Passer for, f.eks. hele familien, også med barnevogn">
       <input type="text" class="tekstfelt" data-felt="tipsUnderveis" aria-label="Underveis" placeholder="Hytte eller rasteplass underveis, f.eks. benker og bålplasser">
       <input type="text" class="tekstfelt" data-felt="tipsSesong" aria-label="Beste tid" placeholder="Beste tid på året, f.eks. hele året">
-      <p class="hjelp">Tomme felt vises ikke i bildet.</p>
+      <p class="hjelp">Tomme felt vises ikke i bildet. Merkelapp viser lengde og gradering, Plakat viser alt.</p>
     </div>
 
     <div class="felt">
-      <p class="felt__etikett">6. Turlag, nettadresse og logo</p>
-      <label class="skjult" for="turlag">Turlag</label>
-      <input type="text" class="tekstfelt" id="turlag" data-felt="turlag" placeholder="Navn på turlaget">
+      <p class="felt__etikett">7. Detaljer i bildet</p>
+      <label class="avkryssing" data-mal="arrangement turtips sesong meny" data-nivaa="merkelapp"><input type="checkbox" id="vis-merke"><span>Vis merkelapp med logo og navn øverst</span></label>
       <label class="avkryssing"><input type="checkbox" id="vis-band"><span>Vis rødt bånd med nettadresse nederst</span></label>
       <div id="lenke-felt" hidden>
         <label class="skjult" for="lenke">Nettadresse</label>
         <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/oslo">
       </div>
-      <label class="avkryssing"><input type="checkbox" id="vis-logo"><span>Vis DNT-logo i bildet</span></label>
+      <label class="avkryssing" data-mal="turkalender program"><input type="checkbox" id="vis-logo"><span>Vis DNT-logo i bildet</span></label>
       <label class="avkryssing"><input type="checkbox" id="vis-turbo"><span>Vis Turbo (Barnas Turlag)</span></label>
     </div>
 
-    <div class="felt felt--romslig" data-mal="turkalender">
+    <div class="felt felt--romslig" data-mal="turkalender program">
       <div class="felt__topp">
-        <p class="felt__etikett">Turene</p>
+        <p class="felt__etikett" id="liste-etikett">Turene</p>
         <button type="button" class="liten-knapp" id="legg-til">+ Legg til tur</button>
       </div>
       <div class="turliste" id="turliste"></div>
@@ -190,7 +288,7 @@
       <button type="button" class="lenkeknapp" id="tom-skjema">Tøm skjemaet og start på nytt</button>
       <button type="button" class="lenkeknapp" id="veksle-prompt">Reserveløsning: prompt til Claude</button>
       <div class="prompt" id="prompt-boks" hidden>
-        <p class="hjelp">Får du ikke lastet ned bildet, kan du lime denne teksten inn i Claude. Turene du har fylt inn er allerede med.</p>
+        <p class="hjelp">Får du ikke lastet ned bildet, kan du lime denne teksten inn i Claude. Det du har fylt inn er allerede med.</p>
         <label class="skjult" for="prompt-tekst">Prompt</label>
         <textarea id="prompt-tekst" readonly rows="10"></textarea>
         <button type="button" class="mork-knapp" id="kopier-prompt">Kopier prompten</button>
@@ -200,11 +298,28 @@
   </section>
 
   <section class="forhandsvisning" aria-label="Forhåndsvisning">
-    <p class="felt__etikett">Forhåndsvisning</p>
+    <div class="forhandsvisning__topp">
+      <p class="felt__etikett">Forhåndsvisning</p>
+      <button type="button" class="liten-knapp liten-knapp--ikon" id="ny-variant"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>Prøv en annen variant</button>
+    </div>
+    <p class="hjelp" id="variant-hjelp"></p>
     <div class="ramme" id="ramme">
       <div id="plakat-skala">
         <div id="plakat" data-oppsett="topp"></div>
       </div>
+    </div>
+
+    <div class="posttekst">
+      <div class="felt__topp">
+        <p class="felt__etikett">Forslag til posttekst</p>
+        <span class="knapperad">
+          <button type="button" class="liten-knapp" id="annen-posttekst">Vis et annet forslag</button>
+          <button type="button" class="liten-knapp" id="kopier-posttekst">Kopier</button>
+        </span>
+      </div>
+      <label class="skjult" for="posttekst">Forslag til posttekst</label>
+      <textarea id="posttekst" readonly rows="9"></textarea>
+      <p class="hjelp">Bildet gir stemningen, teksten gir budskapet. Rediger gjerne når du limer inn i Facebook eller Instagram.</p>
     </div>
   </section>
 
@@ -216,7 +331,7 @@
       <span class="tur__nummer"></span>
       <button type="button" class="ikon-knapp" data-handling="opp" title="Flytt opp" aria-label="Flytt opp">↑</button>
       <button type="button" class="ikon-knapp" data-handling="ned" title="Flytt ned" aria-label="Flytt ned">↓</button>
-      <button type="button" class="ikon-knapp ikon-knapp--fjern" data-handling="fjern" title="Fjern turen" aria-label="Fjern turen">×</button>
+      <button type="button" class="ikon-knapp ikon-knapp--fjern" data-handling="fjern" title="Fjern" aria-label="Fjern">×</button>
     </div>
     <div class="tur__rad">
       <select class="tur__kort tur__dag" data-felt="dag" aria-label="Dag">
@@ -226,8 +341,8 @@
       <input type="text" class="tur__kort" data-felt="dato" placeholder="Dato" aria-label="Dato">
       <input type="text" class="tur__kort" data-felt="tid" placeholder="kl." aria-label="Klokkeslett">
     </div>
-    <input type="text" data-felt="tittel" placeholder="Turmål" aria-label="Turmål">
-    <input type="text" data-felt="sted" placeholder="Startsted" aria-label="Startsted">
+    <input type="text" data-felt="tittel" placeholder="Turmål" aria-label="Turmål eller aktivitet">
+    <input type="text" data-felt="sted" placeholder="Startsted" aria-label="Startsted eller sted">
     <div class="tur__rad">
       <input type="text" class="tur__liten" data-felt="turleder" placeholder="Turleder" aria-label="Turleder">
       <input type="text" class="tur__liten" data-felt="varighet" placeholder="8 km · 3 t" aria-label="Lengde og varighet">
@@ -246,6 +361,7 @@
 </template>
 
 <script src="js/vendor/html2canvas.min.js"></script>
+<script src="js/hytter.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

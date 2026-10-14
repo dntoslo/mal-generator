@@ -1,23 +1,28 @@
-# Turplakaten
+# Turposten
 
-Et lite nettverktøy for frivillige i DNT Oslo og Omegns turlag. Du velger mal (turkalender, arrangement eller turtips), fyller inn innhold, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder.
+Et lite nettverktøy for turlag og betjente hytter i DNT Oslo og Omegn. Het Turplakaten fram til oktober 2026. Du velger hvem som poster og hva du vil fortelle, fyller inn, velger bilde og laster ned et ferdig bilde til Facebook og Instagram. Logo, farger, fonter og oppsett er låst til DNTs profil, så resultatet blir riktig uten designkunnskap, og uten KI-genererte bilder. Ved siden av bildet står et forslag til posttekst som kan kopieres.
 
-Tre maler:
+Malene:
 
-- **Turkalender**: flere turer i én liste, for uka eller måneden.
-- **Arrangement**: ett arrangement, som tur, kurs eller dugnad, med tittel, dato, tid, sted, kort tekst og valgfrie felt som pris, påmeldingsfrist eller hva man skal ta med.
-- **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet, gradering, start, kollektivt, hvem turen passer for, hytte eller rasteplass underveis og beste tid på året.
+- **Turkalender** (turlag): flere turer i én liste, for uka eller måneden.
+- **Program** (hytter): flere programpunkter i én liste, f.eks. påskeprogram.
+- **Sesong og booking** (hytter): vi åpner, booking åpner, ledige senger, takk for sesongen eller vi søker folk.
+- **Mat og meny** (hytter): dagens middag, gourmethelg eller pizzakveld.
+- **Arrangement**: ett arrangement, som tur, kurs eller dugnad.
+- **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet og gradering.
+- **Postkort**: et fint bilde med signatur og nesten ingen tekst.
 
 ## Slik brukes det
 
-1. Velg mal, og deretter format: Innlegg (1080 × 1350) eller Historie (1080 × 1920).
-2. Velg tekststørrelse. «Stor» er for turlag med mange seniorer og gir plass til én tur mindre.
-3. Velg bildeoppsett og last opp et eget foto fra turlaget. Juster utsnittet med skyveknappene.
-4. Fyll inn tittel, turlag, periode (for eksempel «UKE 38 · SEPTEMBER» eller «SEPTEMBER 2026») og eventuelt nettadresse. Det røde båndet med nettadresse nederst, DNT-logoen oppe til høyre og Turbo (Barnas Turlags maskot) nede til høyre er alle av som standard, fordi bildet gjør seg best i sosiale medier uten. Kryss av for det du vil ha med. Standardadressen er dnt.no/oslo, bytt gjerne til turlagets egen side, f.eks. dnt.no/lorenskog. Adressen kan ikke klikkes i sosiale medier, så bruk en kort adresse som er lett å huske.
-5. Turkalender: legg inn turene. Dag, dato, klokkeslett, turmål og startsted vises alltid. Turleder, lengde, gradering og påmelding er valgfritt. Arrangement: velg type (tur, kurs eller dugnad) og fyll inn feltene. Turtips: fyll inn turmål og de faktaene du vil ha med. Tomme felt vises ikke i plakaten. Får ikke innholdet plass, sier skjemaet fra.
-6. Trykk «Last ned bildet».
+1. Velg hvem som poster: turlag eller betjent hytte. Hyttene kan få sin egen lenke, f.eks. `https://dntoslo.github.io/mal-generator/?hytte=leirvassbu`, der hytta er valgt på forhånd. Velg bokmål eller nynorsk.
+2. Velg hva du vil fortelle, og format: Innlegg (1080 × 1350) eller Historie (1080 × 1920).
+3. Velg hvor mye tekst som skal stå på bildet: Postkort, Merkelapp (standard) eller Plakat. Postkort har tre signaturer å velge mellom. Turkalender og program har bildeoppsett i stedet.
+4. Last opp et eget foto, eller bruk eksempelbildet. Hyttene har tre egne bilder hver. Juster utsnittet med skyveknappene.
+5. Fyll inn innholdet. Tomme felt vises ikke i bildet. Får ikke innholdet plass, sier skjemaet fra.
+6. Trykk «Prøv en annen variant» for annen farge og plassering, så innleggene ikke blir like fra gang til gang.
+7. Trykk «Last ned bildet», og kopier forslaget til posttekst.
 
-Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt med turene dine som kan limes inn i Claude.
+Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt som kan limes inn i Claude.
 
 ## Mappestruktur
 
@@ -26,10 +31,12 @@ index.html            skjema og forhåndsvisning
 css/tokens.css        DNTs designtokens og fonter
 css/app.css           stiler for skjema og plakat
 js/app.js             all logikk
+js/hytter.js          de 25 betjente hyttene med fakta og eksempelbilder
 js/vendor/            html2canvas 1.4.1 (bildeeksport)
 assets/fonts/         ABC Social, ABC Social Extended, Whitman (lisensierte)
 assets/img/           DNT-logo og Turbo
-assets/img/eksempler/ 29 eksempelfoto som rullerer
+assets/img/eksempler/ 29 eksempelfoto til turlagene
+assets/img/hytter/    3 foto per hytte, hentet fra UT.no
 docs/design.md        begrunnelser bak størrelser og grenser
 CLAUDE.md             kontekst for videre arbeid med Claude Code
 ```
@@ -63,15 +70,17 @@ git add -A && git commit -m "Beskriv endringen" && git push
 Verdt å vite:
 
 - Repoet er offentlig inntil organisasjonen dntoslo får GitHub Team-lisens, og gjøres privat etter det (Settings, Danger zone, Change visibility). Pages fortsetter å virke fra privat repo på Team-planen. Nettsiden er uansett åpen for alle med lenken. DNT har lisens på fontene.
-- Bruk repoet bare til Turplakaten. Ikke legg inn deltakerlister eller andre personopplysninger.
+- Bruk repoet bare til Turposten. Ikke legg inn deltakerlister eller andre personopplysninger.
 
 ## Eksempelbilder
 
-Når den frivillige ikke har lastet opp eget foto, vises et eksempelbilde fra `assets/img/eksempler/`. Bildet trekkes tilfeldig ved hver åpning, aldri det samme to ganger på rad, og kan byttes med knappen «Nytt eksempelbilde». Skjemaet minner om å kreditere fotografen i posteteksten.
+Når brukeren ikke har lastet opp eget foto, vises et eksempelbilde fra `assets/img/eksempler/`. Bildet trekkes tilfeldig ved hver åpning, aldri det samme to ganger på rad, og kan byttes med knappen «Nytt eksempelbilde». Skjemaet minner om å kreditere fotografen i posteteksten.
 
 Legge til et bilde: skaler det til 1620 px bredde (liggende) eller 2160 px høyde (stående) som JPEG, legg det i mappen, og legg til én linje i `EKSEMPELBILDER` øverst i `js/app.js` med filnavn, fotograf og om det er stående. Bare ekte foto som DNT har rettighetene til.
 
 Fotografer i dag: Daniel Jacobsen og Marius Dalseg. To bilder fra den opprinnelige prototypen har ukjent fotograf.
+
+Hyttebildene ligger i `assets/img/hytter/` med fotograf i `js/hytter.js`. De ble hentet fra UT.no 14. oktober 2026, tre per hytte, med bilde nr. 1 av hytta i landskapet. Bytt gjerne ut med bilder fra vertskapet eller fra Fotoweb.
 
 ## Fonter og bilder
 

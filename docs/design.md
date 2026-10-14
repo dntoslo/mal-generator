@@ -97,7 +97,7 @@ Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en teksts
 
 Lagt til 11. september 2026. Ett arrangement (tur, kurs eller dugnad) i to oppsett og to formater, innlegg og historie.
 
-- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst) og «Foto og tekstfelt» (foto øverst, tekst på lys beige).
+- **Oppsett:** «Stort foto» (foto fyller flaten, tekst i hvitt nederst) og «Foto og tekstfelt» (foto øverst, tekst på lys beige). Fra 14. oktober 2026 er de erstattet av tekstnivåene Merkelapp og Plakat, se «Turposten» under.
 - **Fjernet 28. september 2026:** formatet liggende (1920 × 1080) og oppsettet «Uten foto», for å gjøre valgene enklere. Lagrede valg av dem faller tilbake til innlegg og «Stort foto».
 - **Faste elementer:** datofelt med rødt dagbånd, stor dato og måned (`.a-chip`, se «Datofeltene» under), tittel i Whitman Bold som skaleres ned til én linje og brytes først under minste størrelse, undertittel, informasjon som etikett og verdi i to kolonner (`ARR_INFO` styrer rekkefølgen), kort tekst på maks 180 tegn, og det røde båndet med nettadresse.
 - **Typene** bestemmer bare hvilke valgfrie felt som vises: tur har «Passer for» og «Påmelding», kurs har i tillegg «Pris» og «Påmeldingsfrist», dugnad har «Ta med» og «Servering». Felt som ikke hører til typen skjules i plakaten selv om de har innhold, så et bytte av type ikke sletter noe.
@@ -122,3 +122,19 @@ Strammet opp 28. september 2026, etter at Daniel valgte variant B blant fire ski
 - **Hvorfor:** Før var feltet 168 px med måneden i 20 px. «SEPTEMBER» gikk nesten ut til kantene, og det var 21 px luft over tallet mot 8 px under måneden. Måneden og turkalenderens dagsnavn (20 til 22 px) var under minstegrensen på 24 px. Whitman-tallet så lett og boklig ut i et lite ikon med sans rundt.
 - **Plass:** Med 184 px har det lengste månedsnavnet (september) minst 14 px luft til kanten, også med stor tekst. Det lengste dagsnavnet (torsdag) har minst 24 px.
 - **Balanse:** Linjehøyde 0,8 på tallet og 6 px ekstra luft nederst (2 px i turkalenderen) gjør at tallblokken står optisk midt under båndet.
+
+## Turposten (14. oktober 2026)
+
+Verktøyet ble utvidet til de 25 betjente hyttene og fikk navnet Turposten. Bakgrunnen er en kartlegging av hva hyttene poster i egne kanaler: mest ekte foto, karuseller og reels, der posteteksten bærer budskapet. Designede plakater var unntaket, blant annet en KI-generert påskeplakat. Verktøyet skal derfor dytte mot foto først og lite tekst. Skissene ligger i Claude Design (lenke i `CLAUDE.md`).
+
+- **Avsender først.** Brukeren velger turlag eller betjent hytte, og deretter hva innlegget skal fortelle. Hver avsender ser bare sine maler (`MALVALG`). Hyttelenken `?hytte=<id>` velger hytta, setter hyttas målform og starter i Sesong og booking, fordi det var den vanligste posttypen.
+- **Tre tekstnivåer.** Postkort (bare signatur), Merkelapp (standard) og Plakat (all informasjon). Merkelapp viser merkelapp eller datofelt, tittel, undertittel og opptil to fakta med ikon. Kort tekst, meny og resten av informasjonen vises bare i Plakat. En gul tips-boks minner om at posteteksten kan bære mye av teksten.
+- **Tittel på foto** kan gå over to linjer: først én linje ned til 96 px, ellers to linjer fra 112 px og ned til 64 px, med balansert linjeskift så «15. oktober» ikke deles.
+- **Stempelet** (hvitt kort med logo, navn og høyde over havet) står øverst til venstre i Merkelapp, eller nederst når teksten står øverst. Det er den eneste logoen i de organiske innleggene. Den frittstående T-en i hvit sirkel ble droppet for enkeltmalene etter gjennomgang av skissene.
+- **Postkortsignaturer.** A: «Hilsen fra» over navnet stort i Whitman, rett på fotoet (standard). B: stempelet med logo. C: fotoet med lys kant og signaturen under, som et postkort. Alle kan velges.
+- **Variasjon.** Merkelappen kan være rød eller ha sesongfarge fra den nye paletten: vinter `--ny-bla`, påske `--ny-gul`, sommer `--ny-mork-gronn` (hvit tekst) og høst `--ny-oransje`. «Prøv en annen variant» velger en ny kombinasjon av farge og plassering (nederst, øverst, midtstilt) i Merkelapp, neste signatur i Postkort, neste farge i Plakat og det andre oppsettet i kalenderne.
+- **Historie.** Instagram legger knapper over toppen og bunnen, så stempelet står 210 px ned og teksten 340 px over bunnen.
+- **Nynorsk.** Faste ord i plakaten (dagsnavn, etiketter som «Stad» og «Passar for», «Helsing frå») og eksempeltekstene følger målformen. Det brukeren har skrevet selv, endres aldri.
+- **Forslag til posttekst.** To varianter per mal, på valgt målform, med fotograf og @dntoslo for hyttene. Ingen utropstegn, ingen emoji.
+- **Program** bruker turkalenderens oppsett og regler, med egen liste, tittel og periode, og hyttas navn i overlinjen.
+- **Hyttebildene** er tre per hytte fra UT.no, 1800 px brede der originalen tillater det. Noen er bare 1200 px og kan bli myke i Historie.
