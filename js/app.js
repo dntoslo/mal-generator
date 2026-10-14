@@ -132,30 +132,21 @@
   // Sesong og booking. Typen bestemmer eksempelteksten og etikett og ikon på de to faktaene.
   var SESONG_TYPER = {
     apner:   { hjelp: "Når hytta åpner for sesongen.",
-               fakta: [["Åpent", "Ope", "kalender"], ["Bestilling", "Bestilling", "seng"]] },
+               fakta: [["Åpent", "kalender"], ["Bestilling", "seng"]] },
     booking: { hjelp: "Når bookingen åpner. Datofeltet vises i Plakat.",
-               fakta: [["Periode", "Periode", "kalender"], ["Bestilling", "Bestilling", "post"]] },
+               fakta: [["Periode", "kalender"], ["Bestilling", "post"]] },
     ledig:   { hjelp: "Ledige senger i en periode.",
-               fakta: [["Periode", "Periode", "kalender"], ["Bestilling", "Bestilling", "seng"]] },
+               fakta: [["Periode", "kalender"], ["Bestilling", "seng"]] },
     takk:    { hjelp: "Takk for sesongen, med dato for neste sesong.",
-               fakta: [["Neste sesong", "Neste sesong", "kalender"], ["Bestilling", "Bestilling", "seng"]] },
+               fakta: [["Neste sesong", "kalender"], ["Bestilling", "seng"]] },
     soker:   { hjelp: "Rekruttering av sesongansatte.",
-               fakta: [["Søknadsfrist", "Søknadsfrist", "kalender"], ["Søknad", "Søknad", "post"]] }
+               fakta: [["Søknadsfrist", "kalender"], ["Søknad", "post"]] }
   };
   var SESONG_FELT = ["sesongMerke", "sesongTittel", "sesongUnder", "sesongTekst", "sesongFakta1", "sesongFakta2",
                      "sesongDag", "sesongDato", "sesongMaaned"];
   var MENY_FELT = ["menyMerke", "menyTittel", "menyUnder", "menyLinjer", "menyTid", "menyPris"];
   var POST_FELT = ["postOverlinje", "postNavn", "postMeta"];
   var PROGRAM_FELT = ["programTittel", "programPeriode", "karusellUnder", "karusellInfo"];
-
-  // Ord og etiketter i plakaten som skrives annerledes på nynorsk.
-  // Alt som ikke står her, er likt på bokmål og nynorsk.
-  var NYNORSK = {
-    "Sted": "Stad", "Passer for": "Passar for", "Varighet": "Varigheit", "Underveis": "Undervegs",
-    "Krevende": "Krevjande", "Turleder": "Turleiar", "Hilsen fra": "Helsing frå",
-    "Mandag": "Måndag", "Tirsdag": "Tysdag", "Lørdag": "Laurdag", "Søndag": "Sundag",
-    "MAN": "MÅN", "TIR": "TYS", "LØR": "LAU", "SØN": "SUN"
-  };
 
   // Ikonene er fra Lucide (MIT), som i designsystemet Hyttebestilling. Streken er
   // satt til sort direkte, fordi html2canvas tegner SVG uten å arve currentColor.
@@ -235,7 +226,8 @@
     return { feed: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 }, karusell: { x: 50, y: 50, z: 115 } };
   }
 
-  // ISO-ukenummer, slik at «UKE 38 · SEPTEMBER» stemmer med dagens dato.
+  // ISO-ukenummer, slik at «UKE 38, SEPTEMBER» stemmer med dagens dato.
+  // Ingen midtprikk som skilletegn (15. oktober 2026), den så KI-generert ut.
   function gjeldendePeriode() {
     var d = new Date();
     var dato = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -243,49 +235,47 @@
     dato.setUTCDate(dato.getUTCDate() + 4 - dag);
     var aarStart = new Date(Date.UTC(dato.getUTCFullYear(), 0, 1));
     var uke = Math.ceil(((dato - aarStart) / 86400000 + 1) / 7);
-    return "UKE " + uke + " · " + MANEDER[d.getMonth()];
+    return "UKE " + uke + ", " + MANEDER[d.getMonth()];
   }
 
-  // Eksempeltekst for sesong og booking. Avhenger av type, målform og hytte (e-post).
+  // Eksempeltekst for sesong og booking. Avhenger av type og hytte (e-post).
   // Alle typene fyller alle feltene, så et typebytte tømmer det forrige eksempelet.
-  function sesongPreset(type, mf, h) {
-    var nn = mf === "nn";
+  function sesongPreset(type, h) {
     var epost = h && h.epost ? h.epost : "Bestilling på e-post";
     var bestill = "hyttebestilling.dnt.no";
     var p = {
       apner: {
         sesongMerke: "Vintersesongen",
-        sesongTittel: nn ? "Vi opnar 26. februar" : "Vi åpner 26. februar",
-        sesongUnder: nn ? "Velkomen til fjells" : "Velkommen til fjells",
-        sesongTekst: nn ? "Vi gler oss til å ta imot deg att. Hugs å bestille i god tid." : "Vi gleder oss til å ta imot deg igjen. Husk å bestille i god tid.",
+        sesongTittel: "Vi åpner 26. februar",
+        sesongUnder: "Velkommen til fjells",
+        sesongTekst: "Vi gleder oss til å ta imot deg igjen. Husk å bestille i god tid.",
         sesongFakta1: "26. februar til 2. mai", sesongFakta2: bestill
       },
       booking: {
-        sesongMerke: nn ? "Påska 2027" : "Påsken 2027",
-        sesongTittel: nn ? "Booking opnar 15. oktober" : "Booking åpner 15. oktober",
+        sesongMerke: "Påsken 2027",
+        sesongTittel: "Booking åpner 15. oktober",
         sesongUnder: "",
-        sesongTekst: nn ? "Send oss ønskt periode, kor mange de er og kontaktinformasjon, så stadfestar vi og sender lenkje til betaling."
-                        : "Send oss ønsket periode, antall personer og kontaktinformasjon, så bekrefter vi og sender lenke til betaling.",
+        sesongTekst: "Send oss ønsket periode, antall personer og kontaktinformasjon, så bekrefter vi og sender lenke til betaling.",
         sesongFakta1: "19. til 28. mars", sesongFakta2: epost,
         sesongDag: "Torsdag", sesongDato: "15", sesongMaaned: "oktober"
       },
       ledig: {
-        sesongMerke: nn ? "Påska 2027" : "Påsken 2027",
-        sesongTittel: nn ? "Ledige senger i påska" : "Ledige senger i påsken",
-        sesongUnder: nn ? "Det er framleis plass til deg" : "Det er fortsatt plass til deg",
+        sesongMerke: "Påsken 2027",
+        sesongTittel: "Ledige senger i påsken",
+        sesongUnder: "Det er fortsatt plass til deg",
         sesongTekst: "", sesongFakta1: "25. til 29. mars", sesongFakta2: bestill
       },
       takk: {
         sesongMerke: "Takk for sesongen",
-        sesongTittel: nn ? "Vi sjåast att 5. mars" : "Vi ses igjen 5. mars",
-        sesongUnder: nn ? "Tusen takk til alle som tok turen til oss i sommar" : "Tusen takk til alle som tok turen til oss i sommer",
+        sesongTittel: "Vi ses igjen 5. mars",
+        sesongUnder: "Tusen takk til alle som tok turen til oss i sommer",
         sesongTekst: "", sesongFakta1: "5. mars", sesongFakta2: bestill
       },
       soker: {
         sesongMerke: "Ledig stilling",
-        sesongTittel: nn ? "Vil du jobbe hjå oss?" : "Vil du jobbe hos oss?",
-        sesongUnder: nn ? "Vi søkjer sesongtilsette til sommaren" : "Vi søker sesongansatte til sommeren",
-        sesongTekst: nn ? "Vi treng folk på kjøkenet, i resepsjonen og til reinhald." : "Vi trenger folk på kjøkkenet, i resepsjonen og til renhold.",
+        sesongTittel: "Vil du jobbe hos oss?",
+        sesongUnder: "Vi søker sesongansatte til sommeren",
+        sesongTekst: "Vi trenger folk på kjøkkenet, i resepsjonen og til renhold.",
         sesongFakta1: "1. mai", sesongFakta2: epost
       }
     }[type] || {};
@@ -294,14 +284,13 @@
     return ut;
   }
 
-  function menyPreset(mf) {
-    var nn = mf === "nn";
+  function menyPreset() {
     return {
       menyMerke: "Dagens middag",
-      menyTittel: nn ? "Eigenfiska aure" : "Egenfisket aure",
-      menyUnder: nn ? "Frå vatna rett ved hytta" : "Fra vannene rett ved hytta",
-      menyLinjer: nn ? "Rømmesaus og agurksalat\nNypoteter med dill\nMultekrem til dessert" : "Rømmesaus og agurksalat\nNypoteter med dill\nMultekrem til dessert",
-      menyTid: nn ? "Kl. 19.00 i spisesalen" : "Kl. 19.00 i spisesalen",
+      menyTittel: "Egenfisket aure",
+      menyUnder: "Fra vannene rett ved hytta",
+      menyLinjer: "Rømmesaus og agurksalat\nNypoteter med dill\nMultekrem til dessert",
+      menyTid: "Kl. 19.00 i spisesalen",
       menyPris: ""
     };
   }
@@ -311,7 +300,6 @@
     return Object.assign({
       avsender: "turlag",
       hytte: "",
-      malform: "nb",
       mal: "turkalender",
       nivaa: "merkelapp",
       signatur: "a",
@@ -377,7 +365,7 @@
         nyTur("ONS", "16", "18:00", "Kveldstur med utsikt fra Marikollslottet og Bjønnåsen", "Sandbekken fotballbane"),
         nyTur("SØN", "20", "10:00", "Søndagstur over Lutåsen til Sarabråten", "Fra Marihøltet P")
       ]
-    }, sesongPreset("booking", "nb", null), menyPreset("nb"));
+    }, sesongPreset("booking", null), menyPreset());
   }
 
   var state = Object.assign(standardSkjema(), {
@@ -449,15 +437,24 @@
     return state.turlag || "";
   }
 
-  // Høyde og område under hyttenavnet, f.eks. «1405 moh · Jotunheimen».
+  // Preposisjon foran området. «i» er standard.
+  var PAA_OMRADE = { "Hardangervidda": "på", "Dovrefjell": "på", "Oslofjorden": "ved" };
+
+  // Høyde og område under hyttenavnet, f.eks. «1405 moh i Jotunheimen». Hytter nær havet
+  // får bare området, f.eks. «Ved Oslofjorden». Ingen midtprikk som skilletegn.
   function avsenderMeta() {
     var h = valgtHytte();
     if (!h) return "";
-    return [h.moh ? h.moh + " moh" : "", h.omrade].filter(Boolean).join(" · ");
+    var omrade = h.omrade ? (PAA_OMRADE[h.omrade] || "i") + " " + h.omrade : "";
+    if (!h.moh || h.moh < 100) return omrade.charAt(0).toUpperCase() + omrade.slice(1);
+    return [h.moh + " moh", omrade].filter(Boolean).join(" ");
   }
 
-  function paaMalform(tekst) {
-    return state.malform === "nn" && NYNORSK[tekst] ? NYNORSK[tekst] : tekst;
+  // Samme opplysninger på to linjer, til postkortet med lys kant.
+  function avsenderMetaLinjer() {
+    var h = valgtHytte();
+    if (!h) return [];
+    return [h.moh >= 100 ? h.moh + " moh" : "", h.omrade || ""].filter(Boolean);
   }
 
   function ikon(navn) {
@@ -485,10 +482,10 @@
   }
 
   function detaljerFor(t) {
-    return [t.turleder ? paaMalform("Turleder") + " " + t.turleder : "", t.varighet].filter(Boolean).join(" · ");
+    return [t.turleder ? "Turleder " + t.turleder : "", t.varighet].filter(Boolean).join(", ");
   }
 
-  // Felt som fortsatt har eksempelteksten byttes når type, målform eller hytte endres.
+  // Felt som fortsatt har eksempelteksten byttes når type eller hytte endres.
   // Det brukeren har skrevet selv, blir stående.
   function byttEksempeltekst(gammel, ny) {
     var patch = {};
@@ -507,6 +504,31 @@
     return h && h.bilder && h.bilder.length ? h.bilder : null;
   }
 
+  // Hvilken sesong eksempelbildet bør vise, ut fra teksten i innlegget. Påske, vinter
+  // og ski gir vinterbilde (15. oktober 2026), sommer og fiske gir sommerbilde.
+  function onsketSesong() {
+    var s = state, tekst;
+    if (s.mal === "sesong") tekst = [s.sesongMerke, s.sesongTittel, s.sesongUnder];
+    else if (s.mal === "program") tekst = [s.programTittel, s.programPeriode];
+    else if (s.mal === "meny") tekst = [s.menyMerke, s.menyTittel, s.menyUnder];
+    else if (s.mal === "arrangement") tekst = [s.arrTittel, s.arrUnder, s.arrMaaned];
+    else return "";
+    tekst = tekst.join(" ").toLowerCase();
+    // Månedsnavn teller ikke, de viser ofte til neste sesong («Vi ses igjen 5. mars»).
+    if (/påsk|vinter|\bski|snø|\bjul|nyttår/.test(tekst)) return "vinter";
+    if (/sommer|sommar|fiske|\bbad|høst/.test(tekst)) return "sommer";
+    return "";
+  }
+
+  // Hyttebildene som passer sesongen. Finnes ingen, brukes bilder innefra, og til slutt alle.
+  function bilderForSesong(hb, onsket) {
+    if (!onsket) return hb;
+    var like = hb.filter(function (b) { return b.sesong === onsket; });
+    if (like.length) return like;
+    var inne = hb.filter(function (b) { return b.sesong === "inne"; });
+    return inne.length ? inne : hb;
+  }
+
   // Trekker ett liggende og ett stående eksempelbilde. Forrige trekk huskes i
   // nettleseren og unngås, så det aldri blir samme bilde to ganger på rad.
   // En valgt hytte bruker sine egne bilder, samme bilde i alle flater.
@@ -516,10 +538,11 @@
     var valg;
     var hb = hytteBilder();
     if (hb) {
-      var andre = hb.filter(function (b) { return b.fil !== forrige.hytte; });
-      var liste = andre.length ? andre : hb;
+      var aktuelle = bilderForSesong(hb, onsketSesong());
+      var andre = aktuelle.filter(function (b) { return b.fil !== forrige.hytte; });
+      var liste = andre.length ? andre : aktuelle;
       var b = liste[Math.floor(Math.random() * liste.length)];
-      var bilde = { fil: b.fil, fotograf: b.fotograf || null, mappe: HYTTEMAPPE };
+      var bilde = { fil: b.fil, fotograf: b.fotograf || null, mappe: HYTTEMAPPE, sesong: b.sesong || "" };
       valg = { liggende: bilde, staaende: bilde };
       forrige.hytte = b.fil;
     } else {
@@ -553,7 +576,7 @@
 
   /* ---------- Lokal lagring ---------- */
 
-  var LAGRES = ["avsender", "hytte", "malform", "mal", "nivaa", "signatur", "farge", "plassering", "visMerke",
+  var LAGRES = ["avsender", "hytte", "mal", "nivaa", "signatur", "farge", "plassering", "visMerke",
                 "arrType", "sesongType", "oppsett", "format", "tekst", "tittel", "turlag", "lenke", "periode",
                 "visLogo", "visBand", "visTurbo", "kortGlass", "utsnitt", "turer", "programRader"];
 
@@ -578,7 +601,6 @@
       if (!d || typeof d !== "object") return;
       if (d.avsender === "turlag" || d.avsender === "hytte") state.avsender = d.avsender;
       if (typeof d.hytte === "string" && finnHytte(d.hytte)) state.hytte = d.hytte;
-      if (d.malform === "nb" || d.malform === "nn") state.malform = d.malform;
       if (MALVALG[d.mal]) state.mal = d.mal;
       if (!tillattMal(state.mal, state.avsender)) state.mal = state.avsender === "hytte" ? "sesong" : "turkalender";
       if (NIVAA[d.nivaa]) state.nivaa = d.nivaa;
@@ -591,6 +613,10 @@
       if (SESONG_TYPER[d.sesongType]) state.sesongType = d.sesongType;
       ARR_FELT.concat(TIPS_FELT, SESONG_FELT, MENY_FELT, POST_FELT, PROGRAM_FELT)
         .forEach(function (k) { if (typeof d[k] === "string") state[k] = d[k]; });
+      // Nynorsk ble tatt ut 15. oktober 2026. Lagret «Helsing frå» blir «Hilsen fra».
+      if (state.postOverlinje === "Helsing frå") state.postOverlinje = "Hilsen fra";
+      // Periode laget av verktøyet med midtprikk («UKE 38 · SEPTEMBER») får det nye skillet.
+      state.periode = String(state.periode || "").replace(/^(UKE \d+) · ([A-ZÆØÅ]+)$/, "$1, $2");
       if (OPPSETT[d.oppsett]) state.oppsett = d.oppsett;
       else if (d.oppsett === "stort" || d.oppsett === "side") state.oppsett = "bakgrunn";
       // Lagret «liggende» og «flate» finnes ikke lenger og faller tilbake til Innlegg og Merkelapp.
@@ -622,20 +648,15 @@
     try { localStorage.removeItem(LAGRINGSNOKKEL); } catch (e) { /* ignorer */ }
   }
 
-  // Lenken ?hytte=leirvassbu velger hytta på forhånd. Hytta og målformen huskes etterpå.
+  // Lenken ?hytte=leirvassbu velger hytta på forhånd. Hytta huskes etterpå.
   function lesLenke() {
     var id = "";
     try { id = (new URLSearchParams(window.location.search).get("hytte") || "").toLowerCase(); } catch (e) { return; }
     var h = finnHytte(id);
     if (!h) return;
     var forrige = valgtHytte();
-    var ny = state.hytte !== h.id || state.avsender !== "hytte";
-    var patch = { avsender: "hytte", hytte: h.id };
-    if (ny && h.malform) patch.malform = h.malform;
-    Object.assign(state, patch);
-    Object.assign(state, byttEksempeltekst(sesongPreset(state.sesongType, "nb", forrige), sesongPreset(state.sesongType, state.malform, h)));
-    Object.assign(state, byttEksempeltekst(menyPreset("nb"), menyPreset(state.malform)));
-    Object.assign(state, byttEksempeltekst({ postOverlinje: "Hilsen fra" }, { postOverlinje: paaMalform("Hilsen fra") }));
+    Object.assign(state, { avsender: "hytte", hytte: h.id, tekst: "normal" });
+    Object.assign(state, byttEksempeltekst(sesongPreset(state.sesongType, forrige), sesongPreset(state.sesongType, h)));
     // Den vanligste posten fra hyttene er sesong og booking, så lenken starter der.
     if (!tillattMal(state.mal, "hytte")) state.mal = "sesong";
   }
@@ -733,7 +754,7 @@
       if (felt === "arrTaMed" || felt === "arrServering") return s.arrType === "dugnad";
       if (felt === "arrPasserFor") return s.arrType !== "dugnad";
       return true;
-    }).map(function (par) { return { etikett: paaMalform(par[1]), verdi: s[par[0]].trim() }; });
+    }).map(function (par) { return { etikett: par[1], verdi: s[par[0]].trim() }; });
     var fakta = [];
     if ((s.arrTid || "").trim()) fakta.push({ ikon: "klokke", verdi: s.arrTid.trim() });
     if ((s.arrSted || "").trim()) fakta.push({ ikon: "sted", verdi: s.arrSted.trim() });
@@ -749,25 +770,24 @@
       .map(function (par) {
         var verdi = s[par[0]].trim();
         var grad = par[0] === "tipsGrad";
-        return { etikett: paaMalform(par[1]), verdi: grad ? paaMalform(verdi) : verdi, farge: grad ? (GRAD[verdi] || "") : "" };
+        return { etikett: par[1], verdi: grad ? verdi : verdi, farge: grad ? (GRAD[verdi] || "") : "" };
       });
     var fakta = [];
-    var lengde = [(s.tipsLengde || "").trim(), (s.tipsVarighet || "").trim()].filter(Boolean).join(" · ");
+    var lengde = [(s.tipsLengde || "").trim(), (s.tipsVarighet || "").trim()].filter(Boolean).join(", ");
     if (lengde) fakta.push({ ikon: "rute", verdi: lengde });
-    if ((s.tipsGrad || "").trim()) fakta.push({ prikk: GRAD[s.tipsGrad] || "", verdi: paaMalform(s.tipsGrad) });
+    if ((s.tipsGrad || "").trim()) fakta.push({ prikk: GRAD[s.tipsGrad] || "", verdi: s.tipsGrad });
     return { tittel: s.tipsTittel, under: s.tipsUnder, tekst: s.tipsTekst, info: info, fakta: fakta, meny: [], dato: null, merke: "Turtips" };
   }
 
   function innholdSesong() {
     var s = state;
-    var nn = s.malform === "nn";
     var def = SESONG_TYPER[s.sesongType].fakta;
     var info = [], fakta = [];
     [s.sesongFakta1, s.sesongFakta2].forEach(function (v, i) {
       v = (v || "").trim();
       if (!v) return;
-      info.push({ etikett: nn ? def[i][1] : def[i][0], verdi: v });
-      fakta.push({ ikon: def[i][2], verdi: v });
+      info.push({ etikett: def[i][0], verdi: v });
+      fakta.push({ ikon: def[i][1], verdi: v });
     });
     var dato = (s.sesongDag && (s.sesongDato || "").trim()) ? { dag: s.sesongDag, dato: s.sesongDato.trim(), maaned: s.sesongMaaned } : null;
     return { tittel: s.sesongTittel, under: s.sesongUnder, tekst: s.sesongTekst, info: info, fakta: fakta, meny: [], dato: dato, merke: (s.sesongMerke || "").trim() };
@@ -797,13 +817,15 @@
       return {
         over: (state.postOverlinje || "").trim(),
         navn: (state.postNavn || "").trim() || avsenderNavn() || (state.avsender === "hytte" ? "Velg hytte" : "Stedsnavn"),
-        meta: (state.postMeta || "").trim() || avsenderMeta()
+        meta: (state.postMeta || "").trim() || avsenderMeta(),
+        // Postkortet med lys kant viser høyde og område på hver sin linje.
+        metaLinjer: (state.postMeta || "").trim() ? [state.postMeta.trim()] : avsenderMetaLinjer()
       };
     }
     var over = inn.merke ? (inn.merke === "Turtips" ? "Turtips" : inn.merke)
-      : (inn.dato ? [paaMalform(inn.dato.dag), inn.dato.dato ? inn.dato.dato + "." : "", inn.dato.maaned].filter(Boolean).join(" ") : "");
+      : (inn.dato ? [inn.dato.dag, inn.dato.dato ? inn.dato.dato + "." : "", inn.dato.maaned].filter(Boolean).join(" ") : "");
     var meta = (inn.under || "").trim() || (inn.fakta[0] ? inn.fakta[0].verdi : "");
-    return { over: over, navn: inn.tittel, meta: meta };
+    return { over: over, navn: inn.tittel, meta: meta, metaLinjer: meta ? [meta] : [] };
   }
 
   // Enkeltplakaten: arrangement, turtips, sesong, meny eller postkort, på tre
@@ -920,7 +942,7 @@
     // logoen uansett om den vises, så layouten ikke hopper.
     var SOCIAL_EXT = '500 {px}px "ABC Social Extended"';
     var tittelHero = tilpassStorrelse(kal.tittel, TITTELFONT, TITTELSPORING, fmt.bredde - 56 - 170, 92, 56);
-    var overlinje = tilpassStorrelse((kal.navn || "").toUpperCase() + " · " + kal.periode, SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
+    var overlinje = tilpassStorrelse((kal.navn || "").toUpperCase() + "    " + kal.periode, SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
 
     return {
       mal: s.mal, kal: kal,
@@ -953,15 +975,15 @@
     if (!detaljer && !t.grad && !t.pamelding) return "";
     var html = '<div class="p-detaljer">';
     if (detaljer) html += '<span class="p-detaljer__tekst">' + esc(detaljer) + '</span>';
-    if (t.grad) html += '<span class="p-grad" style="color:' + (GRAD[t.grad] || "#0F0F0F") + '"><span class="p-grad__prikk"></span><span>' + esc(paaMalform(t.grad)) + '</span></span>';
+    if (t.grad) html += '<span class="p-grad" style="color:' + (GRAD[t.grad] || "#0F0F0F") + '"><span class="p-grad__prikk"></span><span>' + esc(t.grad) + '</span></span>';
     if (t.pamelding) html += '<span class="p-pamelding">Påmelding</span>';
     return html + '</div>';
   }
 
   function malRad(t, visTid, stedOgTid) {
-    var sted = stedOgTid ? [t.sted, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(" · ") : t.sted;
+    var sted = stedOgTid ? [t.sted, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(", ") : t.sted;
     var html = '<div class="p-rad">' +
-      '<div class="p-chip"><div class="p-chip__dag">' + esc(paaMalform(t.dag)) + '</div><div class="p-chip__dato">' + esc(t.dato) + '</div></div>' +
+      '<div class="p-chip"><div class="p-chip__dag">' + esc(t.dag) + '</div><div class="p-chip__dato">' + esc(t.dato) + '</div></div>' +
       '<div class="p-info">' +
         '<div class="p-info__tittel">' + esc(t.tittel) + '</div>' +
         '<div class="p-info__sted">' + esc(sted) + '</div>' +
@@ -1009,7 +1031,7 @@
     bakgrunn: function (b) {
       return '<div class="p-flate p-flate--bakgrunn">' +
         '<div class="p-foto p-foto--fyll" data-foto></div><div class="p-scrim p-scrim--bakgrunn"></div>' +
-        '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(b.kal.navn.toUpperCase()) + ' · ' + esc(b.kal.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(b.kal.tittel) + '</span></div>' +
+        '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(b.kal.navn.toUpperCase()) + '<span class="p-overlinje__skille"></span>' + esc(b.kal.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(b.kal.tittel) + '</span></div>' +
         malLogo("p-logo--lav") + malTurbo("p-turbo--underlogo") +
         '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
@@ -1023,7 +1045,7 @@
 
   function malChip(d) {
     return '<div class="a-chip">' +
-      '<div class="a-chip__dag">' + esc(paaMalform(d.dag)) + '</div>' +
+      '<div class="a-chip__dag">' + esc(d.dag) + '</div>' +
       '<div class="a-chip__dato"><span class="a-chip__tall">' + esc(d.dato) + '</span><span class="a-chip__maaned">' + esc(d.maaned) + '</span></div>' +
     '</div>';
   }
@@ -1127,7 +1149,7 @@
       var s = b.sig;
       var v = SIGNATURER[state.signatur] ? state.signatur : "a";
       if (v === "c") {
-        var meta = s.meta ? '<div class="s-c__meta">' + s.meta.split(" · ").map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
+        var meta = s.metaLinjer.length ? '<div class="s-c__meta">' + s.metaLinjer.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
         return '<div class="s-flate s-flate--c">' +
           '<div class="s-c__foto"><div class="p-foto" data-foto></div></div>' +
           '<div class="s-c__bunn"><div class="s-c__venstre">' +
@@ -1191,15 +1213,17 @@
   }
 
   // Fotoet på siste side («Godt å vite»). En hytte bruker et annet av sine bilder enn
-  // forsiden, så karusellen får variasjon. Eget bilde brukes på begge.
+  // forsiden, i samme sesong eller innefra, så karusellen får variasjon. Eget bilde brukes på begge.
   function karusellBilde2() {
     if (state.egetBilde) return { src: state.bilde, eksempel: null };
     var hb = hytteBilder();
     var forside = state.eksempel.staaende || state.eksempel.liggende;
     if (hb && hb.length > 1 && forside) {
-      var i = hb.map(function (b) { return b.fil; }).indexOf(forside.fil);
-      var neste = hb[(i + 1) % hb.length];
-      var e = { fil: neste.fil, fotograf: neste.fotograf || null, mappe: HYTTEMAPPE };
+      var onsket = onsketSesong() || forside.sesong;
+      var andre = hb.filter(function (b) { return b.fil !== forside.fil; });
+      var passer = andre.filter(function (b) { return !onsket || b.sesong === onsket || b.sesong === "inne"; });
+      var neste = (passer.length ? passer : andre)[0];
+      var e = { fil: neste.fil, fotograf: neste.fotograf || null, mappe: HYTTEMAPPE, sesong: neste.sesong || "" };
       return { src: bildeAdresse(e), eksempel: e };
     }
     // Turlagene får det liggende eksempelbildet her, forsiden har det stående.
@@ -1208,7 +1232,7 @@
 
   // Forsiden er bygget som Merkelapp: perioden i merkelappen, tittelen og «Bla videre».
   function malForside(b) {
-    var bla = '<div class="k-bla"><span>' + (state.malform === "nn" ? "Bla vidare" : "Bla videre") + '</span>' +
+    var bla = '<div class="k-bla"><span>Bla videre</span>' +
       '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>';
     return MALER_ARR.merkelapp(Object.assign({}, b, { ekstra: b.sider.length > 1 ? bla : "" }));
   }
@@ -1220,7 +1244,7 @@
   }
 
   function malBlokk(bl) {
-    return '<div class="k-blokk"><div class="k-chip"><div class="k-chip__dag">' + esc(paaMalform(bl.dag)) + '</div>' +
+    return '<div class="k-blokk"><div class="k-chip"><div class="k-chip__dag">' + esc(bl.dag) + '</div>' +
       '<div class="k-chip__dato">' + esc(bl.dato) + '</div></div>' +
       '<div class="k-poster">' + bl.poster.map(malPost).join("") + '</div></div>';
   }
@@ -1364,17 +1388,16 @@
   }
 
   var AVSLUTNING = {
-    apner:   { nb: ["Vi gleder oss til å se deg.", "Velkommen til fjells."], nn: ["Vi gler oss til å sjå deg.", "Velkomen til fjells."] },
-    booking: { nb: ["Bestill tidlig, det blir fort fullt.", "Vi gleder oss til å ta imot deg."], nn: ["Bestill tidleg, det blir fort fullt.", "Vi gler oss til å ta imot deg."] },
-    ledig:   { nb: ["Velkommen til fjells.", "Vi har god plass til deg og turfølget ditt."], nn: ["Velkomen til fjells.", "Vi har god plass til deg og turfylgjet ditt."] },
-    takk:    { nb: ["Takk for i år, vi gleder oss til neste sesong.", "Takk til alle gjester, frivillige og samarbeidspartnere."], nn: ["Takk for i år, vi gler oss til neste sesong.", "Takk til alle gjester, frivillige og samarbeidspartnarar."] },
-    soker:   { nb: ["Send oss en e-post hvis du er interessert.", "Del gjerne med noen som passer."], nn: ["Send oss ein e-post viss du er interessert.", "Del gjerne med nokon som passar."] }
+    apner:   ["Vi gleder oss til å se deg.", "Velkommen til fjells."],
+    booking: ["Bestill tidlig, det blir fort fullt.", "Vi gleder oss til å ta imot deg."],
+    ledig:   ["Velkommen til fjells.", "Vi har god plass til deg og turfølget ditt."],
+    takk:    ["Takk for i år, vi gleder oss til neste sesong.", "Takk til alle gjester, frivillige og samarbeidspartnere."],
+    soker:   ["Send oss en e-post hvis du er interessert.", "Del gjerne med noen som passer."]
   };
 
   // Lager et forslag til posteteksten ut fra det som er fylt inn. To varianter per mal,
-  // på bokmål eller nynorsk. Teksten er et utgangspunkt, brukeren redigerer i Facebook eller Instagram.
+  // på bokmål. Teksten er et utgangspunkt, brukeren redigerer i Facebook eller Instagram.
   function byggPosttekst(b) {
-    var nn = state.malform === "nn";
     var v = state.postVariant % 2;
     var hytte = state.avsender === "hytte";
     var navn = avsenderNavn();
@@ -1382,33 +1405,31 @@
     // Karusellen kan ha to fotografer, ett bilde på forsiden og ett på «Godt å vite».
     var fotografer = b.fotografer || (b.eksempel && b.eksempel.fotograf ? [b.eksempel.fotograf] : []);
     var foto = fotografer.length ? "Foto: " + fotografer.join(" og ")
-      : (state.egetBilde ? (nn ? "Foto: [namnet på fotografen]" : "Foto: [navnet på fotografen]") : "");
+      : (state.egetBilde ? "Foto: [navnet på fotografen]" : "");
     var tagg = hytte ? "@dntoslo" : "";
     var linjer = [];
     var inn = b.innhold;
 
     if (erKalender(b.mal)) {
       var rader = b.synlige.map(function (t) {
-        var dag = paaMalform(t.dag);
+        var dag = t.dag;
         var hode = dag.charAt(0) + dag.slice(1).toLowerCase() + (t.dato ? " " + t.dato + "." : "");
         return hode + ": " + setning([t.tittel, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(" ") + (t.sted ? ", " + t.sted.charAt(0).toLowerCase() + t.sted.slice(1) : ""));
       });
       var periode = (b.kal.periode || "").trim();
       var periodeLiten = periode ? periode.charAt(0) + periode.slice(1).toLowerCase() : "";
       if (v === 0) linjer = [b.kal.tittel + (periodeLiten ? ", " + periodeLiten.toLowerCase() : ""), ""].concat(rader);
-      else linjer = [(b.mal === "program" ? (nn ? "Dette skjer" : "Dette skjer") + paa : (nn ? "Bli med på tur" : "Bli med på tur")) + (periodeLiten ? ", " + periodeLiten.toLowerCase() : "") + ":", ""].concat(rader);
+      else linjer = [(b.mal === "program" ? "Dette skjer" + paa : "Bli med på tur") + (periodeLiten ? ", " + periodeLiten.toLowerCase() : "") + ":", ""].concat(rader);
       if (b.karusell && b.sider.length > 1) {
-        var bla = b.mal === "program" ? (nn ? "Bla gjennom bileta for heile programmet." : "Bla gjennom bildene for hele programmet.")
-                                      : (nn ? "Bla gjennom bileta for alle turane." : "Bla gjennom bildene for alle turene.");
-        linjer.splice(1, 0, bla);
+        linjer.splice(1, 0, b.mal === "program" ? "Bla gjennom bildene for hele programmet." : "Bla gjennom bildene for alle turene.");
       }
-      linjer.push("", b.mal === "program" ? (nn ? "Velkomen til oss." : "Velkommen til oss.") : (nn ? "Velkomen på tur." : "Velkommen på tur."));
+      linjer.push("", b.mal === "program" ? "Velkommen til oss." : "Velkommen på tur.");
     } else if (b.mal === "postkort") {
       var s = b.sig;
       if (v === 0) linjer = [setning([s.over, s.navn].filter(Boolean).join(" ")), setning(s.meta)];
-      else linjer = [setning(s.navn + (s.meta ? ", " + s.meta : "")), nn ? "Stikk innom når du er på tur i området." : "Stikk innom når du er på tur i området."];
+      else linjer = [setning(s.navn + (s.meta ? ", " + s.meta : "")), "Stikk innom når du er på tur i området."];
     } else if (b.mal === "sesong") {
-      var slutt = AVSLUTNING[state.sesongType][nn ? "nn" : "nb"][v];
+      var slutt = AVSLUTNING[state.sesongType][v];
       var faktaLinjer = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
       if (v === 0) {
         linjer = [inn.merke ? inn.merke + paa : navn, "", setning(inn.tittel), setning(inn.under), setning(inn.tekst), ""].concat(faktaLinjer, ["", slutt]);
@@ -1421,11 +1442,11 @@
       // Etter kolon fortsetter setningen med liten forbokstav: «Dagens middag på Litlos: egenfisket aure.»
       var rett = setning(inn.tittel);
       if (inn.merke) rett = inn.merke + paa + ": " + rett.charAt(0).toLowerCase() + rett.slice(1);
-      if (v === 0) linjer = [rett, setning(inn.under)].concat(meny, [""], fakta, ["", nn ? "Velkomen til bords." : "Velkommen til bords."]);
-      else linjer = [setning(inn.tittel + paa), setning(inn.under)].concat(meny, [""], fakta, ["", nn ? "Vi sjåast ved bordet." : "Vi ses ved bordet."]);
+      if (v === 0) linjer = [rett, setning(inn.under)].concat(meny, [""], fakta, ["", "Velkommen til bords."]);
+      else linjer = [setning(inn.tittel + paa), setning(inn.under)].concat(meny, [""], fakta, ["", "Vi ses ved bordet."]);
     } else if (b.mal === "arrangement") {
       var d = inn.dato;
-      var datoLinje = [paaMalform(d.dag), d.dato ? d.dato + "." : "", d.maaned].filter(Boolean).join(" ");
+      var datoLinje = [d.dag, d.dato ? d.dato + "." : "", d.maaned].filter(Boolean).join(" ");
       var info = inn.info.filter(function (r) { return r.etikett !== "Tid"; }).map(function (r) { return r.etikett + ": " + r.verdi; });
       if (v === 0) linjer = [inn.tittel, inn.under, "", [datoLinje, (state.arrTid || "").trim()].filter(Boolean).join(", "), "", setning(inn.tekst), ""].concat(info);
       else linjer = [setning((inn.under ? inn.under + ": " : "") + inn.tittel + (datoLinje ? ", " + datoLinje.toLowerCase() : "")), setning(inn.tekst), ""].concat(info);
@@ -1708,6 +1729,15 @@
     valg = valg || {};
     // Karusell finnes bare for turkalender og program. Andre maler faller tilbake til Innlegg.
     if (state.format === "karusell" && !erKalender(state.mal)) state.format = "feed";
+    // Hyttene bruker bare normal tekststørrelse (15. oktober 2026).
+    if (state.avsender === "hytte") state.tekst = "normal";
+    // Handler innlegget om påske eller sommer, byttes et eksempelbilde fra feil sesong.
+    // Mangler hytta bilder fra riktig sesong, blir det et bilde innefra (se bilderForSesong).
+    var onsket = onsketSesong(), naa = state.eksempel && state.eksempel.liggende, hb = hytteBilder();
+    if (!state.egetBilde && hb && onsket && naa && naa.sesong !== onsket &&
+        bilderForSesong(hb, onsket).some(function (b) { return b.sesong !== naa.sesong; })) {
+      Object.assign(state, brukEksempelbilder());
+    }
     // Ferdige bilder til deling gjelder bare til noe endres.
     if (!valg.beholdFiler) state.delingsFiler = null;
     renderSkjema(valg.turliste);
@@ -1730,13 +1760,15 @@
     if (!el.hytteValg) return;
     var sortert = HYTTER.slice().sort(function (a, b) { return a.kortnavn.localeCompare(b.kortnavn, "nb"); });
     el.hytteValg.innerHTML = '<option value="">Velg hytte</option>' + sortert.map(function (h) {
-      return '<option value="' + esc(h.id) + '">' + esc(h.kortnavn + " · " + h.omrade) + '</option>';
+      return '<option value="' + esc(h.id) + '">' + esc(h.kortnavn + ", " + h.omrade) + '</option>';
     }).join("");
   }
 
   function velgAvsender(avs) {
     if (avs === state.avsender) return;
     var patch = { avsender: avs };
+    // Hyttene bruker bare normal tekststørrelse (15. oktober 2026).
+    if (avs === "hytte") patch.tekst = "normal";
     if (!tillattMal(state.mal, avs)) {
       patch.mal = avs === "hytte" ? (state.mal === "turkalender" ? "program" : "sesong")
                                   : (state.mal === "program" ? "turkalender" : "arrangement");
@@ -1750,7 +1782,7 @@
     var gammel = valgtHytte();
     var ny = finnHytte(id);
     var patch = { hytte: ny ? ny.id : "" };
-    Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, state.malform, gammel), sesongPreset(state.sesongType, state.malform, ny)));
+    Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, gammel), sesongPreset(state.sesongType, ny)));
     Object.assign(state, patch);
     if (!state.egetBilde) Object.assign(state, brukEksempelbilder());
     render();
@@ -1760,19 +1792,7 @@
     if (!SESONG_TYPER[type] || type === state.sesongType) return;
     var h = valgtHytte();
     var patch = { sesongType: type };
-    Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, state.malform, h), sesongPreset(type, state.malform, h)));
-    oppdater(patch);
-  }
-
-  function velgMalform(mf) {
-    var gml = state.malform;
-    if (mf === gml) return;
-    var h = valgtHytte();
-    var patch = { malform: mf };
-    Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, gml, h), sesongPreset(state.sesongType, mf, h)));
-    Object.assign(patch, byttEksempeltekst(menyPreset(gml), menyPreset(mf)));
-    var hilsen = { nb: "Hilsen fra", nn: "Helsing frå" };
-    if (state.postOverlinje === hilsen[gml]) patch.postOverlinje = hilsen[mf];
+    Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, h), sesongPreset(type, h)));
     oppdater(patch);
   }
 
@@ -1808,7 +1828,7 @@
     var navn = (b.kal.navn || "").trim() || "turlaget";
     var linjer = b.synlige.map(function (t) {
       var deler = [];
-      deler.push([paaMalform(t.dag), t.dato].filter(Boolean).join(" ") + (t.tid ? " kl. " + t.tid : "") + ": " + (t.tittel || "(turmål)"));
+      deler.push([t.dag, t.dato].filter(Boolean).join(" ") + (t.tid ? " kl. " + t.tid : "") + ": " + (t.tittel || "(turmål)"));
       if (t.sted) deler.push("Sted: " + t.sted);
       if (t.turleder) deler.push("Turleder " + t.turleder);
       if (t.varighet) deler.push(t.varighet);
@@ -1828,7 +1848,6 @@
       (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre i fotoet." : "") +
       (state.kortGlass && state.oppsett === "bakgrunn" ? " Kortet er svakt gjennomskinnelig (88 % hvitt) så fotoet skinner gjennom." : "") + "\n" +
       "Minste tekststørrelse er 24 px.\n" +
-      (state.malform === "nn" ? "All tekst skal være på nynorsk.\n" : "") +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto.\n\n" +
       b.kal.tittel + " for " + navn + ", " + b.kal.periode + ":\n" + linjer.join("\n");
   }
@@ -1862,7 +1881,6 @@
       (state.visTurbo ? " Turbo-figuren (Barnas Turlags maskot) nede til høyre." : "") +
       (b.mal === "turtips" && state.tipsGrad ? " Graderingen vises med en prikk i graderingsfargen: grønn for enkel, blå for middels, rød for krevende og svart for ekspert." : "") + "\n" +
       "Minste tekststørrelse er 24 px.\n" +
-      (state.malform === "nn" ? "All tekst skal være på nynorsk.\n" : "") +
       "Ingen KI-genererte bilder, ingen emoji. Bruk et ekte foto.\n\n" +
       "Innhold:\n- " + linjer.join("\n- ");
   }
@@ -2065,7 +2083,7 @@
   }
 
   function kobleHendelser() {
-    // Knappegrupper. Avsender, målform og sesongtype har sideeffekter, resten settes rett.
+    // Knappegrupper. Avsender og sesongtype har sideeffekter, resten settes rett.
     $$("[data-gruppe]").forEach(function (gruppe) {
       gruppe.addEventListener("click", function (e) {
         var kn = e.target.closest("button[data-verdi]");
@@ -2073,7 +2091,6 @@
         var navn = gruppe.getAttribute("data-gruppe");
         var verdi = kn.getAttribute("data-verdi");
         if (navn === "avsender") return velgAvsender(verdi);
-        if (navn === "malform") return velgMalform(verdi);
         if (navn === "sesongType") return velgSesongType(verdi);
         var patch = {}; patch[navn] = verdi;
         oppdater(patch, { turliste: navn === "mal" });
@@ -2209,11 +2226,10 @@
     $("#tom-skjema").addEventListener("click", function () {
       if (!window.confirm("Vil du tømme skjemaet? Alle tekster nullstilles til eksempelinnholdet.")) return;
       tomLagring();
-      var behold = { mal: state.mal, avsender: state.avsender, hytte: state.hytte, malform: state.malform };
+      var behold = { mal: state.mal, avsender: state.avsender, hytte: state.hytte };
       Object.assign(state, standardSkjema(), behold);
       var h = valgtHytte();
-      Object.assign(state, sesongPreset(state.sesongType, state.malform, h), menyPreset(state.malform),
-        { postOverlinje: paaMalform("Hilsen fra") }, brukEksempelbilder());
+      Object.assign(state, sesongPreset(state.sesongType, h), brukEksempelbilder());
       $("#bilde-fil").value = "";
       visFeil("");
       render({ turliste: true, lagre: false });

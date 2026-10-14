@@ -14,7 +14,7 @@ Malene:
 
 ## Slik brukes det
 
-1. Velg hvem som poster: turlag eller betjent hytte. Hyttene kan få sin egen lenke, f.eks. `https://dntoslo.github.io/mal-generator/?hytte=leirvassbu`, der hytta er valgt på forhånd. Velg bokmål eller nynorsk.
+1. Velg hvem som poster: turlag eller betjent hytte. Hyttene kan få sin egen lenke, f.eks. `https://dntoslo.github.io/mal-generator/?hytte=leirvassbu`, der hytta er valgt på forhånd.
 2. Velg hva du vil fortelle, og format: Innlegg (1080 × 1350) eller Historie (1080 × 1920). Turkalender og program kan også lages som Karusell: forside, listen fordelt på så mange bilder som trengs, og «Godt å vite» til slutt hvis du fyller det inn.
 3. Velg hvor mye tekst som skal stå på bildet: Postkort, Merkelapp (standard) eller Plakat. Postkort har tre signaturer å velge mellom. Turkalender og program har bildeoppsett i stedet.
 4. Last opp et eget foto, eller bruk eksempelbildet. Hyttene har tre egne bilder hver. Juster utsnittet med skyveknappene.

@@ -42,11 +42,6 @@
           <p class="hjelp">Lagre lenken som bokmerke, så er hytta valgt neste gang.</p>
         </div>
       </div>
-      <p class="smaa-etikett">Målform i bildet og i forslaget til posttekst</p>
-      <div class="knapperad" data-gruppe="malform" role="group" aria-label="Målform">
-        <button type="button" class="pille" data-verdi="nb">Bokmål</button>
-        <button type="button" class="pille" data-verdi="nn">Nynorsk</button>
-      </div>
     </div>
 
     <div class="felt">
@@ -73,7 +68,7 @@
       <p class="hjelp" id="format-hjelp"></p>
     </div>
 
-    <div class="felt">
+    <div class="felt" data-avsender="turlag">
       <p class="felt__etikett">Tekststørrelse</p>
       <div class="knapperad" data-gruppe="tekst" role="group" aria-label="Tekststørrelse">
         <button type="button" class="pille" data-verdi="normal">Normal</button>
@@ -169,7 +164,7 @@
       <label class="skjult" for="tittel">Tittel</label>
       <input type="text" class="tekstfelt" id="tittel" data-felt="tittel" placeholder="Ukens turer eller Turer i september">
       <label class="skjult" for="periode">Periode</label>
-      <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38 · SEPTEMBER eller SEPTEMBER 2026">
+      <input type="text" class="tekstfelt" id="periode" data-felt="periode" placeholder="UKE 38, SEPTEMBER eller SEPTEMBER 2026">
     </div>
 
     <div class="felt" data-mal="program" hidden>
@@ -369,7 +364,7 @@
     <input type="text" data-felt="sted" placeholder="Startsted" aria-label="Startsted eller sted">
     <div class="tur__rad">
       <input type="text" class="tur__liten" data-felt="turleder" placeholder="Turleder" aria-label="Turleder">
-      <input type="text" class="tur__liten" data-felt="varighet" placeholder="8 km · 3 t" aria-label="Lengde og varighet">
+      <input type="text" class="tur__liten" data-felt="varighet" placeholder="8 km, 3 t" aria-label="Lengde og varighet">
     </div>
     <div class="tur__rad">
       <select class="tur__liten" data-felt="grad" aria-label="Gradering">

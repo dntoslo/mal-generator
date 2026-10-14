@@ -179,6 +179,8 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .p-hero__tekst--lav { top: 52px; }
 .p-overlinje { font-family: var(--font-heading); font-weight: 500; font-size: var(--overlinje-size, 24px); letter-spacing: 0.18em; color: var(--hvit); }
 .p-overlinje--topp { font-size: 25px; }
+/* Luft mellom navn og periode i stedet for midtprikk (15. oktober 2026). */
+.p-overlinje__skille { display: inline-block; width: 0.9em; }
 .p-tittel { font-family: var(--font-display); font-weight: 700; font-size: var(--tittel-size, 92px); line-height: 0.98; letter-spacing: -0.02em; color: var(--hvit); white-space: nowrap; }
 .p-tittel--bryt { white-space: normal; }
 .p-periode { position: absolute; left: 56px; bottom: 34px; font-family: var(--font-heading); font-weight: 500; font-size: 27px; letter-spacing: 0.16em; color: var(--hvit); }

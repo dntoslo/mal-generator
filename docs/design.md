@@ -149,3 +149,10 @@ Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Ge
 - **«Godt å vite»** er siste side når feltet er fylt ut: et annet foto av hytta øverst (540 px), tittel og opptil fem punkter med ikon i beige sirkel. Ikonet velges ut fra ordene i linjen (`ikonFor()`), med i-ikon når ingenting passer.
 - **Nedlasting.** Bildene lages ett for ett fra forhåndsvisningen, så de blir identiske med det man ser. Datamaskin: lastes ned etter hverandre, og nettleseren kan spørre om lov til flere filer. Mobil med delingsark: første trykk lager bildene, andre trykk åpner delingsarket, fordi delingsarket krever et ferskt trykk. Filnavnene er nummerert i rekkefølgen de skal lastes opp.
 - **Posttekst** får linjen «Bla gjennom bildene for hele programmet», og begge fotografene når forsiden og «Godt å vite» har ulike bilder.
+
+## Justeringer 15. oktober 2026
+
+- **Bare bokmål.** Valget mellom bokmål og nynorsk er tatt ut. Eksempeltekst, faste ord og forslaget til posttekst er på bokmål. Den som vil skrive nynorsk, gjør det i feltene.
+- **Bare normal tekst for hyttene.** «Stor tekst» er for turlag med mange seniorer. Hyttene får ikke valget, og plakaten bruker alltid normal størrelse.
+- **Ingen midtprikk som skilletegn.** Den tynne prikken (·) mellom høyde og område, i perioden og i lengde og varighet virket KI-generert. Nå står det «1405 moh i Jotunheimen» (eller «på Hardangervidda», «Ved Oslofjorden»), «UKE 42, OKTOBER» (ikke «I», som ser ut som en strek i versaler med sporing), «3,3 km, 1 time» og luft mellom navn og periode i overlinjen.
+- **Vinterbilder til påske.** Hyttebildene er merket vinter, sommer eller inne. Handler innlegget om påske, vinter eller ski, brukes et vinterbilde. Handler det om sommer eller fiske, brukes et sommerbilde. Sju hytter som er åpne i påsken, manglet vinterbilde og fikk ett fra UT.no.
