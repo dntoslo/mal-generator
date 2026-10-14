@@ -138,6 +138,12 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .ramme { width: 540px; max-width: 100%; overflow: hidden; border-radius: 14px; box-shadow: 0 8px 26px rgba(0,0,0,0.12); background: var(--hvit); }
 #plakat-skala { transform-origin: top left; }
 
+/* Bla i karusellen under forhåndsvisningen */
+.karusell-nav { width: 540px; max-width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.karusell-nav .liten-knapp { background: var(--hvit); box-shadow: var(--shadow-sm); padding: 9px 14px; }
+.karusell-nav .liten-knapp:disabled { opacity: 0.4; cursor: default; }
+.karusell-nav__tekst { font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7); text-align: center; }
+
 /* Forslag til posttekst under forhåndsvisningen */
 .posttekst { width: 540px; max-width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 16px; background: var(--hvit); box-shadow: var(--shadow-md); }
 .posttekst textarea {
@@ -231,8 +237,12 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 [data-oppsett="bakgrunn"] .p-info__tittel { font-size: var(--title-size-smal); }
 [data-oppsett="bakgrunn"] .p-chip__dag { padding: 6px 0 5px; }
 
-/* Skjult klone brukt ved eksport */
+/* Skjult klone brukt ved eksport. Klonen mister id-en #plakat, så box-sizing settes
+   her også, ellers blir flater med både bredde og polstring bredere i eksporten. */
 .eksport-klone { position: fixed; left: -12000px; top: 0; pointer-events: none; }
+.eksport-klone *, .k-maal * { box-sizing: border-box; }
+/* Skjult element der listesidene i karusellen måles før de fordeles på bildene */
+.k-maal { position: fixed; left: -24000px; top: 0; width: 1080px; pointer-events: none; visibility: hidden; }
 
 /* Skjulte etiketter for skjermlesere */
 .skjult { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -381,3 +391,46 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .p-turbo--band { right: var(--a-pad, 64px); bottom: calc(var(--band-h, 88px) + 24px); z-index: 1; }
 .p-turbo--fotoflate { right: 40px; bottom: 24px; }
 .a-innhold--turbo { padding-right: calc(var(--turbo-h, 200px) + 100px); }
+
+/* =========================================================
+   Karusell (15. oktober 2026), bare for turkalender og program.
+   Forsiden bruker Merkelapp (.m-*). Listesidene og «Godt å vite» er her.
+   Kun px. Variabler fra JS: --k-tittel-size --k-chip --k-dato-size
+   --k-tid-size --k-post-size --k-sted-size --k-info-size
+   ========================================================= */
+.k-bla { align-self: flex-end; display: flex; align-items: center; gap: 6px; font-family: var(--font-body); font-weight: 500; font-size: 28px; line-height: 1; color: var(--hvit); }
+.m-innhold--midt .k-bla { align-self: center; }
+
+.k-liste, .k-info { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; display: flex; flex-direction: column; background: var(--beige-lys); color: var(--sort); }
+.k-liste *, .k-info * { box-sizing: border-box; }
+.k-hode { flex: none; padding: 60px 64px 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.k-avsender { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.k-avsender img { width: 52px; height: 52px; display: block; flex: none; }
+.k-avsender__navn { font-family: var(--font-display); font-weight: 700; font-size: 34px; letter-spacing: -0.02em; line-height: 1; white-space: nowrap; }
+.k-sidetall { flex: none; font-family: var(--font-body); font-weight: 500; font-size: 26px; line-height: 1; color: rgba(0,0,0,0.55); }
+.k-sidetall--foto { position: absolute; right: 40px; top: 40px; padding: 10px 18px; border-radius: 999px; background: rgba(15,15,15,0.55); color: var(--hvit); }
+.k-tittel { flex: none; padding: 22px 64px 36px; font-family: var(--font-display); font-weight: 700; font-size: var(--k-tittel-size, 92px); line-height: 0.98; letter-spacing: -0.02em; white-space: nowrap; }
+.k-tittel--bryt { white-space: normal; text-wrap: balance; }
+
+.k-rader { display: flex; flex-direction: column; }
+.k-blokk { display: flex; align-items: flex-start; gap: 32px; padding: 24px 64px; }
+.k-blokk:nth-child(odd) { background: var(--hvit); }
+.k-chip { flex: none; width: var(--k-chip, 150px); height: var(--k-chip, 150px); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; background: var(--hvit); }
+.k-blokk:nth-child(odd) .k-chip { background: var(--beige-mork); }
+.k-chip__dag { background: var(--dnt-rod); color: var(--hvit); padding: 10px 0 9px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: 24px; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
+.k-chip__dato { flex: 1; display: flex; align-items: center; justify-content: center; padding-bottom: 4px; font-family: var(--font-heading); font-weight: 700; font-size: var(--k-dato-size, 60px); letter-spacing: -0.02em; line-height: 0.8; }
+.k-poster { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+.k-post { display: flex; align-items: baseline; gap: 18px; }
+.k-post__tid { flex: none; width: 104px; font-family: var(--font-heading); font-weight: 700; font-size: var(--k-tid-size, 30px); line-height: 1.15; color: var(--dnt-rod); }
+.k-post__tekst { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.k-post__tittel { font-family: var(--font-heading); font-weight: 700; font-size: var(--k-post-size, 32px); line-height: 1.15; }
+.k-post__sted { font-family: var(--font-body); font-weight: 400; font-size: var(--k-sted-size, 26px); line-height: 1.2; color: rgba(0,0,0,0.66); }
+.k-post .p-detaljer { margin-top: 4px; }
+
+.k-info__foto { flex: none; height: 540px; position: relative; overflow: hidden; background: #2f3b33; }
+.k-info__innhold { flex: 1; display: flex; flex-direction: column; padding: 52px 0 56px; }
+.k-info .k-tittel { padding: 0 64px 30px; }
+.k-info__liste { display: flex; flex-direction: column; gap: 24px; padding: 0 64px; }
+.k-info__rad { display: flex; align-items: center; gap: 22px; font-family: var(--font-body); font-weight: 400; font-size: var(--k-info-size, 30px); line-height: 1.3; }
+.k-ikon { flex: none; width: 60px; height: 60px; border-radius: 999px; background: var(--beige-mork); display: flex; align-items: center; justify-content: center; }
+.k-ikon svg { width: 28px; height: 28px; display: block; }

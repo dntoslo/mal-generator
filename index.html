@@ -68,6 +68,7 @@
       <div class="knapperad" data-gruppe="format" role="group" aria-label="Format">
         <button type="button" class="pille" data-verdi="feed">Innlegg</button>
         <button type="button" class="pille" data-verdi="story">Historie</button>
+        <button type="button" class="pille" data-verdi="karusell" data-mal="turkalender program">Karusell</button>
       </div>
       <p class="hjelp" id="format-hjelp"></p>
     </div>
@@ -81,7 +82,24 @@
       <p class="hjelp" id="tekst-hjelp"></p>
     </div>
 
-    <div class="felt" data-mal="turkalender program">
+    <div class="felt" data-mal="turkalender program" data-format="karusell" hidden>
+      <p class="felt__etikett">4. Karusell</p>
+      <p class="hjelp">Første bilde er forsiden med tittel og periode. Listen fordeles på så mange bilder som trengs, og en dag deles aldri. «Godt å vite» blir siste bilde hvis du fyller det inn.</p>
+      <p class="smaa-etikett">Farge på merkelappen på forsiden</p>
+      <div class="knapperad knapperad--wrap" data-gruppe="farge" role="group" aria-label="Farge på merkelappen på forsiden">
+        <button type="button" class="pille pille--liten" data-verdi="rod">Rød</button>
+        <button type="button" class="pille pille--liten" data-verdi="vinter">Vinter</button>
+        <button type="button" class="pille pille--liten" data-verdi="paske">Påske</button>
+        <button type="button" class="pille pille--liten" data-verdi="sommer">Sommer</button>
+        <button type="button" class="pille pille--liten" data-verdi="host">Høst</button>
+      </div>
+      <input type="text" class="tekstfelt" data-felt="karusellUnder" aria-label="Undertittel på forsiden" placeholder="Undertittel på forsiden (valgfri), f.eks. Velkommen til påske på fjellet">
+      <label class="smaa-etikett" for="karusell-info">Godt å vite (valgfritt, én linje per punkt, maks fem)</label>
+      <textarea class="tekstfelt" id="karusell-info" data-felt="karusellInfo" rows="4" placeholder="F.eks.&#10;Parkering ved Vesterdalsvatnet på FV 50&#10;Bagasjetransport koster 195 kr per kolli&#10;Bestill på hyttebestilling.dnt.no"></textarea>
+      <p class="hjelp">Ikonet velges ut fra ordene i linjen, f.eks. buss og parkering, bestilling, e-post, mat eller klokkeslett.</p>
+    </div>
+
+    <div class="felt" data-mal="turkalender program" data-format="feed story">
       <p class="felt__etikett">4. Velg bildeoppsett</p>
       <div class="knapperad knapperad--grid" data-gruppe="oppsett" role="group" aria-label="Bildeoppsett">
         <button type="button" class="kort-knapp" data-verdi="topp">Bilde øverst</button>
@@ -258,13 +276,13 @@
 
     <div class="felt">
       <p class="felt__etikett">7. Detaljer i bildet</p>
-      <label class="avkryssing" data-mal="arrangement turtips sesong meny" data-nivaa="merkelapp"><input type="checkbox" id="vis-merke"><span>Vis merkelapp med logo og navn øverst</span></label>
+      <label class="avkryssing" data-mal="arrangement turtips sesong meny turkalender program" data-nivaa="merkelapp"><input type="checkbox" id="vis-merke"><span>Vis merkelapp med logo og navn øverst</span></label>
       <label class="avkryssing"><input type="checkbox" id="vis-band"><span>Vis rødt bånd med nettadresse nederst</span></label>
       <div id="lenke-felt" hidden>
         <label class="skjult" for="lenke">Nettadresse</label>
         <input type="text" class="tekstfelt" id="lenke" data-felt="lenke" placeholder="Nettadresse, f.eks. dnt.no/oslo">
       </div>
-      <label class="avkryssing" data-mal="turkalender program"><input type="checkbox" id="vis-logo"><span>Vis DNT-logo i bildet</span></label>
+      <label class="avkryssing" data-mal="turkalender program" data-format="feed story"><input type="checkbox" id="vis-logo"><span>Vis DNT-logo i bildet</span></label>
       <label class="avkryssing"><input type="checkbox" id="vis-turbo"><span>Vis Turbo (Barnas Turlag)</span></label>
     </div>
 
@@ -279,6 +297,7 @@
     <div class="felt">
       <p class="advarsel" id="formange" hidden></p>
       <button type="button" class="primar" id="last-ned">Last ned bildet</button>
+      <button type="button" class="lenkeknapp" id="last-ned-ett" hidden>Last ned bare bildet som vises nå</button>
       <p class="hjelp" id="nedlasting-hjelp"></p>
       <p class="hjelp" id="kreditering" hidden></p>
       <p class="advarsel" id="feil" role="alert" hidden></p>
@@ -307,6 +326,11 @@
       <div id="plakat-skala">
         <div id="plakat" data-oppsett="topp"></div>
       </div>
+    </div>
+    <div class="karusell-nav" id="karusell-nav" hidden>
+      <button type="button" class="liten-knapp" id="karusell-forrige" aria-label="Forrige bilde">‹ Forrige</button>
+      <span class="karusell-nav__tekst" id="karusell-tekst" aria-live="polite"></span>
+      <button type="button" class="liten-knapp" id="karusell-neste" aria-label="Neste bilde">Neste ›</button>
     </div>
 
     <div class="posttekst">

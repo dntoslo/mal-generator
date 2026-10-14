@@ -138,3 +138,14 @@ Verktøyet ble utvidet til de 25 betjente hyttene og fikk navnet Turposten. Bakg
 - **Forslag til posttekst.** To varianter per mal, på valgt målform, med fotograf og @dntoslo for hyttene. Ingen utropstegn, ingen emoji.
 - **Program** bruker turkalenderens oppsett og regler, med egen liste, tittel og periode, og hyttas navn i overlinjen.
 - **Hyttebildene** er tre per hytte fra UT.no, 1800 px brede der originalen tillater det. Noen er bare 1200 px og kan bli myke i Historie.
+
+## Karusell (15. oktober 2026)
+
+Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Geiterygghytta var for langt for ett bilde. Karusell er derfor et eget format for turkalender og program, i innleggsformat 1080 × 1350.
+
+- **Forsiden** er bygget som Merkelapp: foto over hele flaten, stempelet, perioden i merkelappen («PÅSKEN 2027»), tittelen og «Bla videre» nede til høyre. Undertittel er valgfri. Farge og plassering varieres med «Prøv en annen variant».
+- **Listesidene** har logo og navn øverst, sidetall («2 / 4»), tittelen i Whitman og én blokk per dag: datofelt med dagbånd og dato, og under hverandre klokkeslett i rødt, aktivitet og sted. Punkter med samme dag og dato etter hverandre samles i én blokk. Blokkene veksler mellom hvit og lys beige som i turkalenderen.
+- **Fordelingen** måles, ikke regnes ut: alle dagene rendres i et skjult element med samme stiler, og så fylles hver side til det ikke er plass til neste dag. 48 px luft nederst. En dag deles aldri på to bilder. Er én dag høyere enn en hel side, sier skjemaet fra.
+- **«Godt å vite»** er siste side når feltet er fylt ut: et annet foto av hytta øverst (540 px), tittel og opptil fem punkter med ikon i beige sirkel. Ikonet velges ut fra ordene i linjen (`ikonFor()`), med i-ikon når ingenting passer.
+- **Nedlasting.** Bildene lages ett for ett fra forhåndsvisningen, så de blir identiske med det man ser. Datamaskin: lastes ned etter hverandre, og nettleseren kan spørre om lov til flere filer. Mobil med delingsark: første trykk lager bildene, andre trykk åpner delingsarket, fordi delingsarket krever et ferskt trykk. Filnavnene er nummerert i rekkefølgen de skal lastes opp.
+- **Posttekst** får linjen «Bla gjennom bildene for hele programmet», og begge fotografene når forsiden og «Godt å vite» har ulike bilder.
