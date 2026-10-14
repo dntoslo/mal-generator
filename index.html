@@ -247,6 +247,13 @@
 
     <div class="felt" data-mal="turtips" hidden>
       <p class="felt__etikett">6. Innhold</p>
+      <div class="boks" id="tur-boks" data-avsender="hytte" hidden>
+        <div class="felt__topp">
+          <span class="boks__etikett">Turforslag fra UT.no</span>
+          <button type="button" class="liten-knapp" id="nytt-turforslag">Nytt turforslag</button>
+        </div>
+        <p class="hjelp" id="tur-hjelp"></p>
+      </div>
       <input type="text" class="tekstfelt" data-felt="tipsTittel" aria-label="Turmål" placeholder="Turmål, f.eks. Sognsvann rundt">
       <input type="text" class="tekstfelt" data-felt="tipsUnder" aria-label="Undertittel" placeholder="Undertittel, f.eks. En enkel tur for hele familien">
       <textarea class="tekstfelt" data-felt="tipsTekst" rows="3" maxlength="180" aria-label="Kort tekst" placeholder="Kort tekst om turen, maks to setninger. Vises bare i Plakat."></textarea>

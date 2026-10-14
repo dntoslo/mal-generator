@@ -9,7 +9,7 @@ Malene:
 - **Sesong og booking** (hytter): vi åpner, booking åpner, ledige senger, takk for sesongen eller vi søker folk.
 - **Mat og meny** (hytter): dagens middag, gourmethelg eller pizzakveld.
 - **Arrangement**: ett arrangement, som tur, kurs eller dugnad.
-- **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet og gradering.
+- **Turtips**: ett turmål med kort tekst og fakta som lengde, varighet og gradering. Hyttene får ferdige turforslag fra UT.no.
 - **Postkort**: et fint bilde med signatur og nesten ingen tekst.
 
 ## Slik brukes det
@@ -37,6 +37,7 @@ assets/fonts/         ABC Social, ABC Social Extended, Whitman (lisensierte)
 assets/img/           DNT-logo og Turbo
 assets/img/eksempler/ 29 eksempelfoto til turlagene
 assets/img/hytter/    3 foto per hytte, hentet fra UT.no
+assets/img/hytter/turer/  foto til turforslagene fra UT.no
 docs/design.md        begrunnelser bak størrelser og grenser
 CLAUDE.md             kontekst for videre arbeid med Claude Code
 ```
@@ -81,6 +82,8 @@ Legge til et bilde: skaler det til 1620 px bredde (liggende) eller 2160 px høyd
 Fotografer i dag: Daniel Jacobsen og Marius Dalseg. To bilder fra den opprinnelige prototypen har ukjent fotograf.
 
 Hyttebildene ligger i `assets/img/hytter/` med fotograf i `js/hytter.js`. De ble hentet fra UT.no 14. oktober 2026, tre per hytte, med bilde nr. 1 av hytta i landskapet. Bytt gjerne ut med bilder fra vertskapet eller fra Fotoweb.
+
+Turforslagene til hyttene ligger som `turer` per hytte i `js/hytter.js`, med foto i `assets/img/hytter/turer/`. De ble hentet fra UT.no 15. oktober 2026: 67 turer, 2 til 3 per hytte, fra DNT-foreninger og turlag, med turens eget foto og fotograf. Turtips starter med turen som passer årstiden, og «Nytt turforslag» bytter tur.
 
 ## Fonter og bilder
 

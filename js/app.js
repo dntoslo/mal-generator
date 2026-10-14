@@ -18,6 +18,7 @@
   var MAKS_KARUSELL = 20;
   var HYTTER = window.HYTTER || [];
   var HYTTEMAPPE = "assets/img/hytter/";
+  var TURMAPPE = "assets/img/hytter/turer/";
 
   // Graderingsfargene følger DNTs graderingsstandard (grønn, blå, rød, sort),
   // ikke merkevarepaletten. Rød er likevel DNT Rød fra paletten.
@@ -147,6 +148,8 @@
   var MENY_FELT = ["menyMerke", "menyTittel", "menyUnder", "menyLinjer", "menyTid", "menyPris"];
   var POST_FELT = ["postOverlinje", "postNavn", "postMeta"];
   var PROGRAM_FELT = ["programTittel", "programPeriode", "karusellUnder", "karusellInfo"];
+  // Hvilket turforslag fra UT.no som er brukt som eksempel i Turtips («hytte/id», se turNokkel()).
+  var TUR_FELT = ["tipsTur"];
 
   // Ikonene er fra Lucide (MIT), som i designsystemet Hyttebestilling. Streken er
   // satt til sort direkte, fordi html2canvas tegner SVG uten å arve currentColor.
@@ -512,6 +515,8 @@
     else if (s.mal === "program") tekst = [s.programTittel, s.programPeriode];
     else if (s.mal === "meny") tekst = [s.menyMerke, s.menyTittel, s.menyUnder];
     else if (s.mal === "arrangement") tekst = [s.arrTittel, s.arrUnder, s.arrMaaned];
+    // Et turforslag uten eget foto får et hyttebilde fra turens sesong.
+    else if (s.mal === "turtips") { var tur = aktivTur(); return tur ? tur.sesong || "" : ""; }
     else return "";
     tekst = tekst.join(" ").toLowerCase();
     // Månedsnavn teller ikke, de viser ofte til neste sesong («Vi ses igjen 5. mars»).
@@ -531,8 +536,14 @@
 
   // Trekker ett liggende og ett stående eksempelbilde. Forrige trekk huskes i
   // nettleseren og unngås, så det aldri blir samme bilde to ganger på rad.
-  // En valgt hytte bruker sine egne bilder, samme bilde i alle flater.
+  // En valgt hytte bruker sine egne bilder, samme bilde i alle flater. Et turtips
+  // med turforslag fra UT.no bruker turens eget foto.
   function trekkEksempelbilder() {
+    var tur = aktivTur();
+    if (tur && tur.bilde) {
+      var tb = { fil: tur.bilde.fil, fotograf: tur.bilde.fotograf || null, mappe: TURMAPPE, sesong: tur.sesong || "" };
+      return { liggende: tb, staaende: tb };
+    }
     var forrige = {};
     try { forrige = JSON.parse(localStorage.getItem(EKSEMPELNOKKEL) || "{}") || {}; } catch (e) { /* ignorer */ }
     var valg;
@@ -586,7 +597,7 @@
     lagreTimer = setTimeout(function () {
       try {
         var data = {};
-        LAGRES.concat(ARR_FELT, TIPS_FELT, SESONG_FELT, MENY_FELT, POST_FELT, PROGRAM_FELT)
+        LAGRES.concat(ARR_FELT, TIPS_FELT, SESONG_FELT, MENY_FELT, POST_FELT, PROGRAM_FELT, TUR_FELT)
           .forEach(function (k) { data[k] = state[k]; });
         localStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(data));
       } catch (e) { /* privat modus eller full lagring: vi lever fint uten */ }
@@ -611,7 +622,7 @@
       if (PLASSERINGER[d.plassering]) state.plassering = d.plassering;
       if (ARR_TYPER[d.arrType]) state.arrType = d.arrType;
       if (SESONG_TYPER[d.sesongType]) state.sesongType = d.sesongType;
-      ARR_FELT.concat(TIPS_FELT, SESONG_FELT, MENY_FELT, POST_FELT, PROGRAM_FELT)
+      ARR_FELT.concat(TIPS_FELT, SESONG_FELT, MENY_FELT, POST_FELT, PROGRAM_FELT, TUR_FELT)
         .forEach(function (k) { if (typeof d[k] === "string") state[k] = d[k]; });
       // Nynorsk ble tatt ut 15. oktober 2026. Lagret «Helsing frå» blir «Hilsen fra».
       if (state.postOverlinje === "Helsing frå") state.postOverlinje = "Hilsen fra";
@@ -770,7 +781,7 @@
       .map(function (par) {
         var verdi = s[par[0]].trim();
         var grad = par[0] === "tipsGrad";
-        return { etikett: par[1], verdi: grad ? verdi : verdi, farge: grad ? (GRAD[verdi] || "") : "" };
+        return { etikett: par[1], verdi: verdi, farge: grad ? (GRAD[verdi] || "") : "" };
       });
     var fakta = [];
     var lengde = [(s.tipsLengde || "").trim(), (s.tipsVarighet || "").trim()].filter(Boolean).join(", ");
@@ -1454,6 +1465,11 @@
       var tipsInfo = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
       if (v === 0) linjer = ["Turtips: " + inn.tittel, inn.under, "", setning(inn.tekst), ""].concat(tipsInfo);
       else linjer = [setning(inn.tittel + (inn.under ? ". " + inn.under : "")), setning(inn.tekst), ""].concat(tipsInfo, ["", "God tur."]);
+      var tur = aktivTur();
+      // Lenken følger med så lenge tittel eller tekst fortsatt er turens egen.
+      if (tur && tur.url && (state.tipsTittel === tur.tittel || state.tipsTekst === tur.tekst)) {
+        linjer.push("", "Les mer på " + tur.url.replace(/^https?:\/\/(www\.)?/, ""));
+      }
     }
 
     linjer.push("", foto, tagg);
@@ -1666,7 +1682,19 @@
     if ($("#liste-etikett")) $("#liste-etikett").textContent = state.mal === "program" ? "Programmet" : "Turene";
     $("#legg-til").textContent = state.mal === "program" ? "+ Legg til punkt" : "+ Legg til tur";
     el.bildenavn.textContent = state.bildenavn;
-    el.nyttEksempel.hidden = state.egetBilde;
+    // Med turforslag kommer fotoet fra turen. «Nytt turforslag» bytter tur og foto.
+    var tur = aktivTur();
+    el.nyttEksempel.hidden = state.egetBilde || Boolean(tur && tur.bilde);
+    var turBoks = $("#tur-boks");
+    if (turBoks) {
+      var turer = hytteTurer();
+      turBoks.hidden = !synlig(turBoks) || !turer.length;
+      $("#nytt-turforslag").hidden = turer.length < 2;
+      $("#tur-hjelp").textContent = tur
+        ? "Tur " + (turer.indexOf(tur) + 1) + " av " + turer.length + " ved " + valgtHytte().kortnavn +
+          ". Lenken til UT.no kommer med i posteteksten. Endre gjerne teksten."
+        : "";
+    }
     el.nyttEksempel.textContent = hytteBilder() ? "Nytt bilde fra hytta" : "Nytt eksempelbilde";
     if (state.egetBilde) {
       el.kreditering.hidden = true;
@@ -1731,6 +1759,17 @@
     if (state.format === "karusell" && !erKalender(state.mal)) state.format = "feed";
     // Hyttene bruker bare normal tekststørrelse (15. oktober 2026).
     if (state.avsender === "hytte") state.tekst = "normal";
+    // Turtips for en hytte starter med et turforslag fra UT.no som passer årstiden.
+    // Uten hytte (turlag) kommer turlagenes eksempel tilbake.
+    if (state.mal === "turtips") {
+      if (hytteTurer().length && !aktivTur()) brukTur(turForAarstiden(hytteTurer()));
+      else if (!hytteTurer().length && state.tipsTur) slippTur();
+    }
+    // Turens foto hører bare til turtipset. I andre maler byttes det til hyttas bilder.
+    var tur = aktivTur(), eks = state.eksempel && state.eksempel.liggende;
+    if (!state.egetBilde && eks && (tur && tur.bilde ? eks.fil !== tur.bilde.fil : eks.mappe === TURMAPPE)) {
+      Object.assign(state, brukEksempelbilder());
+    }
     // Handler innlegget om påske eller sommer, byttes et eksempelbilde fra feil sesong.
     // Mangler hytta bilder fra riktig sesong, blir det et bilde innefra (se bilderForSesong).
     var onsket = onsketSesong(), naa = state.eksempel && state.eksempel.liggende, hb = hytteBilder();
@@ -1785,6 +1824,79 @@
     Object.assign(patch, byttEksempeltekst(sesongPreset(state.sesongType, gammel), sesongPreset(state.sesongType, ny)));
     Object.assign(state, patch);
     if (!state.egetBilde) Object.assign(state, brukEksempelbilder());
+    render();
+  }
+
+  /* ---------- Turforslag fra UT.no (Turtips for hyttene) ---------- */
+
+  // Turforslagene for valgt hytte, fra js/hytter.js. Tom liste for turlag.
+  function hytteTurer() {
+    var h = valgtHytte();
+    return h && h.turer && h.turer.length ? h.turer : [];
+  }
+
+  // tipsTur er «hytte/id», fordi samme UT-rute kan stå på to hytter med ulik tekst.
+  function turNokkel(h, t) { return h.id + "/" + t.id; }
+
+  function finnTur(nokkel) {
+    var del = String(nokkel || "").split("/");
+    var h = finnHytte(del[0]);
+    return h && h.turer ? h.turer.filter(function (t) { return String(t.id) === del[1]; })[0] || null : null;
+  }
+
+  // Turen som er eksempel i Turtips nå, hvis den hører til valgt hytte.
+  function aktivTur() {
+    var h = valgtHytte();
+    if (state.mal !== "turtips" || !h) return null;
+    return hytteTurer().filter(function (t) { return turNokkel(h, t) === state.tipsTur; })[0] || null;
+  }
+
+  // Tipsfeltene en tur fyller ut. Felt turen ikke har, tømmes.
+  function turFelt(t) {
+    return {
+      tipsTittel: t.tittel || "", tipsUnder: t.under || "", tipsTekst: t.tekst || "",
+      tipsLengde: t.lengde || "", tipsVarighet: t.varighet || "", tipsGrad: GRAD[t.grad] ? t.grad : "",
+      tipsStart: t.start || "", tipsKollektiv: t.kollektiv || "", tipsPasserFor: "",
+      tipsUnderveis: "", tipsSesong: t.besteTid || ""
+    };
+  }
+
+  // Turlagenes eksempel (Sognsvann rundt). Regnes som forrige eksempel første gang.
+  function turlagTips() {
+    var s = standardSkjema(), ut = {};
+    TIPS_FELT.forEach(function (k) { ut[k] = s[k]; });
+    return ut;
+  }
+
+  // En tur med dagens måned i sesongen, ellers den første.
+  function turForAarstiden(turer) {
+    var mnd = new Date().getMonth() + 1;
+    return turer.filter(function (t) { return (t.maneder || []).indexOf(mnd) >= 0; })[0] || turer[0];
+  }
+
+  // Fyller tipsfeltene med turen. Bare felt som fortsatt har forrige eksempel byttes,
+  // så det brukeren har skrevet selv blir stående.
+  function brukTur(ny) {
+    var forrige = finnTur(state.tipsTur);
+    var patch = byttEksempeltekst(forrige ? turFelt(forrige) : turlagTips(), turFelt(ny));
+    patch.tipsTur = turNokkel(valgtHytte(), ny);
+    Object.assign(state, patch);
+    if (!state.egetBilde) Object.assign(state, brukEksempelbilder());
+  }
+
+  // Tilbake til turlagenes eksempel når hytta ikke lenger er avsender.
+  function slippTur() {
+    var forrige = finnTur(state.tipsTur);
+    if (forrige) Object.assign(state, byttEksempeltekst(turFelt(forrige), turlagTips()));
+    state.tipsTur = "";
+    if (!state.egetBilde) Object.assign(state, brukEksempelbilder());
+  }
+
+  function nesteTur() {
+    var turer = hytteTurer();
+    if (!turer.length) return;
+    var i = turer.indexOf(aktivTur());
+    brukTur(turer[(i + 1) % turer.length]);
     render();
   }
 
@@ -2135,6 +2247,8 @@
       u[state.format] = { x: 50, y: 50, z: 115 };
       oppdater({ utsnitt: u });
     });
+
+    if ($("#nytt-turforslag")) $("#nytt-turforslag").addEventListener("click", nesteTur);
 
     el.nyttEksempel.addEventListener("click", function () {
       $("#bilde-fil").value = "";

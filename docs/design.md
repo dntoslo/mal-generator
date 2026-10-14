@@ -156,3 +156,15 @@ Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Ge
 - **Bare normal tekst for hyttene.** «Stor tekst» er for turlag med mange seniorer. Hyttene får ikke valget, og plakaten bruker alltid normal størrelse.
 - **Ingen midtprikk som skilletegn.** Den tynne prikken (·) mellom høyde og område, i perioden og i lengde og varighet virket KI-generert. Nå står det «1405 moh i Jotunheimen» (eller «på Hardangervidda», «Ved Oslofjorden»), «UKE 42, OKTOBER» (ikke «I», som ser ut som en strek i versaler med sporing), «3,3 km, 1 time» og luft mellom navn og periode i overlinjen.
 - **Vinterbilder til påske.** Hyttebildene er merket vinter, sommer eller inne. Handler innlegget om påske, vinter eller ski, brukes et vinterbilde. Handler det om sommer eller fiske, brukes et sommerbilde. Sju hytter som er åpne i påsken, manglet vinterbilde og fikk ett fra UT.no.
+
+## Turforslag fra UT.no (15. oktober 2026)
+
+Turtips for en hytte starter med et ekte turforslag fra hytta, i stedet for turlagenes «Sognsvann rundt». Det treffer bedre, og vertskapet får en lenke til UT.no å legge i posteteksten.
+
+- **Kilde.** Turforslag på UT.no innen cirka 3 km fra hytta, med DNT-forening eller turlag som eier. Ikke turer fra privatpersoner eller andre organisasjoner. Helst én sommer-dagstur og én ski-dagstur. Har hytta ingen i nærheten, brukes et turforslag som går til eller gjennom hytta, eller en merket DNT-rute fra hytta.
+- **Tekst.** Tittel, undertittel og tekst er skrevet ut fra UT-beskrivelsen, uten å legge til noe som ikke står der. Lengde, varighet, gradering, start, kollektivt og beste tid kommer fra UT. Graderingen mappes til `GRAD`: Enkel og Tilrettelagt blir Enkel, Middels krevende blir Middels, Krevende blir Krevende og Ekstra krevende blir Ekspert.
+- **Foto.** Turens eget foto fra UT.no, med fotograf, i `assets/img/hytter/turer/`. Knappen «Nytt eksempelbilde» skjules så lenge turens foto brukes. Bytter man til en annen mal, kommer hyttas egne bilder tilbake.
+- **Valg av tur.** Ingen liste. Turtips velger turen som passer dagens måned (`maneder`), og «Nytt turforslag» bytter til hyttas neste. Som ellers byttes bare felt som fortsatt har forrige eksempeltekst, så det vertskapet har skrevet selv blir stående.
+- **Posttekst.** Linjen «Les mer på ut.no/turforslag/<id>» kommer med så lenge tittel eller tekst fortsatt er turens egen. Skriver vertskapet om begge, kan det være en annen tur, og lenken faller bort.
+- **Turlag** er uendret. Bytter man fra hytte til turlag, kommer Sognsvann-eksempelet tilbake.
+- **Omfang.** 67 turer for de 25 hyttene, 61 med eget foto. Seks turer mangler brukbart foto i UT (eller fotografen er ukjent) og bruker hyttas bilde fra samme sesong. Ruter har ikke sesong i UT, så månedene er utledet fra kvisteperioden eller hyttas åpningstid. Fire tekster og én kollektivlinje er kortet litt ned, så ingen tur gir plassadvarsel i Plakat.
