@@ -737,6 +737,14 @@
     return res;
   }
 
+  // Bredden på en tekst i px, målt med canvas. 0 før fontene er lastet.
+  function maalBredde(tekst, fontMal, px) {
+    if (!tekst || !fonterKlare) return 0;
+    if (!maaleCtx) maaleCtx = document.createElement("canvas").getContext("2d");
+    maaleCtx.font = fontMal.replace("{px}", px);
+    return maaleCtx.measureText(String(tekst)).width;
+  }
+
   // Titler på foto kan gå over to linjer. Først prøves én linje ned til 96 px,
   // så to linjer fra maksPx og ned. To linjer er et anslag (1,8 ganger bredden),
   // og sjekkPlass() sier fra hvis teksten likevel ikke får plass.
@@ -869,7 +877,7 @@
     // Datofeltet er 184 px, så hele månedsnavnet får plass i 24 px (se docs/design.md).
     var tekstBredde = fmt.bredde - 2 * pad;
     var chip = Math.round(184 * (stor ? 1.08 : 1));
-    var tittel, sigNavnPx = 0;
+    var tittel, sigNavnPx = 0, cUnder = false;
     if (nivaa === "plakat") {
       // Datofeltet står ved siden av tittelen, så bredden er mindre. Uten datofelt får tittelen hele bredden.
       var tittelBredde = innhold.dato ? tekstBredde - chip - 36 : tekstBredde;
@@ -878,7 +886,19 @@
       tittel = tilpassToLinjer(innhold.tittel, tekstBredde - (s.visTurbo ? 300 : 0), 112, 64);
     } else {
       if (s.signatur === "b") tittel = tilpassStorrelse(sig.navn, TITTELFONT, TITTELSPORING, 740, 46, 32);
-      else if (s.signatur === "c") tittel = tilpassStorrelse(sig.navn, TITTELFONT, TITTELSPORING, sig.meta ? 640 : 900, 112, 60);
+      else if (s.signatur === "c") {
+        // Navn og meta står side om side når begge får plass (hyttenavn og høyde).
+        // Lange titler og undertitler fra Turtips og Sesong får meta under navnet,
+        // ellers kolliderer de (15. oktober 2026). Bunnen er 968 px innenfor kanten.
+        var metaB = Math.max.apply(null, [0].concat(sig.metaLinjer.map(function (x) { return maalBredde(x, '500 {px}px "ABC Social"', 28); })));
+        var vedSiden = Math.min(640, 968 - 24 - metaB);
+        var ved = sig.metaLinjer.length ? tilpassStorrelse(sig.navn, TITTELFONT, TITTELSPORING, vedSiden, 112, 72) : null;
+        if (ved && !ved.bryt && vedSiden >= 360) tittel = ved;
+        else {
+          tittel = tilpassStorrelse(sig.navn, TITTELFONT, TITTELSPORING, 900, 112, 56);
+          cUnder = sig.metaLinjer.length > 0;
+        }
+      }
       else tittel = tilpassToLinjer(sig.navn, tekstBredde - (s.visTurbo ? 300 : 0), 132, 72);
       sigNavnPx = tittel.px;
     }
@@ -888,6 +908,7 @@
       bilde: bilde,
       eksempel: aktivtEksempel(fotoFlate[0], fotoFlate[1]),
       tittelBryt: tittel.bryt,
+      cUnder: cUnder,
       innhold: innhold,
       info: innhold.info,
       sig: sig,
@@ -1160,12 +1181,15 @@
       var s = b.sig;
       var v = SIGNATURER[state.signatur] ? state.signatur : "a";
       if (v === "c") {
-        var meta = s.metaLinjer.length ? '<div class="s-c__meta">' + s.metaLinjer.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
+        // Får ikke navn og meta plass side om side, står meta under navnet (b.cUnder).
+        var meta = s.metaLinjer.length ? '<div class="s-c__meta' + (b.cUnder ? " s-c__meta--under" : "") + '">' +
+          s.metaLinjer.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
         return '<div class="s-flate s-flate--c">' +
           '<div class="s-c__foto"><div class="p-foto" data-foto></div></div>' +
           '<div class="s-c__bunn"><div class="s-c__venstre">' +
             (s.over ? '<span class="s-over s-over--rod s-over--liten">' + esc(s.over) + '</span>' : "") +
-            '<span class="s-navn s-navn--c">' + esc(s.navn) + '</span></div>' + meta +
+            '<span class="s-navn s-navn--c' + (b.tittelBryt ? " s-navn--bryt" : "") + '">' + esc(s.navn) + '</span>' +
+            (b.cUnder ? meta : "") + '</div>' + (b.cUnder ? "" : meta) +
           '</div>' +
         '</div>';
       }
