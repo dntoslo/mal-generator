@@ -8,8 +8,15 @@
 
 html, body { margin: 0; background: var(--beige); }
 input, select, button, textarea { font: inherit; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--dnt-rod); }
-button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
+/* Synlig fokus på alt som kan nås med tastatur: knapper, avkrysninger og glidere får ring,
+   tekstfelt får rød, tykkere kant. Selektorene for tekstfelt er like spesifikke som
+   kantreglene lenger ned (f.eks. .tur input[type="text"]), så fokus alltid vinner. */
+:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
+.tekstfelt:focus, .tur input[type="text"]:focus, .tur select:focus,
+.prompt textarea:focus, .posttekst textarea:focus {
+  outline: none; border-color: var(--dnt-rod); box-shadow: 0 0 0 1px var(--dnt-rod);
+}
+::placeholder { color: rgba(0,0,0,0.55); opacity: 1; }
 [hidden] { display: none !important; }
 
 /* ---------- Sideoppsett ---------- */
@@ -41,9 +48,10 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 
 .felt { display: flex; flex-direction: column; gap: 9px; }
 .felt--romslig { gap: 12px; }
-.felt__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.5); margin: 0; }
+/* Gråtonene i skjemaet er minst 0,6 sort, som gir over 4,5:1 kontrast på hvitt og beige. */
+.felt__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.6); margin: 0; }
 .felt__topp { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
-.hjelp { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.55); margin: 0; }
+.hjelp { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.6); margin: 0; }
 
 .knapperad { display: flex; gap: 9px; }
 .knapperad--grid { display: grid; grid-template-columns: 1fr 1fr; }
@@ -69,10 +77,13 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
   border: 1.5px dashed rgba(0,0,0,0.28); border-radius: 12px; padding: 18px; cursor: pointer; background: var(--beige-lys);
 }
 .opplasting__tittel { font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--sort); }
-.opplasting input { display: none; }
+/* Filfeltet skjules visuelt, men kan fortsatt nås med Tab og åpnes med Enter eller mellomrom. */
+.opplasting { position: relative; }
+.opplasting input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.opplasting:focus-within { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 
 .boks { display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: 12px; background: var(--beige-lys); }
-.boks__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.5); }
+.boks__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.6); }
 .liten-knapp {
   border: none; background: rgba(0,0,0,0.07); border-radius: 999px; padding: 6px 13px;
   font-family: var(--font-heading); font-weight: 700; font-size: 13px; color: var(--sort); cursor: pointer;
@@ -90,7 +101,7 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .turliste { display: flex; flex-direction: column; gap: 12px; }
 .tur { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: var(--beige-lys); }
 .tur__topp { display: flex; align-items: center; gap: 8px; }
-.tur__nummer { flex: 1; font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: rgba(0,0,0,0.45); }
+.tur__nummer { flex: 1; font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: rgba(0,0,0,0.6); }
 .ikon-knapp {
   width: 32px; height: 32px; border: none; border-radius: 8px; background: rgba(0,0,0,0.06);
   font-size: 15px; line-height: 1; color: rgba(0,0,0,0.6); cursor: pointer;
@@ -102,16 +113,17 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
   width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px;
   font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);
 }
-.tur__kort { font-family: var(--font-heading) !important; font-weight: 700; font-size: 15px !important; text-align: center; padding: 10px !important; }
+/* 16 px i alle felt, ellers zoomer Safari på iPhone inn når feltet får fokus. */
+.tur__kort { font-family: var(--font-heading) !important; font-weight: 700; font-size: 16px !important; text-align: center; padding: 10px !important; }
 .tur__dag { flex: none !important; width: 88px !important; padding: 10px 8px !important; text-align: left; }
-.tur__liten { font-size: 15px !important; }
+.tur__liten { font-size: 16px !important; }
 .tur__pamelding { flex: none !important; display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer; }
 .tur__pamelding input { width: 18px; height: 18px; accent-color: var(--dnt-rod); margin: 0; }
 
 .avkryssing { display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer; }
 .avkryssing input { width: 18px; height: 18px; accent-color: var(--dnt-rod); margin: 0; }
 
-.advarsel { border-radius: 12px; padding: 13px 15px; background: #FDECEA; font-family: var(--font-body); font-size: 14px; line-height: 1.45; color: #8E1B12; margin: 0; }
+.advarsel { border-radius: 12px; padding: 13px 15px; background: var(--advarsel-bg); font-family: var(--font-body); font-size: 14px; line-height: 1.45; color: var(--advarsel-tekst); margin: 0; }
 
 .primar {
   border: none; border-radius: 999px; background: var(--dnt-rod); color: var(--hvit);
@@ -164,7 +176,7 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 }
 #plakat * { box-sizing: border-box; }
 .p-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; }
-.p-flate--bakgrunn { background: #2f3b33; }
+.p-flate--bakgrunn { background: var(--foto-bakgrunn); }
 
 /* Foto og scrim */
 .p-foto { width: 100%; height: 100%; background-size: var(--bg-str); background-position: var(--bg-pos); background-repeat: no-repeat; }
@@ -174,7 +186,7 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .p-scrim--bakgrunn { background: linear-gradient(180deg, rgba(20,30,22,0.52) 0%, rgba(20,30,22,0.14) 34%, rgba(20,30,22,0.30) 100%); }
 
 /* Hero (Bilde øverst) og tittel over foto (Stort bilde) */
-.p-hero { flex: none; position: relative; overflow: hidden; background: #2f3b33; height: var(--hero-h); }
+.p-hero { flex: none; position: relative; overflow: hidden; background: var(--foto-bakgrunn); height: var(--hero-h); }
 .p-hero__tekst { position: absolute; left: 56px; top: 46px; right: 170px; display: flex; flex-direction: column; gap: 8px; }
 .p-hero__tekst--lav { top: 52px; }
 .p-overlinje { font-family: var(--font-heading); font-weight: 500; font-size: var(--overlinje-size, 24px); letter-spacing: 0.18em; color: var(--hvit); }
@@ -247,33 +259,30 @@ button:focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
 .k-maal { position: fixed; left: -24000px; top: 0; width: 1080px; pointer-events: none; visibility: hidden; }
 
 /* Skjulte etiketter for skjermlesere */
-.skjult { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skjult { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 
 /* ---------- Skjema: arrangement ---------- */
 .tekstfelt--dag { flex: none !important; width: 150px; }
 textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 /* =========================================================
-   Enkeltplakat (arrangement og turtips). Kun px. Variabler fra JS:
+   Plakat-nivået i enkeltmalene: foto øverst, all informasjon på lys
+   beige under. Kun px. Variabler fra JS:
    --a-pad --a-chip --a-dag-size --a-dato-size --a-maaned-size
    --a-merke-size --a-tittel-size --a-under-size --a-etikett-size
    --a-verdi-size --a-tekst-size --a-foto-h
    ========================================================= */
 .a-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; color: var(--sort); }
-.a-flate--foto { background: #2f3b33; }
 
-.a-foto { position: relative; overflow: hidden; background: #2f3b33; flex: none; }
-.a-foto--fyll { position: absolute; inset: 0; }
+.a-foto { position: relative; overflow: hidden; background: var(--foto-bakgrunn); flex: none; }
 .a-foto--topp { height: var(--a-foto-h); }
 .a-scrim { position: absolute; inset: 0; }
-.a-scrim--foto { background: linear-gradient(180deg, rgba(20,30,22,0.40) 0%, rgba(20,30,22,0.05) 28%, rgba(20,30,22,0.30) 52%, rgba(20,30,22,0.86) 100%); }
 .a-scrim--topp { background: linear-gradient(180deg, rgba(20,30,22,0.38) 0%, rgba(20,30,22,0.02) 45%, rgba(20,30,22,0.10) 100%); }
 
 .a-overlinje { position: absolute; left: var(--a-pad); top: 56px; font-family: var(--font-heading); font-weight: 500; font-size: 26px; letter-spacing: 0.18em; color: var(--hvit); }
 
 .a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
 .a-innhold--fyll { flex: 1; }
-.a-innhold--paa-foto { position: absolute; left: 0; right: 0; bottom: var(--band-h, 88px); color: var(--hvit); }
 .a-innhold--midt { justify-content: center; }
 
 .a-topp { display: flex; align-items: flex-start; gap: 36px; }
@@ -295,21 +304,16 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 .a-tittel { font-family: var(--font-display); font-weight: 700; font-size: var(--a-tittel-size); line-height: 0.98; letter-spacing: -0.02em; white-space: nowrap; }
 .a-tittel--bryt { white-space: normal; }
-.a-under { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-under-size); line-height: 1.2; }
-.a-innhold--paa-foto .a-under { color: rgba(255,255,255,0.9); }
-.a-flate:not(.a-flate--foto) .a-under { color: rgba(0,0,0,0.65); }
+.a-under { font-family: var(--font-heading); font-weight: 500; font-size: var(--a-under-size); line-height: 1.2; color: rgba(0,0,0,0.65); }
 
 .a-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 40px; }
 .a-info__rad { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .a-info__etikett { font-family: var(--font-heading); font-weight: 700; font-size: var(--a-etikett-size); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: rgba(0,0,0,0.55); }
 .a-info__verdi { font-family: var(--font-body); font-weight: 400; font-size: var(--a-verdi-size); line-height: 1.25; }
-.a-innhold--paa-foto .a-info__etikett { color: rgba(255,255,255,0.72); }
-/* Graderingsprikk i turtips. Hvit kant på foto, så også blå og svart syns mot mørk bakgrunn. */
+/* Graderingsprikk i turtips. På foto (Merkelapp) er det .m-prikk med hvit kant. */
 .a-grad { display: inline-block; width: 22px; height: 22px; border-radius: 999px; margin-right: 12px; vertical-align: -1px; }
-.a-innhold--paa-foto .a-grad { border: 3px solid var(--hvit); }
 
 .a-tekst { font-family: var(--font-body); font-weight: 400; font-size: var(--a-tekst-size); line-height: 1.35; color: rgba(0,0,0,0.8); }
-.a-innhold--paa-foto .a-tekst { color: rgba(255,255,255,0.92); }
 
 /* Meny i Plakat: én rett per linje med rød prikk. Prikken er et eget element,
    ikke ::before, så html2canvas tegner den likt som forhåndsvisningen. */
@@ -323,7 +327,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
    Kun px. Variabler fra JS: --m-tittel-size --m-under-size --m-fakta-size
    --m-topp --m-bunn --m-innhold-topp --m-stempel-bunn --merke-bg --merke-fg
    ========================================================= */
-.m-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: #2f3b33; color: var(--hvit); }
+.m-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--foto-bakgrunn); color: var(--hvit); }
 .m-scrim { position: absolute; inset: 0; }
 .m-scrim--nede { background: linear-gradient(180deg, rgba(20,30,22,0.34) 0%, rgba(20,30,22,0) 24%, rgba(20,30,22,0) 44%, rgba(20,30,22,0.84) 100%); }
 .m-scrim--oppe { background: linear-gradient(180deg, rgba(20,30,22,0.84) 0%, rgba(20,30,22,0.14) 48%, rgba(20,30,22,0) 70%, rgba(20,30,22,0.26) 100%); }
@@ -358,7 +362,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
    Bare stempelet (B) har logo. Kun px. Variabler fra JS:
    --s-navn-size --s-bunn --s-bunn-b --s-c-topp --s-c-foto-h
    ========================================================= */
-.s-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: #2f3b33; color: var(--hvit); }
+.s-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--foto-bakgrunn); color: var(--hvit); }
 .s-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0) 50%, rgba(20,30,22,0.74) 100%); }
 .s-over { font-family: var(--font-heading); font-weight: 700; font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
 .s-over--rod { color: var(--dnt-rod); }
@@ -380,7 +384,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 /* C: fotoet med lys kant, signaturen på kanten under */
 .s-flate--c { background: var(--beige-lys); color: var(--sort); padding: var(--s-c-topp, 44px) 44px 0; display: flex; flex-direction: column; }
-.s-c__foto { height: var(--s-c-foto-h, 1040px); flex: none; border-radius: 6px; overflow: hidden; position: relative; background: #2f3b33; }
+.s-c__foto { height: var(--s-c-foto-h, 1040px); flex: none; border-radius: 6px; overflow: hidden; position: relative; background: var(--foto-bakgrunn); }
 .s-c__bunn { height: 266px; flex: none; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px; }
 .s-c__venstre { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .s-navn--c { font-size: var(--s-navn-size, 112px); line-height: 0.9; white-space: nowrap; }
@@ -394,7 +398,6 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .p-turbo--underlogo { right: 46px; top: 150px; height: calc(var(--turbo-h, 200px) * 0.8); }
 .p-turbo--band { right: var(--a-pad, 64px); bottom: calc(var(--band-h, 88px) + 24px); z-index: 1; }
 .p-turbo--fotoflate { right: 40px; bottom: 24px; }
-.a-innhold--turbo { padding-right: calc(var(--turbo-h, 200px) + 100px); }
 
 /* =========================================================
    Karusell (15. oktober 2026), bare for turkalender og program.
@@ -431,7 +434,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .k-post__sted { font-family: var(--font-body); font-weight: 400; font-size: var(--k-sted-size, 26px); line-height: 1.2; color: rgba(0,0,0,0.66); }
 .k-post .p-detaljer { margin-top: 4px; }
 
-.k-info__foto { flex: none; height: 540px; position: relative; overflow: hidden; background: #2f3b33; }
+.k-info__foto { flex: none; height: 540px; position: relative; overflow: hidden; background: var(--foto-bakgrunn); }
 .k-info__innhold { flex: 1; display: flex; flex-direction: column; padding: 52px 0 56px; }
 .k-info .k-tittel { padding: 0 64px 30px; }
 .k-info__liste { display: flex; flex-direction: column; gap: 24px; padding: 0 64px; }

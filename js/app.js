@@ -73,9 +73,11 @@
   };
 
   // Tittelfonten. Sporingen må være lik letter-spacing på .p-tittel, .a-tittel,
-  // .m-tittel og .s-navn i app.css, ellers regner tilpassStorrelse() feil bredde.
+  // .m-tittel, .s-navn og .k-tittel i app.css, ellers regner tilpassStorrelse() feil bredde.
   var TITTELFONT = '700 {px}px "Whitman"';
   var TITTELSPORING = -0.02;
+  // Snittene tilpassStorrelse() og maalBredde() måler med. Lastes før første måling i start().
+  var MAALTE_FONTER = ['700 40px "Whitman"', '500 24px "ABC Social Extended"', '500 28px "ABC Social"'];
 
   // Hvor mye tekst som står på bildet. Gjelder arrangement, turtips, sesong og meny.
   // Postkort-malen bruker alltid postkortnivået. Merkelapp er standard.
@@ -354,7 +356,9 @@
       format: "feed",
       tekst: "normal",
       tittel: "Ukens turer",
-      turlag: "Fyll inn turlag",
+      // Tomt til turlaget skriver inn navnet. Før 16. oktober 2026 sto «Fyll inn turlag»
+      // her, og den havnet i bildet og filnavnet når ingen byttet den ut.
+      turlag: "",
       lenke: "dnt.no/oslo",
       periode: gjeldendePeriode(),
       visLogo: false,
@@ -430,14 +434,18 @@
   // Navnet som står i stempelet, overlinjen og signaturen.
   function avsenderNavn() {
     if (state.avsender === "hytte") { var h = valgtHytte(); return h ? h.kortnavn : ""; }
-    var t = (state.turlag || "").trim();
-    return t === "Fyll inn turlag" ? "" : t;
+    return (state.turlag || "").trim();
   }
 
-  // Overlinjen i turkalenderen og plakaten. Turlagets navn vises som før, også eksempelteksten.
+  // Overlinjen i turkalenderen og plakaten. Uten turlagsnavn står den tom.
   function overlinjeNavn() {
     if (state.avsender === "hytte") { var h = valgtHytte(); return h ? h.kortnavn : "Velg hytte"; }
-    return state.turlag || "";
+    return (state.turlag || "").trim();
+  }
+
+  // «Søndag 27. september». Tomme deler utelates, så et tomt datofelt ikke gir «Søndag . september».
+  function datoTekst(d) {
+    return d ? [d.dag, d.dato ? d.dato + "." : "", d.maaned].filter(Boolean).join(" ") : "";
   }
 
   // Preposisjon foran området. «i» er standard.
@@ -626,8 +634,6 @@
         .forEach(function (k) { if (typeof d[k] === "string") state[k] = d[k]; });
       // Nynorsk ble tatt ut 15. oktober 2026. Lagret «Helsing frå» blir «Hilsen fra».
       if (state.postOverlinje === "Helsing frå") state.postOverlinje = "Hilsen fra";
-      // Periode laget av verktøyet med midtprikk («UKE 38 · SEPTEMBER») får det nye skillet.
-      state.periode = String(state.periode || "").replace(/^(UKE \d+) · ([A-ZÆØÅ]+)$/, "$1, $2");
       if (OPPSETT[d.oppsett]) state.oppsett = d.oppsett;
       else if (d.oppsett === "stort" || d.oppsett === "side") state.oppsett = "bakgrunn";
       // Lagret «liggende» og «flate» finnes ikke lenger og faller tilbake til Innlegg og Merkelapp.
@@ -636,6 +642,11 @@
       ["tittel", "turlag", "lenke", "periode"].forEach(function (k) {
         if (typeof d[k] === "string") state[k] = d[k];
       });
+      // Periode laget av verktøyet med midtprikk («UKE 38 · SEPTEMBER») får det nye skillet.
+      // Må stå etter innlesingen over, ellers skrives den lagrede verdien tilbake.
+      state.periode = state.periode.replace(/^(UKE \d+) · ([A-ZÆØÅ]+)$/, "$1, $2");
+      // Den gamle instruksjonen i turlagsfeltet blir et tomt felt (16. oktober 2026).
+      if (state.turlag === "Fyll inn turlag") state.turlag = "";
       if (state.lenke === "Fyll inn lenke til turkalender" || state.lenke === "Fyll inn nettadresse, f.eks. dnt.no/oslo") state.lenke = standardSkjema().lenke;
       ["visLogo", "visBand", "visTurbo", "kortGlass", "visMerke"].forEach(function (k) {
         if (typeof d[k] === "boolean") state[k] = d[k];
@@ -718,7 +729,7 @@
   // Finner største skriftstørrelse mellom minPx og maksPx som får teksten på
   // én linje innenfor maksBredde. Måler med canvas, så fontene må være lastet.
   // Før det returneres maksPx, og plakaten rendres på nytt når fontene er klare.
-  var maaleCtx = null, maaleCache = {};
+  var maaleCtx = null, maaleCache = {}, maaleAntall = 0;
   var fonterKlare = false;
   function tilpassStorrelse(tekst, fontMal, sporing, maksBredde, maksPx, minPx) {
     tekst = String(tekst || "");
@@ -733,6 +744,8 @@
       if (bredde <= maksBredde) break;
     }
     var res = px < minPx ? { px: minPx, bryt: true } : { px: px, bryt: false };
+    // Hvert tastetrykk gir en ny nøkkel. Bufferen tømmes før den vokser seg stor.
+    if (++maaleAntall > 2000) { maaleCache = {}; maaleAntall = 0; }
     maaleCache[nokkel] = res;
     return res;
   }
@@ -841,8 +854,7 @@
         metaLinjer: (state.postMeta || "").trim() ? [state.postMeta.trim()] : avsenderMetaLinjer()
       };
     }
-    var over = inn.merke ? (inn.merke === "Turtips" ? "Turtips" : inn.merke)
-      : (inn.dato ? [inn.dato.dag, inn.dato.dato ? inn.dato.dato + "." : "", inn.dato.maaned].filter(Boolean).join(" ") : "");
+    var over = inn.merke || datoTekst(inn.dato);
     var meta = (inn.under || "").trim() || (inn.fakta[0] ? inn.fakta[0].verdi : "");
     return { over: over, navn: inn.tittel, meta: meta, metaLinjer: meta ? [meta] : [] };
   }
@@ -974,7 +986,7 @@
     // logoen uansett om den vises, så layouten ikke hopper.
     var SOCIAL_EXT = '500 {px}px "ABC Social Extended"';
     var tittelHero = tilpassStorrelse(kal.tittel, TITTELFONT, TITTELSPORING, fmt.bredde - 56 - 170, 92, 56);
-    var overlinje = tilpassStorrelse((kal.navn || "").toUpperCase() + "    " + kal.periode, SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
+    var overlinje = tilpassStorrelse([(kal.navn || "").toUpperCase(), kal.periode].filter(Boolean).join("    "), SOCIAL_EXT, 0.18, fmt.bredde - 56 - 170, 24, 18);
 
     return {
       mal: s.mal, kal: kal,
@@ -1063,7 +1075,7 @@
     bakgrunn: function (b) {
       return '<div class="p-flate p-flate--bakgrunn">' +
         '<div class="p-foto p-foto--fyll" data-foto></div><div class="p-scrim p-scrim--bakgrunn"></div>' +
-        '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(b.kal.navn.toUpperCase()) + '<span class="p-overlinje__skille"></span>' + esc(b.kal.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(b.kal.tittel) + '</span></div>' +
+        '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(b.kal.navn.toUpperCase()) + (b.kal.navn ? '<span class="p-overlinje__skille"></span>' : "") + esc(b.kal.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(b.kal.tittel) + '</span></div>' +
         malLogo("p-logo--lav") + malTurbo("p-turbo--underlogo") +
         '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
           '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
@@ -1480,8 +1492,7 @@
       if (v === 0) linjer = [rett, setning(inn.under)].concat(meny, [""], fakta, ["", "Velkommen til bords."]);
       else linjer = [setning(inn.tittel + paa), setning(inn.under)].concat(meny, [""], fakta, ["", "Vi ses ved bordet."]);
     } else if (b.mal === "arrangement") {
-      var d = inn.dato;
-      var datoLinje = [d.dag, d.dato ? d.dato + "." : "", d.maaned].filter(Boolean).join(" ");
+      var datoLinje = datoTekst(inn.dato);
       var info = inn.info.filter(function (r) { return r.etikett !== "Tid"; }).map(function (r) { return r.etikett + ": " + r.verdi; });
       if (v === 0) linjer = [inn.tittel, inn.under, "", [datoLinje, (state.arrTid || "").trim()].filter(Boolean).join(", "), "", setning(inn.tekst), ""].concat(info);
       else linjer = [setning((inn.under ? inn.under + ": " : "") + inn.tittel + (datoLinje ? ", " + datoLinje.toLowerCase() : "")), setning(inn.tekst), ""].concat(info);
@@ -1516,8 +1527,23 @@
     el.lastNedEtt = $("#last-ned-ett");
   }
 
-  function renderPlakat() {
-    var b = beregn();
+  // Skriver bare når teksten er ny, så skjermlesere ikke leser opp det samme ved hvert tastetrykk.
+  function settTekst(e, tekst) {
+    if (e.textContent !== tekst) e.textContent = tekst;
+  }
+
+  // Advarselen over nedlastingsknappen. Tom tekst skjuler den.
+  function visAdvarsel(tekst) {
+    el.formange.hidden = !tekst;
+    settTekst(el.formange, tekst || "");
+  }
+
+  // Siste beregning, så knappene i karusellen ikke må regne ut alt på nytt.
+  var sist = null;
+
+  function renderPlakat(b) {
+    b = b || beregn();
+    sist = b;
     var p = el.plakat;
     Object.keys(b.vars).forEach(function (k) { p.style.setProperty(k, b.vars[k]); });
     p.setAttribute("data-mal", state.mal);
@@ -1539,9 +1565,10 @@
     el.karusellNav.hidden = !b.karusell;
     if (!b.karusell) return;
     var navn = { forside: "forsiden", liste: "listen", info: "Godt å vite" }[b.side.type];
-    el.karusellTekst.textContent = "Bilde " + (b.aktiv + 1) + " av " + b.sider.length + ", " + navn;
-    el.karusellForrige.disabled = b.aktiv === 0;
-    el.karusellNeste.disabled = b.aktiv >= b.sider.length - 1;
+    settTekst(el.karusellTekst, "Bilde " + (b.aktiv + 1) + " av " + b.sider.length + ", " + navn);
+    // Mens bildene lages, står bla-knappene stille, ellers tegnes feil side.
+    el.karusellForrige.disabled = state.laster || b.aktiv === 0;
+    el.karusellNeste.disabled = state.laster || b.aktiv >= b.sider.length - 1;
   }
 
   // Enkeltplakatene har ingen maksgrense som turkalenderen. I stedet måles
@@ -1578,12 +1605,9 @@
         trangt = m.offsetTop < min;
       }
     }
-    el.formange.hidden = !trangt;
-    if (trangt) {
-      el.formange.textContent = aktivtNivaa() === "plakat"
-        ? "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Historie."
-        : "Teksten får ikke plass på fotoet. Kort ned tittelen eller undertittelen, eller velg Plakat for mer tekst.";
-    }
+    visAdvarsel(!trangt ? "" : aktivtNivaa() === "plakat"
+      ? "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Historie."
+      : "Teksten får ikke plass på fotoet. Kort ned tittelen eller undertittelen, eller velg Plakat for mer tekst.");
   }
 
   // Forhåndsvisningen er maks 540 px bred. På brede skjermer er den festet
@@ -1615,6 +1639,13 @@
       var rad = mal.content.firstElementChild.cloneNode(true);
       rad.setAttribute("data-index", i);
       $(".tur__nummer", rad).textContent = (program ? "PUNKT " : "TUR ") + (i + 1);
+      // Knappene får nummeret i navnet, så skjermlesere skiller «Fjern tur 2» fra «Fjern tur 3».
+      var hva = (program ? "punkt " : "tur ") + (i + 1);
+      [["opp", "Flytt " + hva + " opp"], ["ned", "Flytt " + hva + " ned"], ["fjern", "Fjern " + hva]].forEach(function (par) {
+        var kn = $("[data-handling=" + par[0] + "]", rad);
+        kn.setAttribute("aria-label", par[1]);
+        kn.title = par[1];
+      });
       $("[data-felt=tittel]", rad).placeholder = program ? "Aktivitet" : "Turmål";
       $("[data-felt=sted]", rad).placeholder = program ? "Sted, f.eks. peisestua" : "Startsted";
       el.turliste.appendChild(rad);
@@ -1660,8 +1691,7 @@
     return "Variant: " + f + " merkelapp, " + PLASSERINGER[state.plassering] + ".";
   }
 
-  function renderSkjema(byggTurlisteNy) {
-    var b = beregn();
+  function renderSkjema(b, byggTurlisteNy) {
     var enkelt = !erKalender(state.mal);
 
     $$("[data-gruppe]").forEach(function (gruppe) {
@@ -1675,6 +1705,11 @@
 
     $$(".panel [data-mal], .panel [data-avsender], .panel [data-nivaa], .panel [data-format]").forEach(function (e) { e.hidden = !synlig(e); });
     $$("[data-arr-type]").forEach(function (e) { e.hidden = e.getAttribute("data-arr-type").split(" ").indexOf(state.arrType) < 0; });
+    // Valg som ikke endrer bildet, vises ikke: signaturene har faste størrelser, og
+    // postkortet med lys kant (C) har verken bånd eller Turbo.
+    var postkort = aktivtNivaa() === "postkort";
+    if ($("#tekst-felt") && postkort) $("#tekst-felt").hidden = true;
+    if ($("#detaljer-felt")) $("#detaljer-felt").hidden = postkort && state.signatur === "c";
     if ($("#mal-hjelp")) $("#mal-hjelp").textContent = MALVALG[state.mal].hjelp;
     if ($("#nivaa-hjelp") && enkelt) $("#nivaa-hjelp").textContent = NIVAA[aktivtNivaa()].tekst;
     if ($("#signatur-hjelp")) $("#signatur-hjelp").textContent = SIGNATURER[state.signatur].tekst;
@@ -1747,12 +1782,10 @@
     renderTurliste(byggTurlisteNy);
 
     if (b.karusell) {
-      el.formange.hidden = !b.forStor;
-      el.formange.textContent = "En dag har flere punkter enn det er plass til på ett bilde. Kort ned teksten, fjern et punkt, eller velg Normal tekst.";
+      visAdvarsel(b.forStor ? "En dag har flere punkter enn det er plass til på ett bilde. Kort ned teksten, fjern et punkt, eller velg Normal tekst." : "");
     } else if (!enkelt) {
-      el.formange.hidden = !b.forMange;
-      el.formange.textContent = b.synlige.length + (state.mal === "program" ? " punkter" : " turer") + " får ikke plass i dette oppsettet (maks " + b.maks +
-        "). Velg «Bilde øverst», bytt til Karusell eller Historie, eller del listen i to bilder.";
+      visAdvarsel(b.forMange ? b.synlige.length + (state.mal === "program" ? " punkter" : " turer") + " får ikke plass i dette oppsettet (maks " + b.maks +
+        "). Velg «Bilde øverst», bytt til Karusell eller Historie, eller del listen i to bilder." : "");
     }
 
     el.lastNed.disabled = b.forMange || state.laster;
@@ -1803,14 +1836,30 @@
     }
     // Ferdige bilder til deling gjelder bare til noe endres.
     if (!valg.beholdFiler) state.delingsFiler = null;
-    renderSkjema(valg.turliste);
-    renderPlakat();
+    // En planlagt render fra skriving er med her, så den trengs ikke lenger.
+    if (planlagt) { cancelAnimationFrame(planlagt.ramme); clearTimeout(planlagt.tid); planlagt = null; }
+    // Beregningen gjøres én gang og deles av skjemaet og plakaten.
+    var b = beregn();
+    renderSkjema(b, valg.turliste);
+    renderPlakat(b);
     if (valg.lagre !== false) lagre();
   }
 
   function oppdater(patch, valg) {
     Object.assign(state, patch);
     render(valg);
+  }
+
+  // Skriving i tekstfelt og flytting av glidere samles til én render per skjermbilde,
+  // så raske tastetrykk ikke bygger plakaten mange ganger mellom hver gang den vises.
+  // Tidsfristen er en reserve: når siden ikke tegnes (f.eks. et skjult panel), kommer
+  // det ingen skjermbilder, og da må renderen likevel skje.
+  var planlagt = null;
+  function oppdaterSnart(patch) {
+    Object.assign(state, patch);
+    if (planlagt) return;
+    var kjor = function () { if (planlagt) render(); };
+    planlagt = { ramme: requestAnimationFrame(kjor), tid: setTimeout(kjor, 100) };
   }
 
   /* ---------- Avsender, type og målform ---------- */
@@ -2002,7 +2051,7 @@
         inn.merke ? "Merkelapp: " + inn.merke : "",
         "Tittel: " + inn.tittel,
         inn.under ? "Undertittel: " + inn.under : "",
-        inn.dato ? "Dato: " + [inn.dato.dag, inn.dato.dato + ".", inn.dato.maaned].filter(Boolean).join(" ") : ""
+        datoTekst(inn.dato) ? "Dato: " + datoTekst(inn.dato) : ""
       ].concat(b.info.map(function (r) { return r.etikett + ": " + r.verdi; }))
        .concat(inn.meny.length ? ["Meny: " + inn.meny.join(", ")] : [])
        .concat(inn.tekst && b.nivaa === "plakat" ? ["Tekst: " + inn.tekst] : []);
@@ -2086,7 +2135,8 @@
     for (var i = 0; i < 100 && !bildeMal[src]; i++) await vent(20);
   }
 
-  // Lager PNG av plakaten slik den står i forhåndsvisningen nå, fra en skjult 1:1-klone.
+  // Lager PNG av plakaten slik den står i forhåndsvisningen nå, fra en skjult 1:1-klone,
+  // så forhåndsvisningen ikke blinker og skaleringen ikke påvirker målene.
   async function eksporterPlakat(b) {
     var klone = el.plakat.cloneNode(true);
     klone.id = "";
@@ -2098,6 +2148,9 @@
         width: b.fmt.bredde, height: b.fmt.hoyde,
         windowWidth: b.fmt.bredde, windowHeight: b.fmt.hoyde
       });
+      if (canvas.width !== b.fmt.bredde || canvas.height !== b.fmt.hoyde) {
+        console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
+      }
       return await tilBlob(canvas);
     } finally {
       if (klone.parentNode) klone.parentNode.removeChild(klone);
@@ -2138,8 +2191,10 @@
         var b = beregn();
         await ventPaaBilde(b.bilde);
         await ventPaaMaal(b.bilde);
-        renderPlakat();
+        // Siden settes på nytt rett før tegningen, i tilfelle noe har rendret i mellomtiden.
+        state.karusellSide = i;
         b = beregn();
+        renderPlakat(b);
         var blob = await eksporterPlakat(b);
         filer.push(new File([blob], filnavn(b) + "-karusell-" + (i + 1) + ".png", { type: "image/png" }));
       }
@@ -2172,38 +2227,30 @@
     visFeil("");
     oppdater({ laster: true }, { lagre: false });
 
-    var klone = null;
     try {
       await document.fonts.ready;
       await ventPaaBilde(b.bilde);
-
-      // Skjult 1:1-klone, så forhåndsvisningen ikke blinker og skalering ikke påvirker målene.
-      klone = el.plakat.cloneNode(true);
-      klone.id = "";
-      klone.className = "eksport-klone";
-      document.body.appendChild(klone);
-
-      var canvas = await window.html2canvas(klone, {
-        scale: 1, useCORS: true, backgroundColor: null, logging: false,
-        width: b.fmt.bredde, height: b.fmt.hoyde,
-        windowWidth: b.fmt.bredde, windowHeight: b.fmt.hoyde
-      });
-      if (canvas.width !== b.fmt.bredde || canvas.height !== b.fmt.hoyde) {
-        console.warn("Uventet størrelse på eksport:", canvas.width, canvas.height);
-      }
-      var blob = await tilBlob(canvas);
+      // Bildet må være målt, ellers står bakgrunnen med «cover» i stedet for utsnittet.
+      await ventPaaMaal(b.bilde);
+      b = beregn();
+      renderPlakat(b);
+      var blob = await eksporterPlakat(b);
       lastNedBlob(blob, filnavn(b) + "-" + state.format + (b.karusell ? "-" + (b.aktiv + 1) : "") + ".png");
     } catch (e) {
       console.error(e);
       visFeil("Det gikk ikke å lage bildet: " + (e && e.message ? e.message : "ukjent feil") +
         ". Prøv en annen nettleser (Chrome eller Edge), eller bruk reserveløsningen under.");
     } finally {
-      if (klone && klone.parentNode) klone.parentNode.removeChild(klone);
       oppdater({ laster: false }, { lagre: false });
     }
   }
 
   /* ---------- Hendelser ---------- */
+
+  // Frigjør objektadressen til et eget bilde som ikke lenger brukes.
+  function frigjor(adresse) {
+    if (/^blob:/.test(adresse || "")) URL.revokeObjectURL(adresse);
+  }
 
   function kopier(tekst, knapp, ferdigTekst, vanligTekst, reserve) {
     var ferdig = function () {
@@ -2235,9 +2282,9 @@
 
     // Tekstfelter, nedtrekk og tekstområder utenfor turlisten
     $$(".tekstfelt[data-felt]").forEach(function (felt) {
-      var handler = function () {
+      var handler = function (e) {
         var patch = {}; patch[felt.getAttribute("data-felt")] = felt.value;
-        oppdater(patch);
+        if (e.type === "input") oppdaterSnart(patch); else oppdater(patch);
       };
       felt.addEventListener("input", handler);
       if (felt.tagName === "SELECT") felt.addEventListener("change", handler);
@@ -2263,7 +2310,7 @@
         var u = Object.assign({}, state.utsnitt);
         u[state.format] = Object.assign({}, u[state.format]);
         u[state.format][r.getAttribute("data-utsnitt")] = Number(r.value);
-        oppdater({ utsnitt: u });
+        oppdaterSnart({ utsnitt: u });
       });
     });
     $("#midtstill").addEventListener("click", function () {
@@ -2276,21 +2323,32 @@
 
     el.nyttEksempel.addEventListener("click", function () {
       $("#bilde-fil").value = "";
+      var forrige = state.egetBilde ? state.bilde : "";
       oppdater(brukEksempelbilder());
+      frigjor(forrige);
     });
 
-    // Eget bilde
+    // Eget bilde. En objektadresse (blob:) i stedet for data-URL, så ikke flere MB med tekst
+    // følger med i hver render. Bildet prøves først, så filer nettleseren ikke kan vise
+    // (f.eks. HEIC i Chrome) gir en melding i stedet for en tom plakat.
     $("#bilde-fil").addEventListener("change", function (e) {
       var fil = e.target.files && e.target.files[0];
       if (!fil) return;
       if (!/^image\//.test(fil.type)) { visFeil("Filen er ikke et bilde. Velg en JPG- eller PNG-fil."); return; }
-      var leser = new FileReader();
-      leser.onload = function () {
+      var url = URL.createObjectURL(fil);
+      var proeve = new Image();
+      proeve.onload = function () {
         visFeil("");
-        oppdater({ bilde: leser.result, egetBilde: true, bildenavn: fil.name, utsnitt: nyttUtsnitt() });
+        var forrige = state.egetBilde ? state.bilde : "";
+        oppdater({ bilde: url, egetBilde: true, bildenavn: fil.name, utsnitt: nyttUtsnitt() });
+        frigjor(forrige);
       };
-      leser.onerror = function () { visFeil("Kunne ikke lese bildefilen."); };
-      leser.readAsDataURL(fil);
+      proeve.onerror = function () {
+        URL.revokeObjectURL(url);
+        e.target.value = "";
+        visFeil("Nettleseren kan ikke vise dette bildet. Velg en JPG- eller PNG-fil. Bilder fra iPhone (HEIC) kan du eksportere som JPG først.");
+      };
+      proeve.src = url;
     });
 
     // Turliste og program: skriving og valg
@@ -2305,7 +2363,7 @@
       liste[i] = Object.assign({}, liste[i]);
       liste[i][felt] = input.type === "checkbox" ? input.checked : input.value;
       var patch = {}; patch[nokkel] = liste;
-      oppdater(patch);
+      if (e.type === "input") oppdaterSnart(patch); else oppdater(patch);
     }
     el.turliste.addEventListener("input", turHendelse);
     el.turliste.addEventListener("change", turHendelse);
@@ -2319,15 +2377,23 @@
       var nokkel = listeNokkel();
       var liste = state[nokkel].slice();
       var handling = kn.getAttribute("data-handling");
+      var j = i;
       if (handling === "fjern") {
         liste.splice(i, 1);
+        j = Math.min(i, liste.length - 1);
       } else {
-        var j = handling === "opp" ? i - 1 : i + 1;
+        j = handling === "opp" ? i - 1 : i + 1;
         if (j < 0 || j >= liste.length) return;
         var t = liste[i]; liste[i] = liste[j]; liste[j] = t;
       }
       var patch = {}; patch[nokkel] = liste;
       oppdater(patch, { turliste: true });
+      // Listen er bygd på nytt. Fokus følger raden, eller går til samme knapp i neste rad
+      // etter «Fjern», så tastaturbrukere ikke havner øverst på siden.
+      var nyRad = el.turliste.children[j];
+      var neste = nyRad ? $("[data-handling=" + handling + "]", nyRad) : null;
+      if (neste && neste.disabled) neste = $("[data-handling=" + (handling === "opp" ? "ned" : "opp") + "]", nyRad);
+      (neste && !neste.disabled ? neste : $("#legg-til")).focus();
     });
 
     $("#legg-til").addEventListener("click", function () {
@@ -2349,12 +2415,14 @@
     });
 
     // Karusell: bla i forhåndsvisningen. Ferdige bilder til deling beholdes.
+    // Mens bildene lages, styrer eksporten hvilken side som vises.
     if (el.karusellForrige) el.karusellForrige.addEventListener("click", function () {
-      oppdater({ karusellSide: Math.max(0, beregn().aktiv - 1) }, { lagre: false, beholdFiler: true });
+      if (state.laster || !sist || !sist.karusell) return;
+      oppdater({ karusellSide: Math.max(0, sist.aktiv - 1) }, { lagre: false, beholdFiler: true });
     });
     if (el.karusellNeste) el.karusellNeste.addEventListener("click", function () {
-      var b = beregn();
-      oppdater({ karusellSide: Math.min(b.sider.length - 1, b.aktiv + 1) }, { lagre: false, beholdFiler: true });
+      if (state.laster || !sist || !sist.karusell) return;
+      oppdater({ karusellSide: Math.min(sist.sider.length - 1, sist.aktiv + 1) }, { lagre: false, beholdFiler: true });
     });
 
     // Nedlasting, tømming, prompt
@@ -2364,6 +2432,7 @@
     $("#tom-skjema").addEventListener("click", function () {
       if (!window.confirm("Vil du tømme skjemaet? Alle tekster nullstilles til eksempelinnholdet.")) return;
       tomLagring();
+      frigjor(state.egetBilde ? state.bilde : "");
       var behold = { mal: state.mal, avsender: state.avsender, hytte: state.hytte };
       Object.assign(state, standardSkjema(), behold);
       var h = valgtHytte();
@@ -2392,10 +2461,16 @@
     Object.assign(state, brukEksempelbilder(), { utsnitt: state.utsnitt });
     kobleHendelser();
     render({ turliste: true, lagre: false });
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () { fonterKlare = true; maaleCache = {}; renderPlakat(); });
+    // Målingen trenger fontene. document.fonts.ready dekker bare snitt som allerede er i bruk,
+    // så snittene som måles lastes eksplisitt (ABC Social 500 brukes f.eks. først i postkort C).
+    // Hele siden rendres på nytt, så også knappetekst og antall karusellbilder bygger på riktige mål.
+    var klare = function () { fonterKlare = true; maaleCache = {}; maaleAntall = 0; render({ lagre: false }); };
+    if (document.fonts && document.fonts.load) {
+      Promise.all(MAALTE_FONTER.map(function (f) { return document.fonts.load(f); }))
+        .then(function () { return document.fonts.ready; })
+        .then(klare, klare);
     } else {
-      fonterKlare = true;
+      klare();
     }
   }
 

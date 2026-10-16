@@ -1,4 +1,4 @@
-# Designbeslutninger i Turplakaten
+# Designbeslutninger i Turposten
 
 Kort om det som ikke er opplagt fra koden. Leses ved behov.
 
@@ -36,7 +36,7 @@ Alternativet var å krympe luften i designet. Det gir en trangere plakat som bry
 
 ## Tittel som tilpasser seg
 
-Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen). Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen «TURLAG · UKE · MÅNED» skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
+Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen). Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen med turlagets navn og perioden («DNT BÆRUM   UKE 42, OKTOBER», med luft mellom) skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
 
 Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i innlegg.
 
@@ -91,7 +91,7 @@ Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krev
 
 Display-fonten er Whitman fra Font Bureau, fra 25. september 2026. Den erstattet Romek. Bare to filer brukes: `Whitman-RomanLF.ttf` (400) og `Whitman-BoldLF.ttf` (700). LF betyr linjetall, så tall i en tittel («Turer i 2026») står på linje. Med gammeldagse tall (OsF) ville sifrene hoppet opp og ned. Fra 28. september 2026 brukes Whitman bare i titler, ikke i datofeltene. Whitman har ingen Light-vekt, så vekt 300 faller tilbake til Roman. Resten av Whitman-filene (Italic, SmallCaps og OsF) ligger utenfor repoet i `original/`.
 
-Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i app.js og som `letter-spacing` på `.p-tittel` og `.a-tittel`. De to må være like, ellers regner `tilpassStorrelse()` feil bredde.
+Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i app.js og som `letter-spacing` på alle titler som måles: `.p-tittel`, `.a-tittel`, `.m-tittel`, `.s-navn` og `.k-tittel`. De må være like, ellers regner `tilpassStorrelse()` feil bredde.
 
 ## Arrangementsmalen
 
@@ -127,15 +127,15 @@ Strammet opp 28. september 2026, etter at Daniel valgte variant B blant fire ski
 
 Verktøyet ble utvidet til de 25 betjente hyttene og fikk navnet Turposten. Bakgrunnen er en kartlegging av hva hyttene poster i egne kanaler: mest ekte foto, karuseller og reels, der posteteksten bærer budskapet. Designede plakater var unntaket, blant annet en KI-generert påskeplakat. Verktøyet skal derfor dytte mot foto først og lite tekst. Skissene ligger i Claude Design (lenke i `CLAUDE.md`).
 
-- **Avsender først.** Brukeren velger turlag eller betjent hytte, og deretter hva innlegget skal fortelle. Hver avsender ser bare sine maler (`MALVALG`). Hyttelenken `?hytte=<id>` velger hytta, setter hyttas målform og starter i Sesong og booking, fordi det var den vanligste posttypen.
+- **Avsender først.** Brukeren velger turlag eller betjent hytte, og deretter hva innlegget skal fortelle. Hver avsender ser bare sine maler (`MALVALG`). Hyttelenken `?hytte=<id>` velger hytta og starter i Sesong og booking, fordi det var den vanligste posttypen.
 - **Tre tekstnivåer.** Postkort (bare signatur), Merkelapp (standard) og Plakat (all informasjon). Merkelapp viser merkelapp eller datofelt, tittel, undertittel og opptil to fakta med ikon. Kort tekst, meny og resten av informasjonen vises bare i Plakat. En gul tips-boks minner om at posteteksten kan bære mye av teksten.
 - **Tittel på foto** kan gå over to linjer: først én linje ned til 96 px, ellers to linjer fra 112 px og ned til 64 px, med balansert linjeskift så «15. oktober» ikke deles.
 - **Stempelet** (hvitt kort med logo, navn og høyde over havet) står øverst til venstre i Merkelapp, eller nederst når teksten står øverst. Det er den eneste logoen i de organiske innleggene. Den frittstående T-en i hvit sirkel ble droppet for enkeltmalene etter gjennomgang av skissene.
 - **Postkortsignaturer.** A: «Hilsen fra» over navnet stort i Whitman, rett på fotoet (standard). B: stempelet med logo. C: fotoet med lys kant og signaturen under, som et postkort. Alle kan velges.
 - **Variasjon.** Merkelappen kan være rød eller ha sesongfarge fra den nye paletten: vinter `--ny-bla`, påske `--ny-gul`, sommer `--ny-mork-gronn` (hvit tekst) og høst `--ny-oransje`. «Prøv en annen variant» velger en ny kombinasjon av farge og plassering (nederst, øverst, midtstilt) i Merkelapp, neste signatur i Postkort, neste farge i Plakat og det andre oppsettet i kalenderne.
 - **Historie.** Instagram legger knapper over toppen og bunnen, så stempelet står 210 px ned og teksten 340 px over bunnen.
-- **Nynorsk.** Faste ord i plakaten (dagsnavn, etiketter som «Stad» og «Passar for», «Helsing frå») og eksempeltekstene følger målformen. Det brukeren har skrevet selv, endres aldri.
-- **Forslag til posttekst.** To varianter per mal, på valgt målform, med fotograf og @dntoslo for hyttene. Ingen utropstegn, ingen emoji.
+- **Målform.** Først fulgte faste ord og eksempeltekst hyttas målform. Valget ble tatt ut 15. oktober 2026, se «Justeringer 15. oktober 2026».
+- **Forslag til posttekst.** To varianter per mal, på bokmål, med fotograf og @dntoslo for hyttene. Ingen utropstegn, ingen emoji.
 - **Program** bruker turkalenderens oppsett og regler, med egen liste, tittel og periode, og hyttas navn i overlinjen.
 - **Hyttebildene** er tre per hytte fra UT.no, 1800 px brede der originalen tillater det. Noen er bare 1200 px og kan bli myke i Historie.
 
@@ -157,6 +157,19 @@ Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Ge
 - **Ingen midtprikk som skilletegn.** Den tynne prikken (·) mellom høyde og område, i perioden og i lengde og varighet virket KI-generert. Nå står det «1405 moh i Jotunheimen» (eller «på Hardangervidda», «Ved Oslofjorden»), «UKE 42, OKTOBER» (ikke «I», som ser ut som en strek i versaler med sporing), «3,3 km, 1 time» og luft mellom navn og periode i overlinjen.
 - **Postkort C med lange titler.** Signaturen med lys kant ble laget for hyttenavn med høyde og område til høyre. I Turtips og Sesong står tittelen og undertittelen der, og de kolliderte. Nå måles begge: får de ikke plass side om side med navnet i minst 72 px, står undertittelen under navnet, og navnet får hele bredden (900 px, ned til 56 px, ellers to linjer). En test av alle hytter, maler, nivåer, signaturer, formater, varianter og karusellsider fant ingen kollisjoner etterpå.
 - **Vinterbilder til påske.** Hyttebildene er merket vinter, sommer eller inne. Handler innlegget om påske, vinter eller ski, brukes et vinterbilde. Handler det om sommer eller fiske, brukes et sommerbilde. Sju hytter som er åpne i påsken, manglet vinterbilde og fikk ett fra UT.no.
+
+## Gjennomgang 16. oktober 2026
+
+En gjennomgang av design, foto, kode og brukervennlighet. Første runde er feilrettinger som ikke endrer hvordan plakatene ser ut.
+
+- **Turlagsfeltet er tomt som standard.** Før sto instruksjonen «Fyll inn turlag» som verdi, og den havnet i overlinjen og filnavnet. Nå står det en plassholder i feltet, og overlinjen utelates til navnet er fylt inn. Lagret «Fyll inn turlag» blir tomt.
+- **Fokus og kontrast i skjemaet.** Alt som kan nås med tastatur har synlig fokus (rød ring, eller rød kant på tekstfelt). Etiketter og hjelpetekst er minst 0,6 sort, som gir over 4,5:1. Bildeopplastingen kan åpnes med tastatur. Feltene i turlisten er 16 px, så iPhone ikke zoomer inn.
+- **Valg uten virkning skjules.** Tekststørrelse vises ikke på Postkort-nivået, og «Detaljer i bildet» vises ikke for postkortet med lys kant (C), som verken har bånd eller Turbo.
+- **Deling av lenken.** Open Graph-tagger gir bilde og tekst når lenken (også `?hytte=`) deles i Messenger og e-post. Bildet er Leirvassbu, tatt av Daniel Jacobsen.
+- **Ytelse.** `beregn()` kjøres én gang per render og deles av skjemaet og plakaten. Skriving og glidere samles til én render per skjermbilde (`oppdaterSnart()`). Egne bilder er objektadresser (`blob:`), ikke data-URL.
+- **Fargetokens i plakaten** kan ikke være `color-mix()`, fordi html2canvas 1.4.1 ikke forstår det. Derfor har plakaten egne hex- og rgba-verdier, og `--foto-bakgrunn` er hex.
+
+Resten av funnene (mobilflyt, fokuspunkt og oppløsning i bildene, tekststørrelser, kodestruktur) er anbefalinger som tas én og én.
 
 ## Turforslag fra UT.no (15. oktober 2026)
 

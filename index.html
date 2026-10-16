@@ -5,7 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Turposten: innlegg til sosiale medier for turlag og hytter</title>
 <meta name="description" content="Lag ferdige bilder til Facebook og Instagram i DNTs profil, for turlag og betjente hytter i DNT Oslo og Omegn.">
+<meta name="theme-color" content="#F2E6D0">
+<!-- Forhåndsvisning når lenken deles, f.eks. hyttelenken ?hytte= i Messenger og e-post.
+     Adressene må være absolutte. Fotoet er Leirvassbu, tatt av Daniel Jacobsen. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DNT Oslo og Omegn">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:title" content="Turposten">
+<meta property="og:description" content="Lag ferdige bilder til Facebook og Instagram i DNTs profil, for turlag og betjente hytter.">
+<meta property="og:url" content="https://dntoslo.github.io/mal-generator/">
+<meta property="og:image" content="https://dntoslo.github.io/mal-generator/assets/img/hytter/leirvassbu-1.jpg">
+<meta property="og:image:width" content="1800">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="To skiløpere foran Leirvassbu i vintersol">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
+<!-- Tittelfonten og overskriftsfonten trengs til første måling av plakaten. -->
+<link rel="preload" href="assets/fonts/Whitman-BoldLF.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="assets/fonts/ABCSocialExtended-Bold.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/app.css">
 </head>
@@ -68,7 +85,7 @@
       <p class="hjelp" id="format-hjelp"></p>
     </div>
 
-    <div class="felt" data-avsender="turlag">
+    <div class="felt" id="tekst-felt" data-avsender="turlag">
       <p class="felt__etikett">Tekststørrelse</p>
       <div class="knapperad" data-gruppe="tekst" role="group" aria-label="Tekststørrelse">
         <button type="button" class="pille" data-verdi="normal">Normal</button>
@@ -276,7 +293,7 @@
       <p class="hjelp">Tomme felt vises ikke i bildet. Merkelapp viser lengde og gradering, Plakat viser alt.</p>
     </div>
 
-    <div class="felt">
+    <div class="felt" id="detaljer-felt">
       <p class="felt__etikett">7. Detaljer i bildet</p>
       <label class="avkryssing" data-mal="arrangement turtips sesong meny turkalender program" data-nivaa="merkelapp"><input type="checkbox" id="vis-merke"><span>Vis merkelapp med logo og navn øverst</span></label>
       <label class="avkryssing"><input type="checkbox" id="vis-band"><span>Vis rødt bånd med nettadresse nederst</span></label>
@@ -297,7 +314,8 @@
     </div>
 
     <div class="felt">
-      <p class="advarsel" id="formange" hidden></p>
+      <!-- Statusområdet står alltid i siden, så skjermlesere leser opp advarselen når den dukker opp. -->
+      <div role="status" aria-live="polite"><p class="advarsel" id="formange" hidden></p></div>
       <button type="button" class="primar" id="last-ned">Last ned bildet</button>
       <button type="button" class="lenkeknapp" id="last-ned-ett" hidden>Last ned bare bildet som vises nå</button>
       <p class="hjelp" id="nedlasting-hjelp"></p>
@@ -386,7 +404,8 @@
   </div>
 </template>
 
-<script src="js/vendor/html2canvas.min.js"></script>
+<!-- html2canvas trengs først ved nedlasting, så den får ikke holde igjen resten av siden. -->
+<script src="js/vendor/html2canvas.min.js" defer></script>
 <script src="js/hytter.js"></script>
 <script src="js/app.js"></script>
 </body>

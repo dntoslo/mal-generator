@@ -160,6 +160,13 @@
   --chip-gronn: #DCF3E0;  /* «DNTs tilbud»-chip (ca.-verdi) */
   --rod-hover:  #B52418;  /* primærknapp hover, avledet av DNT Rød */
 
+  /* ---------- Turposten ---------- */
+  /* Plakaten eksporteres med html2canvas 1.4.1, som ikke forstår color-mix().
+     Tokens som brukes i plakaten må derfor være hex eller rgba. */
+  --foto-bakgrunn:  #2F3B33;  /* mørk flate bak fotoet, synlig før bildet er lastet */
+  --advarsel-bg:    #FDECEA;  /* advarsel og feilmelding i skjemaet */
+  --advarsel-tekst: #8E1B12;
+
   /* ---------- Radier ---------- */
   /* DNTs formspråk er mykt avrundet: T-logoen, ikonstrøkene og
      hyttene deler samme runde avslutninger. Hjørnene følger etter. */
