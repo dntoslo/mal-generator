@@ -169,7 +169,18 @@ En gjennomgang av design, foto, kode og brukervennlighet. Første runde er feilr
 - **Ytelse.** `beregn()` kjøres én gang per render og deles av skjemaet og plakaten. Skriving og glidere samles til én render per skjermbilde (`oppdaterSnart()`). Egne bilder er objektadresser (`blob:`), ikke data-URL.
 - **Fargetokens i plakaten** kan ikke være `color-mix()`, fordi html2canvas 1.4.1 ikke forstår det. Derfor har plakaten egne hex- og rgba-verdier, og `--foto-bakgrunn` er hex.
 
-Resten av funnene (mobilflyt, fokuspunkt og oppløsning i bildene, tekststørrelser, kodestruktur) er anbefalinger som tas én og én.
+Resten av funnene (mobilflyt, fokuspunkt og oppløsning i bildene, tekststørrelser, kodestruktur) er anbefalinger som tas én og én. Bildene er tatt i «Bildekvalitet» under.
+
+## Bildekvalitet (16. oktober 2026)
+
+Fotografens del av gjennomgangen. Midtutsnittet kuttet ofte motivet: på Fannaråkhytta-3 står personen ved 78 til 98 % av bredden, men Innlegg viste bare 27 til 73 %, og på Leirvassbu-1 ble skiløperne kuttet i Historie. Standardzoom på 115 % kuttet og forstørret i tillegg.
+
+- **Fokuspunkt.** Hvert eksempelbilde har `fokus: [x, y]`, motivets plass i prosent fra venstre og ovenfra. Punktene ble satt ved å se på alle 172 bildene med rutenett, og kontrollert med utsnittene for Innlegg, Historie, Plakat og kalenderens fotobånd tegnet inn. Der to motiver ikke får plass i Historie (f.eks. to grupper i hver sin kant), er det tydeligste valgt.
+- **Fokuspunktet legges midt i flaten.** Standardutsnittet har `x` og `y` lik `null`, og da regner `bakgrunn()` ut posisjonen som legger fokuspunktet i midten, så langt bildet rekker (`fraFokus()`). Et motiv helt ute i kanten havner ved kanten av flaten i stedet for å forsvinne. Å sette gliderne lik fokuspunktet ville ikke virket: gliderne er prosent av det som stikker utenfor flaten, som `background-position`, så punktet havner på samme prosent av flaten og ikke i midten. Regnestykket må kjenne både flaten og bildet, og gjøres derfor ved hver render. Da passer samme fokuspunkt i alle formater og oppsett.
+- **Gliderne** viser utsnittet som faktisk brukes. Flytter brukeren en glider, blir den aksen fast, mens den andre fortsatt følger fokuspunktet. Egne bilder har ikke fokuspunkt og midtstilles.
+- **Zoom 100 %.** Standard og «Midtstill» er 100 %, så hele komposisjonen er med og bildet ikke forstørres mer enn flaten krever. «Midtstill» går tilbake til fokuspunktet. Lagret utsnitt med de gamle standardverdiene (50, 50, 115) blir det nye.
+- **Oppløsningsvarsel.** `bakgrunn()` regner ut forstørrelsen, dekning × zoom, der 1 er ett bildepunkt per punkt i det ferdige bildet. Over 1,5 (`MAKS_FORSTORRELSE`) viser utsnittsboksen hvor mye bildet forstørres og hvor stort det bør være på lengste side. Ved zoom over 100 % foreslås mindre zoom først. Hyttebildene er 1800 × 1200 eller mindre og forstørres 1,6 ganger eller mer i Historie, så varselet vises der til bildene byttes til større originaler.
+- **Bilderolle.** Tilfeldig valg ga feil stemning, f.eks. Leirvassbu-2 (mørk blåtime) til «Booking åpner». Hyttebildene har derfor `rolle`: oversikt (hytta eller landskapet), folk, inne eller detalj. `MAL_ROLLE` sier hva malen helst vil ha: Sesong og booking oversikt, Mat og meny inne og Arrangement folk. Sesongen går foran rollen, så påske gir fortsatt vinterbilde, men bilder innefra passer alle årstider, så Mat og meny får stua også i påsken. Byttes malen, byttes bildet hvis rollen ikke passer. «Nytt bilde fra hytta» blar i fast rekkefølge, først bildene med malens rolle og så resten fra sesongen, så alle bildene kan nås med knappen.
 
 ## Turforslag fra UT.no (15. oktober 2026)
 

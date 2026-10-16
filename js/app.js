@@ -176,39 +176,41 @@
   // Legg til et bilde: legg filen i assets/img/eksempler/ og én linje her.
   // Alle er ekte foto med kjent rettighetshaver. Ingen KI-genererte bilder.
   // Hyttene har egne eksempelbilder i js/hytter.js.
+  // «fokus» er motivets plass i bildet, [x, y] i prosent fra venstre og ovenfra. Standardutsnittet
+  // legger det midt i flaten så langt bildet rekker (se bakgrunn()). Nye bilder bør få et fokuspunkt.
   var EKSEMPELMAPPE = "assets/img/eksempler/";
   var EKSEMPELBILDER = [
-    { fil: "vardedugnad-sulebu.jpg",           fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "snellingen.jpg",                   fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "myrsetra-1.jpg",                   fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "myrsetra-2.jpg",                   fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "fuglemyrhytta.jpg",                fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "fiskepinner-katnosdammen.jpg",     fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "seniorbrosjyre-2026.jpg",          fotograf: "Daniel Jacobsen", staaende: true },
-    { fil: "femundsmarka-turlederkurs-1.jpg",  fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "femundsmarka-turlederkurs-2.jpg",  fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "ostmarka.jpg",                     fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "huldreheim.jpg",                   fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "bovelstad.jpg",                    fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "losbyvassdraget.jpg",              fotograf: "Marius Dalseg",   staaende: false },
-    { fil: "skog-liggende.jpg",                fotograf: null,              staaende: false },
-    { fil: "sti-staaende.jpg",                 fotograf: null,              staaende: true },
+    { fil: "vardedugnad-sulebu.jpg",           fotograf: "Daniel Jacobsen", staaende: false, fokus: [73, 62] },
+    { fil: "snellingen.jpg",                   fotograf: "Daniel Jacobsen", staaende: false, fokus: [40, 50] },
+    { fil: "myrsetra-1.jpg",                   fotograf: "Daniel Jacobsen", staaende: false, fokus: [47, 50] },
+    { fil: "myrsetra-2.jpg",                   fotograf: "Daniel Jacobsen", staaende: false, fokus: [22, 50] },
+    { fil: "fuglemyrhytta.jpg",                fotograf: "Daniel Jacobsen", staaende: false, fokus: [45, 60] },
+    { fil: "fiskepinner-katnosdammen.jpg",     fotograf: "Daniel Jacobsen", staaende: false, fokus: [62, 55] },
+    { fil: "seniorbrosjyre-2026.jpg",          fotograf: "Daniel Jacobsen", staaende: true,  fokus: [55, 62] },
+    { fil: "femundsmarka-turlederkurs-1.jpg",  fotograf: "Marius Dalseg",   staaende: false, fokus: [60, 60] },
+    { fil: "femundsmarka-turlederkurs-2.jpg",  fotograf: "Marius Dalseg",   staaende: false, fokus: [72, 40] },
+    { fil: "ostmarka.jpg",                     fotograf: "Marius Dalseg",   staaende: false, fokus: [60, 70] },
+    { fil: "huldreheim.jpg",                   fotograf: "Marius Dalseg",   staaende: false, fokus: [55, 60] },
+    { fil: "bovelstad.jpg",                    fotograf: "Marius Dalseg",   staaende: false, fokus: [42, 65] },
+    { fil: "losbyvassdraget.jpg",              fotograf: "Marius Dalseg",   staaende: false, fokus: [65, 66] },
+    { fil: "skog-liggende.jpg",                fotograf: null,              staaende: false, fokus: [50, 50] },
+    { fil: "sti-staaende.jpg",                 fotograf: null,              staaende: true,  fokus: [45, 50] },
     // Lagt til 11. september 2026
-    { fil: "vettakollen-utsikt.jpg",           fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "vettakollen-to.jpg",               fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "vettakollen-par.jpg",              fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "gressholmen.jpg",                  fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "kobberhaughytta-stue.jpg",         fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "myrsetra-skog.jpg",                fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "fjorden-par.jpg",                  fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "liastua-utsikt.jpg",               fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "turbotur-liastua.jpg",             fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "ulsrudvann.jpg",                   fotograf: "Daniel Jacobsen", staaende: false },
-    { fil: "vannhuset.jpg",                    fotograf: "Daniel Jacobsen", staaende: false },
+    { fil: "vettakollen-utsikt.jpg",           fotograf: "Daniel Jacobsen", staaende: false, fokus: [40, 55] },
+    { fil: "vettakollen-to.jpg",               fotograf: "Daniel Jacobsen", staaende: false, fokus: [50, 50] },
+    { fil: "vettakollen-par.jpg",              fotograf: "Daniel Jacobsen", staaende: false, fokus: [55, 55] },
+    { fil: "gressholmen.jpg",                  fotograf: "Daniel Jacobsen", staaende: false, fokus: [45, 50] },
+    { fil: "kobberhaughytta-stue.jpg",         fotograf: "Daniel Jacobsen", staaende: false, fokus: [50, 60] },
+    { fil: "myrsetra-skog.jpg",                fotograf: "Daniel Jacobsen", staaende: false, fokus: [42, 60] },
+    { fil: "fjorden-par.jpg",                  fotograf: "Daniel Jacobsen", staaende: false, fokus: [62, 65] },
+    { fil: "liastua-utsikt.jpg",               fotograf: "Daniel Jacobsen", staaende: false, fokus: [22, 60] },
+    { fil: "turbotur-liastua.jpg",             fotograf: "Daniel Jacobsen", staaende: false, fokus: [50, 55] },
+    { fil: "ulsrudvann.jpg",                   fotograf: "Daniel Jacobsen", staaende: false, fokus: [42, 62] },
+    { fil: "vannhuset.jpg",                    fotograf: "Daniel Jacobsen", staaende: false, fokus: [52, 55] },
     // Stående beskjæringer av liggende foto, så de stående oppsettene får variasjon
-    { fil: "vettakollen-utsikt-staaende.jpg",  fotograf: "Daniel Jacobsen", staaende: true },
-    { fil: "myrsetra-skog-staaende.jpg",       fotograf: "Daniel Jacobsen", staaende: true },
-    { fil: "ulsrudvann-staaende.jpg",          fotograf: "Daniel Jacobsen", staaende: true }
+    { fil: "vettakollen-utsikt-staaende.jpg",  fotograf: "Daniel Jacobsen", staaende: true,  fokus: [55, 55] },
+    { fil: "myrsetra-skog-staaende.jpg",       fotograf: "Daniel Jacobsen", staaende: true,  fokus: [40, 70] },
+    { fil: "ulsrudvann-staaende.jpg",          fotograf: "Daniel Jacobsen", staaende: true,  fokus: [45, 75] }
   ];
   var EKSEMPELNOKKEL = "dnt-ukens-turer-eksempel";
   var LOGO = "assets/img/dnt-logo.png";
@@ -223,8 +225,11 @@
              turleder: "", varighet: "", grad: "", pamelding: false };
   }
 
+  // x og y er null til brukeren flytter bildet selv, og da følger utsnittet bildets
+  // fokuspunkt (se bakgrunn()). Zoom starter på 100 %, så hele komposisjonen er med
+  // og bildet ikke forstørres mer enn flaten krever (16. oktober 2026, før 115 %).
   function nyttUtsnitt() {
-    return { feed: { x: 50, y: 50, z: 115 }, story: { x: 50, y: 50, z: 115 }, karusell: { x: 50, y: 50, z: 115 } };
+    return { feed: { x: null, y: null, z: 100 }, story: { x: null, y: null, z: 100 }, karusell: { x: null, y: null, z: 100 } };
   }
 
   // ISO-ukenummer, slik at «UKE 38, SEPTEMBER» stemmer med dagens dato.
@@ -537,11 +542,27 @@
     return inne.length ? inne : hb;
   }
 
+  // Bilderollen hver mal helst vil ha (16. oktober 2026). Sesong og booking selger hytta,
+  // Mat og meny viser stua og maten, og Arrangement viser folk. De andre malene tar alle.
+  var MAL_ROLLE = { sesong: "oversikt", meny: "inne", arrangement: "folk" };
+
+  // Hyttebildene som passer innlegget: riktig sesong, og helst malens bilderolle.
+  // Bilder innefra passer alle årstider, så Mat og meny får et bilde innefra også i påsken.
+  function bilderForMal(hb) {
+    var sesong = bilderForSesong(hb, onsketSesong());
+    var rolle = MAL_ROLLE[state.mal];
+    if (!rolle) return sesong;
+    var med = (rolle === "inne" ? hb : sesong).filter(function (b) { return b.rolle === rolle; });
+    return med.length ? med : sesong;
+  }
+
   // Trekker ett liggende og ett stående eksempelbilde. Forrige trekk huskes i
   // nettleseren og unngås, så det aldri blir samme bilde to ganger på rad.
   // En valgt hytte bruker sine egne bilder, samme bilde i alle flater. Et turtips
   // med turforslag fra UT.no bruker turens eget foto.
-  function trekkEksempelbilder() {
+  // «neste» er «Nytt bilde fra hytta»: da blas det i fast rekkefølge, først bildene med
+  // malens rolle og så resten fra sesongen, så alle hyttas bilder kan nås med knappen.
+  function trekkEksempelbilder(neste) {
     var tur = aktivTur();
     if (tur && tur.bilde) {
       var tb = { fil: tur.bilde.fil, fotograf: tur.bilde.fotograf || null, mappe: TURMAPPE, sesong: tur.sesong || "" };
@@ -552,11 +573,19 @@
     var valg;
     var hb = hytteBilder();
     if (hb) {
-      var aktuelle = bilderForSesong(hb, onsketSesong());
-      var andre = aktuelle.filter(function (b) { return b.fil !== forrige.hytte; });
-      var liste = andre.length ? andre : aktuelle;
-      var b = liste[Math.floor(Math.random() * liste.length)];
-      var bilde = { fil: b.fil, fotograf: b.fotograf || null, mappe: HYTTEMAPPE, sesong: b.sesong || "" };
+      var aktuelle = bilderForMal(hb);
+      var b;
+      if (neste) {
+        var rekke = aktuelle.concat(bilderForSesong(hb, onsketSesong()).filter(function (x) { return aktuelle.indexOf(x) < 0; }));
+        var naa = state.eksempel && state.eksempel.liggende;
+        var plass = naa ? rekke.map(function (x) { return x.fil; }).indexOf(naa.fil) : -1;
+        b = rekke[(plass + 1) % rekke.length];
+      } else {
+        var andre = aktuelle.filter(function (x) { return x.fil !== forrige.hytte; });
+        var liste = andre.length ? andre : aktuelle;
+        b = liste[Math.floor(Math.random() * liste.length)];
+      }
+      var bilde = { fil: b.fil, fotograf: b.fotograf || null, mappe: HYTTEMAPPE, sesong: b.sesong || "", rolle: b.rolle || "" };
       valg = { liggende: bilde, staaende: bilde };
       forrige.hytte = b.fil;
     } else {
@@ -576,8 +605,10 @@
 
   function bildeAdresse(b) { return b ? (b.mappe || EKSEMPELMAPPE) + b.fil : ""; }
 
-  function brukEksempelbilder() {
-    var valg = trekkEksempelbilder();
+  function brukEksempelbilder(neste) {
+    var valg = trekkEksempelbilder(neste);
+    // Malen bildet ble valgt til. Byttes malen, ser render() om bilderollen fortsatt passer.
+    valg.mal = state.mal;
     return {
       eksempel: valg,
       bilde: bildeAdresse(valg.liggende),
@@ -649,7 +680,10 @@
       if (d.utsnitt && typeof d.utsnitt === "object") {
         var u = nyttUtsnitt();
         Object.keys(u).forEach(function (f) {
-          if (d.utsnitt[f]) u[f] = Object.assign(u[f], d.utsnitt[f]);
+          var lagret = d.utsnitt[f];
+          // Det gamle standardutsnittet (midten og 115 %) blir det nye: fokuspunktet og 100 %.
+          if (!lagret || (lagret.x === 50 && lagret.y === 50 && lagret.z === 115)) return;
+          u[f] = Object.assign(u[f], lagret);
         });
         state.utsnitt = u;
       }
@@ -680,7 +714,8 @@
 
   /* ---------- Beregninger ---------- */
 
-  // Måler naturlig størrelse på et bilde én gang, og husker den.
+  // Måler naturlig størrelse på et bilde én gang, og husker den. Hele siden rendres
+  // på nytt når målet er klart, fordi gliderne og oppløsningsvarselet bygger på det.
   var bildeMal = {};
   function malBilde(src) {
     if (bildeMal[src] !== undefined) return bildeMal[src];
@@ -688,23 +723,66 @@
     var img = new Image();
     img.onload = function () {
       bildeMal[src] = { w: img.naturalWidth, h: img.naturalHeight };
-      renderPlakat();
+      render({ lagre: false });
     };
     img.onerror = function () { bildeMal[src] = { w: 1, h: 1 }; };
     img.src = src;
     return null;
   }
 
+  // Fokuspunktet til et eksempelbilde, slått opp på adressen. Egne bilder har
+  // ikke noe, og får midten.
+  var fokusTabell = null;
+  function fokusFor(src) {
+    if (!fokusTabell) {
+      fokusTabell = {};
+      EKSEMPELBILDER.forEach(function (b) { if (b.fokus) fokusTabell[EKSEMPELMAPPE + b.fil] = b.fokus; });
+      HYTTER.forEach(function (h) {
+        (h.bilder || []).forEach(function (b) { if (b.fokus) fokusTabell[HYTTEMAPPE + b.fil] = b.fokus; });
+        (h.turer || []).forEach(function (t) { if (t.bilde && t.bilde.fokus) fokusTabell[TURMAPPE + t.bilde.fil] = t.bilde.fokus; });
+      });
+    }
+    return fokusTabell[src] || [50, 50];
+  }
+
+  // Posisjonen (prosent, som i background-position) som legger punktet p, i prosent
+  // av bildet, midt i flaten. Grensene 0 og 100 hindrer tom kant, så et motiv helt
+  // ute i kanten havner så nær midten som bildet rekker.
+  function fraFokus(p, bildeLengde, flateLengde) {
+    if (bildeLengde - flateLengde < 1) return 50;
+    var pos = (p / 100 * bildeLengde - flateLengde / 2) / (bildeLengde - flateLengde) * 100;
+    return Math.max(0, Math.min(100, pos));
+  }
+
+  // Over denne forstørrelsen blir bildet synlig mykt, og skjemaet sier fra (16. oktober 2026).
+  var MAKS_FORSTORRELSE = 1.5;
+
   // Regner ut bakgrunnsstørrelse og -posisjon slik at bildet dekker flaten
   // uten å strekkes, med zoom og panorering lagt på. html2canvas støtter ikke
   // object-fit, derfor gjøres dette med background-size i px.
+  // x og y er prosent av det som stikker utenfor flaten (0 venstre eller øverst,
+  // 100 høyre eller nederst). Er de null, følger utsnittet bildets fokuspunkt.
+  // Svaret har også utsnittet som faktisk brukes (til gliderne) og forstørrelsen,
+  // der 1 betyr ett bildepunkt per punkt i det ferdige bildet.
   function bakgrunn(src, boksB, boksH, u) {
     var d = malBilde(src);
-    if (!d || !d.w || !d.h) return { bgStr: "cover", bgPos: "50% 50%" };
+    if (!d || !d.w || !d.h) {
+      return { bgStr: "cover", bgPos: "50% 50%", forstorrelse: 0,
+               u: { x: u.x == null ? 50 : u.x, y: u.y == null ? 50 : u.y, z: u.z } };
+    }
     var dekning = Math.max(boksB / d.w, boksH / d.h) * (u.z / 100);
     var bw = d.w * dekning, bh = d.h * dekning;
-    var px = (boksB - bw) * (u.x / 100), py = (boksH - bh) * (u.y / 100);
-    return { bgStr: Math.round(bw) + "px " + Math.round(bh) + "px", bgPos: Math.round(px) + "px " + Math.round(py) + "px" };
+    var f = fokusFor(src);
+    var x = u.x == null ? fraFokus(f[0], bw, boksB) : u.x;
+    var y = u.y == null ? fraFokus(f[1], bh, boksH) : u.y;
+    var px = (boksB - bw) * (x / 100), py = (boksH - bh) * (y / 100);
+    return {
+      bgStr: Math.round(bw) + "px " + Math.round(bh) + "px", bgPos: Math.round(px) + "px " + Math.round(py) + "px",
+      u: { x: Math.round(x), y: Math.round(y), z: u.z },
+      // Et bilde som ikke lot seg laste (1 × 1) gir ingen varsel om oppløsning.
+      forstorrelse: d.w > 1 ? dekning : 0,
+      langside: Math.max(d.w, d.h)
+    };
   }
 
   // Standardbildet velges etter fotoflatens proporsjoner. Eget bilde brukes alltid.
@@ -911,7 +989,8 @@
     }
 
     return {
-      mal: s.mal, nivaa: nivaa, oppsett: nivaa, fmt: fmt, opp: NIVAA[nivaa], u: u, stor: stor, forMange: false, synlige: [], maks: 0,
+      mal: s.mal, nivaa: nivaa, oppsett: nivaa, fmt: fmt, opp: NIVAA[nivaa], u: bg.u, stor: stor, forMange: false, synlige: [], maks: 0,
+      forstorrelse: bg.forstorrelse, langside: bg.langside,
       bilde: bilde,
       eksempel: aktivtEksempel(fotoFlate[0], fotoFlate[1]),
       tittelBryt: tittel.bryt,
@@ -985,7 +1064,8 @@
 
     return {
       mal: s.mal, kal: kal,
-      fmt: fmt, opp: opp, synlige: synlige, maks: maks, stor: stor, trinn: trinn, u: u,
+      fmt: fmt, opp: opp, synlige: synlige, maks: maks, stor: stor, trinn: trinn, u: bg.u,
+      forstorrelse: bg.forstorrelse, langside: bg.langside,
       forMange: synlige.length > maks,
       bilde: bilde,
       eksempel: aktivtEksempel(fotoFlate[0], fotoFlate[1]),
@@ -1411,7 +1491,8 @@
       opp: { tekst: "" },
       sider: sider, aktiv: aktiv, side: side, synlige: synlige, maks: MAKS_KARUSELL,
       forMange: false, forStor: deling.forStor,
-      stor: stor, u: u, bilde: bilde,
+      stor: stor, u: bg.u, bilde: bilde,
+      forstorrelse: bg.forstorrelse, langside: bg.langside,
       eksempel: forsideEksempel, fotografer: fotografer,
       tittelBryt: forsideTittel.bryt, listeTittelBryt: listeTittel.bryt,
       innhold: { merke: (kal.periode || "").trim(), tittel: kal.tittel, under: (s.karusellUnder || "").trim(),
@@ -1517,7 +1598,7 @@
     el.posttekst = $("#posttekst"); el.hytteValg = $("#hytte-valg");
     el.karusellNav = $("#karusell-nav"); el.karusellTekst = $("#karusell-tekst");
     el.karusellForrige = $("#karusell-forrige"); el.karusellNeste = $("#karusell-neste");
-    el.lastNedEtt = $("#last-ned-ett");
+    el.lastNedEtt = $("#last-ned-ett"); el.opplosning = $("#opplosning");
     el.forhandsvisning = $("#forhandsvisning"); el.lagre = $("#lagre"); el.klar = $("#klar");
     el.mini = $("#mini"); el.bunnlinjeStatus = $("#bunnlinje-status"); el.seBildet = $("#se-bildet");
     el.bunnlinjeLagre = $("#bunnlinje-lagre"); el.lukkBildet = $("#lukk-bildet"); el.appVarsel = $("#app-varsel");
@@ -1591,6 +1672,18 @@
     boks.appendChild(kopi);
     el.mini.style.width = Math.round(b.fmt.bredde * skala) + "px";
     el.mini.replaceChildren(boks);
+  }
+
+  // Varselet i utsnittsboksen når fotoet forstørres så mye at det blir mykt, både for
+  // eksempelbilder og egne bilder. Anbefalt størrelse er den som gir ett bildepunkt per punkt.
+  function opplosningTekst(b) {
+    if (!b.forstorrelse || b.forstorrelse <= MAKS_FORSTORRELSE) return "";
+    var ganger = String(Math.round(b.forstorrelse * 10) / 10).replace(".", ",");
+    var tekst = "Bildet forstørres " + ganger + " ganger her og kan bli uskarpt. ";
+    if (b.u.z > 100) return tekst + "Dra zoomen ned, eller velg et bilde med høyere oppløsning.";
+    var anbefalt = Math.ceil(b.langside * b.forstorrelse / 100) * 100;
+    return tekst + (state.egetBilde ? "Velg helst et bilde" : "Last opp et eget bilde") +
+      " med minst " + anbefalt + " px på lengste side for et skarpt resultat.";
   }
 
   // Siste beregning, så knappene i karusellen ikke må regne ut alt på nytt.
@@ -1864,6 +1957,11 @@
     }
 
     $$("[data-utsnitt]").forEach(function (r) { settVerdi(r, b.u[r.getAttribute("data-utsnitt")]); });
+    if (el.opplosning) {
+      var myk = opplosningTekst(b);
+      el.opplosning.hidden = !myk;
+      settTekst(el.opplosning, myk);
+    }
     $$(".tekstfelt[data-felt]").forEach(function (f) {
       var k = f.getAttribute("data-felt");
       if (state[k] !== undefined) settVerdi(f, state[k]);
@@ -1953,6 +2051,14 @@
     if (!state.egetBilde && hb && onsket && naa && naa.sesong !== onsket &&
         bilderForSesong(hb, onsket).some(function (b) { return b.sesong !== naa.sesong; })) {
       Object.assign(state, brukEksempelbilder());
+    }
+    // Er malen byttet siden hyttebildet ble valgt, og malen helst vil ha en annen bilderolle
+    // (f.eks. inne til Mat og meny), byttes bildet. Et bilde brukeren har bladd fram med
+    // «Nytt bilde fra hytta» til samme mal, blir stående.
+    naa = state.eksempel && state.eksempel.liggende;
+    if (!state.egetBilde && hb && naa && naa.mappe === HYTTEMAPPE && state.eksempel.mal !== state.mal) {
+      if (bilderForMal(hb).some(function (b) { return b.fil === naa.fil; })) state.eksempel.mal = state.mal;
+      else Object.assign(state, brukEksempelbilder());
     }
     // Ferdige bilder til deling gjelder bare til noe endres.
     if (!valg.beholdFiler) state.delingsFiler = null;
@@ -2382,9 +2488,11 @@
         oppdaterSnart({ utsnitt: u });
       });
     });
+    // Midtstill går tilbake til standardutsnittet: motivet (fokuspunktet) i midten og 100 %.
+    // Et eget bilde har ikke noe fokuspunkt og blir midtstilt.
     $("#midtstill").addEventListener("click", function () {
       var u = Object.assign({}, state.utsnitt);
-      u[state.format] = { x: 50, y: 50, z: 115 };
+      u[state.format] = nyttUtsnitt()[state.format];
       oppdater({ utsnitt: u });
     });
 
@@ -2393,7 +2501,7 @@
     el.nyttEksempel.addEventListener("click", function () {
       $("#bilde-fil").value = "";
       var forrige = state.egetBilde ? state.bilde : "";
-      oppdater(brukEksempelbilder());
+      oppdater(brukEksempelbilder(!state.egetBilde));
       frigjor(forrige);
     });
 

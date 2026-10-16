@@ -138,6 +138,8 @@ input, select, button, textarea { font: inherit; }
 
 .boks { display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: 12px; background: var(--beige-lys); }
 .boks__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.6); }
+/* Varselet om oppløsning og hjelpeteksten deler statusområde, så et skjult varsel ikke gir ekstra luft */
+.utsnitt-status { display: flex; flex-direction: column; gap: 11px; }
 .liten-knapp {
   border: none; background: rgba(0,0,0,0.07); border-radius: 999px; padding: 6px 13px;
   font-family: var(--font-heading); font-weight: 700; font-size: 13px; color: var(--sort); cursor: pointer;
