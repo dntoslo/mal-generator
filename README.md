@@ -22,7 +22,7 @@ Malene:
 6. Trykk «Prøv en annen variant» for annen farge og plassering, så innleggene ikke blir like fra gang til gang.
 7. Trykk «Last ned bildet», og kopier forslaget til posttekst. En karusell lastes ned som flere bilder etter hverandre. På mobil kan bildene deles eller lagres i bildebiblioteket i ett trykk.
 
-Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, finnes en reserveløsning: en ferdig prompt som kan limes inn i Claude.
+Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullstiller. Får du ikke lastet ned bildet, forklarer «Får du ikke lastet ned?» hva du kan gjøre.
 
 ## Mappestruktur
 
@@ -30,8 +30,13 @@ Det du fyller inn huskes i nettleseren til neste gang. «Tøm skjemaet» nullsti
 index.html            skjema og forhåndsvisning
 css/tokens.css        DNTs designtokens og fonter
 css/app.css           stiler for skjema og plakat
-js/app.js             all logikk
+js/app.js             starter verktøyet (ES-modul)
+js/konstanter.js      maler, tekststørrelser, oppsett, formater, eksempelbilder
+js/tilstand.js        tilstanden og standardskjemaet med eksempeltekst
+js/lagring.js         lagring i nettleseren (felttabellen FELT)
+js/*.js               resten av logikken, én modul per oppgave (se CLAUDE.md)
 js/hytter.js          de 25 betjente hyttene med fakta og eksempelbilder
+kontroll.html         tegner alle maler og sammenligner med en referanse
 js/vendor/            html2canvas 1.4.1 (bildeeksport)
 assets/fonts/         ABC Social, ABC Social Extended, Whitman (lisensierte)
 assets/img/           DNT-logo og Turbo
@@ -62,6 +67,8 @@ Koden ligger i det offentlige repoet [github.com/dntoslo/mal-generator](https://
 
 **Publisere endringer senere:** commit lokalt og push til `main`. Pages bygger på nytt automatisk.
 
+**Bytt versjonsnummeret** når noe i `js/` eller `css/` er endret: søk etter `?v=` i `index.html` og bytt alle til dagens dato (f.eks. `?v=2026-10-16`, eller `-2`, `-3` ved flere samme dag). Pages ber nettleseren huske filene i ti minutter. Med nytt nummer henter nettleseren alle de nye filene samlet, og blander ikke gamle og nye moduler.
+
 ```bash
 git add -A && git commit -m "Beskriv endringen" && git push
 ```
@@ -73,11 +80,21 @@ Verdt å vite:
 - Repoet er offentlig inntil organisasjonen dntoslo får GitHub Team-lisens, og gjøres privat etter det (Settings, Danger zone, Change visibility). Pages fortsetter å virke fra privat repo på Team-planen. Nettsiden er uansett åpen for alle med lenken. DNT har lisens på fontene.
 - Bruk repoet bare til Turposten. Ikke legg inn deltakerlister eller andre personopplysninger.
 
+## Kontroll før publisering
+
+`kontroll.html` (åpne http://127.0.0.1:8765/kontroll.html) laster verktøyet i en skjult ramme og tegner alle maler, nivåer, signaturer, oppsett og formater med eksempelinnholdet, med låste bildevalg og fast dato. Hver plakat får et fingeravtrykk.
+
+1. Før du endrer koden: åpne siden, vent til den er ferdig, og trykk «Lagre som referanse».
+2. Etter endringen: åpne siden igjen. Plakater som har endret seg, får gul ramme, og plakater med plassadvarsel får rød.
+3. Kryss av for «Alle 25 hyttene» for full kontroll (tar et par minutter).
+
+Referansen lagres i nettleseren du bruker. Det du har fylt inn i selve verktøyet, blir ikke rørt.
+
 ## Eksempelbilder
 
 Når brukeren ikke har lastet opp eget foto, vises et eksempelbilde fra `assets/img/eksempler/`. Bildet trekkes tilfeldig ved hver åpning, aldri det samme to ganger på rad, og kan byttes med knappen «Nytt eksempelbilde». Skjemaet minner om å kreditere fotografen i posteteksten.
 
-Legge til et bilde: skaler det til 1620 px bredde (liggende) eller 2160 px høyde (stående) som JPEG, legg det i mappen, og legg til én linje i `EKSEMPELBILDER` øverst i `js/app.js` med filnavn, fotograf og om det er stående. Bare ekte foto som DNT har rettighetene til.
+Legge til et bilde: skaler det til 1620 px bredde (liggende) eller 2160 px høyde (stående) som JPEG, legg det i mappen, og legg til én linje i `EKSEMPELBILDER` i `js/konstanter.js` med filnavn, fotograf, om det er stående og fokuspunktet (`fokus: [x, y]`, motivets plass i prosent). Bare ekte foto som DNT har rettighetene til.
 
 Fotografer i dag: Daniel Jacobsen og Marius Dalseg. To bilder fra den opprinnelige prototypen har ukjent fotograf.
 

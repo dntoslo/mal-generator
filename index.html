@@ -23,8 +23,10 @@
 <!-- Tittelfonten og overskriftsfonten trengs til første måling av plakaten. -->
 <link rel="preload" href="assets/fonts/Whitman-BoldLF.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/ABCSocialExtended-Bold.otf" as="font" type="font/otf" crossorigin>
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/app.css">
+<!-- Versjonsnummeret (?v=) byttes når en fil i css/ eller js/ endres, også i importkartet nederst.
+     Da henter nettleseren de nye filene samlet, og blander ikke gamle og nye. -->
+<link rel="stylesheet" href="css/tokens.css?v=2026-10-16">
+<link rel="stylesheet" href="css/app.css?v=2026-10-16">
 </head>
 <body>
 
@@ -617,7 +619,32 @@
 
 <!-- html2canvas trengs først ved nedlasting, så den får ikke holde igjen resten av siden. -->
 <script src="js/vendor/html2canvas.min.js" defer></script>
-<script src="js/hytter.js"></script>
-<script src="js/app.js"></script>
+<script src="js/hytter.js?v=2026-10-16"></script>
+<!-- Modulene importerer hverandre med relative adresser. Importkartet gir alle samme versjon. -->
+<script type="importmap">
+{
+  "imports": {
+    "./js/app.js": "./js/app.js?v=2026-10-16",
+    "./js/konstanter.js": "./js/konstanter.js?v=2026-10-16",
+    "./js/tilstand.js": "./js/tilstand.js?v=2026-10-16",
+    "./js/hjelpere.js": "./js/hjelpere.js?v=2026-10-16",
+    "./js/lagring.js": "./js/lagring.js?v=2026-10-16",
+    "./js/bilder.js": "./js/bilder.js?v=2026-10-16",
+    "./js/maaling.js": "./js/maaling.js?v=2026-10-16",
+    "./js/innhold.js": "./js/innhold.js?v=2026-10-16",
+    "./js/beregn.js": "./js/beregn.js?v=2026-10-16",
+    "./js/karusell.js": "./js/karusell.js?v=2026-10-16",
+    "./js/maler.js": "./js/maler.js?v=2026-10-16",
+    "./js/posttekst.js": "./js/posttekst.js?v=2026-10-16",
+    "./js/forhandsvisning.js": "./js/forhandsvisning.js?v=2026-10-16",
+    "./js/skjema.js": "./js/skjema.js?v=2026-10-16",
+    "./js/render.js": "./js/render.js?v=2026-10-16",
+    "./js/valg.js": "./js/valg.js?v=2026-10-16",
+    "./js/eksport.js": "./js/eksport.js?v=2026-10-16",
+    "./js/hendelser.js": "./js/hendelser.js?v=2026-10-16"
+  }
+}
+</script>
+<script type="module" src="js/app.js?v=2026-10-16"></script>
 </body>
 </html>

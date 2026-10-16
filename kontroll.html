@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Turposten: kontroll av alle maler</title>
+<link rel="icon" href="assets/img/dnt-logo.png" type="image/png">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+  /* Kontrollsiden er et verktøy for den som endrer koden, ikke for brukerne.
+     Prefiks kt- så ingenting kolliderer med app.css. */
+  html, body { background: var(--nett-beige); color: var(--sort); }
+  .kt-side { max-width: 1600px; margin: 0 auto; padding: 36px 32px 96px; display: flex; flex-direction: column; gap: 28px; }
+  .kt-topp { display: flex; flex-direction: column; gap: 10px; max-width: 900px; }
+  .kt-tittel { font-family: var(--font-display); font-weight: 700; font-size: 44px; line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+  .kt-tekst { font-family: var(--font-body); font-size: 16px; line-height: 1.55; color: rgba(0,0,0,0.75); margin: 0; }
+  .kt-verktoy { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; background: var(--hvit); border-radius: 14px; padding: 14px 18px; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 5; }
+  .kt-verktoy button { border: none; border-radius: 999px; padding: 10px 18px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; background: var(--beige); cursor: pointer; }
+  .kt-verktoy button.kt-hoved { background: var(--sort); color: var(--hvit); }
+  .kt-verktoy button:disabled { opacity: 0.5; cursor: default; }
+  .kt-verktoy label { display: flex; gap: 8px; align-items: center; font-family: var(--font-body); font-size: 15px; }
+  .kt-status { font-family: var(--font-body); font-size: 15px; line-height: 1.45; flex: 1 1 320px; }
+  .kt-status strong { font-family: var(--font-heading); font-weight: 700; }
+  .kt-gruppe { display: flex; flex-direction: column; gap: 12px; }
+  .kt-gruppe h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin: 0; }
+  .kt-rutenett { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+  .kt-kort { display: flex; flex-direction: column; gap: 6px; }
+  .kt-plakat { position: relative; overflow: hidden; border-radius: 6px; background: var(--foto-bakgrunn); box-shadow: var(--shadow-md); cursor: zoom-in; }
+  .kt-plakat > div { transform-origin: top left; }
+  .kt-navn { font-family: var(--font-body); font-size: 13px; line-height: 1.35; color: rgba(0,0,0,0.75); }
+  .kt-merker { display: flex; flex-wrap: wrap; gap: 4px; }
+  .kt-merke { font-family: var(--font-heading); font-weight: 700; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--beige); }
+  .kt-merke--advarsel { background: var(--advarsel-bg); color: var(--advarsel-tekst); }
+  .kt-merke--endret { background: var(--ny-gul); }
+  .kt-merke--ny { background: var(--ny-bla); }
+  .kt-kort--advarsel .kt-plakat { outline: 4px solid var(--dnt-rod); outline-offset: 2px; }
+  .kt-kort--endret .kt-plakat { outline: 4px solid #C9A600; outline-offset: 2px; }
+  .kt-skjul-ok .kt-kort--ok { display: none; }
+  .kt-skjul-ok .kt-gruppe--ok { display: none; }
+  .kt-stor { position: fixed; inset: 0; z-index: 20; background: rgba(15,15,15,0.72); display: flex; align-items: center; justify-content: center; gap: 24px; padding: 24px; cursor: zoom-out; }
+  .kt-stor .kt-plakat { cursor: zoom-out; }
+  .kt-stor__tekst { max-width: 320px; color: var(--hvit); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+  .kt-stor__tekst strong { display: block; font-family: var(--font-heading); font-size: 17px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<main class="kt-side">
+  <header class="kt-topp">
+    <h1 class="kt-tittel">Kontroll av alle maler</h1>
+    <p class="kt-tekst">Siden laster verktøyet i en skjult ramme og trykker seg gjennom avsendere, maler, nivåer, signaturer, oppsett og formater med eksempelinnholdet. Tilfeldige bildevalg og dagens dato er låst (16. oktober 2026), så samme kode gir samme bilder hver gang. Hver plakat får et fingeravtrykk. Lagre en referanse før du endrer koden, og kjør siden igjen etterpå: alt som er endret, blir merket. Det du har lagret i selve verktøyet, blir ikke rørt.</p>
+  </header>
+
+  <div class="kt-verktoy">
+    <button type="button" class="kt-hoved" id="kjor">Kjør på nytt</button>
+    <button type="button" id="lagre-ref" disabled>Lagre som referanse</button>
+    <label><input type="checkbox" id="alle-hytter"> Alle 25 hyttene (tar et par minutter)</label>
+    <label><input type="checkbox" id="bare-avvik"> Vis bare avvik</label>
+    <div class="kt-status" id="status" role="status" aria-live="polite">Starter …</div>
+  </div>
+
+  <div id="grupper"></div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var REFERANSE = "turposten-kontroll-referanse";
+  var LAGRING = "dnt-ukens-turer-v1";
+  var UTVALG = ["leirvassbu", "breivoll-gard"];
+  var VIS_BREDDE = 190;
+  var vent = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var $ = function (s, rot) { return (rot || document).querySelector(s); };
+
+  // ---------- Verktøyet i en skjult ramme ----------
+
+  // Skriptet legges først i verktøyets <head>: låst tilfeldighet (mulberry32), fast dato og
+  // lagring i minnet, så kontrollen ikke skriver over det brukeren har lagret.
+  function forberedelse(start) {
+    return "<script>(function(){" +
+      "var f=0x7ab1e5;Math.random=function(){f|=0;f=f+0x6D2B79F5|0;var t=Math.imul(f^f>>>15,1|f);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};" +
+      "var E=Date;var FAST=new E(2026,9,16,12,0,0).getTime();" +
+      "function D(){var a=[].slice.call(arguments);return a.length?new(Function.prototype.bind.apply(E,[null].concat(a))):new E(FAST);}" +
+      "D.prototype=E.prototype;D.now=function(){return FAST;};D.UTC=E.UTC;D.parse=E.parse;window.Date=D;" +
+      "var m={};m[" + JSON.stringify(LAGRING) + "]=" + JSON.stringify(JSON.stringify(start)) + ";" +
+      "var lager={getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[k]=String(v);},removeItem:function(k){delete m[k];},clear:function(){m={};},key:function(i){return Object.keys(m)[i]||null;},get length(){return Object.keys(m).length;}};" +
+      "try{Object.defineProperty(window,'localStorage',{configurable:true,get:function(){return lager;}});}catch(e){}" +
+      "})();<\/script>";
+  }
+
+  var ramme = null, kilde = null;
+
+  // Henter index.html og filene den laster på nytt, så nettleseren ikke bruker gamle kopier.
+  async function hentKilde() {
+    var html = await (await fetch("index.html", { cache: "no-store" })).text();
+    var adresser = [];
+    html.replace(/(?:src|href)="([^"#]+\.(?:js|css)(?:\?[^"]*)?)"/g, function (_, a) { adresser.push(a); return _; });
+    var kart = html.match(/<script type="importmap">([\s\S]*?)<\/script>/);
+    if (kart) { try { var im = JSON.parse(kart[1]).imports || {}; Object.keys(im).forEach(function (k) { adresser.push(im[k]); }); } catch (e) { /* ignorer */ } }
+    await Promise.all(adresser.map(function (a) { return fetch(a, { cache: "reload" }).catch(function () {}); }));
+    return html;
+  }
+
+  async function lastVerktoy(start) {
+    if (!kilde) kilde = await hentKilde();
+    var base = location.href.replace(/[^/]*$/, "");
+    var html = kilde.replace(/<head>/i, '<head><base href="' + base + '">' + forberedelse(start));
+    if (ramme) ramme.remove();
+    ramme = document.createElement("iframe");
+    ramme.setAttribute("aria-hidden", "true");
+    ramme.setAttribute("tabindex", "-1");
+    // Bred nok til at forhåndsvisningen står ved siden av skjemaet (BRED er 900 px).
+    ramme.style.cssText = "position:fixed;left:-5000px;top:0;width:1400px;height:900px;border:0;";
+    var lastet = new Promise(function (ok) { ramme.onload = ok; });
+    ramme.srcdoc = html;
+    document.body.appendChild(ramme);
+    await lastet;
+    var doc = ramme.contentDocument;
+    await doc.fonts.ready;
+    for (var i = 0; i < 50 && !doc.querySelector("#plakat > *"); i++) await vent(100);
+    await vent(400);
+    return doc;
+  }
+
+  function velg(doc, gruppe, verdi) {
+    var kn = doc.querySelector('[data-gruppe="' + gruppe + '"] [data-verdi="' + verdi + '"]');
+    if (kn) kn.click();
+    return Boolean(kn);
+  }
+
+  function velgHytte(doc, id) {
+    var sel = doc.getElementById("hytte-valg");
+    sel.value = id;
+    sel.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  // ---------- Fingeravtrykk ----------
+
+  function fnv(tekst) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+    return (h >>> 0).toString(16).padStart(8, "0");
+  }
+
+  // Variablene på #plakat sorteres, så rekkefølgen de settes i ikke teller, bare verdiene.
+  function avtrykk(p) {
+    var stil = (p.getAttribute("style") || "").split(";").map(function (s) { return s.trim(); }).filter(Boolean).sort().join(";");
+    var attr = ["data-mal", "data-format", "data-oppsett"].map(function (a) { return a + "=" + p.getAttribute(a); }).join("|");
+    return fnv(stil + "#" + attr + "#" + p.innerHTML);
+  }
+
+  // ---------- Kjøringen ----------
+
+  // tegnes: om plakatene i delen som kjøres nå, skal tegnes selv uten avvik.
+  var resultater = [], referanse = null, avbryt = false, tegnes = true;
+
+  function lesReferanse() {
+    try { return JSON.parse(localStorage.getItem(REFERANSE) || "null"); } catch (e) { return null; }
+  }
+
+  async function ventPaaBilde(doc) {
+    var p = doc.getElementById("plakat");
+    for (var i = 0; i < 40 && /cover/.test(p.style.getPropertyValue("--bg-str")); i++) await vent(75);
+    await vent(0);
+  }
+
+  async function ta(doc, gruppe, navn) {
+    await ventPaaBilde(doc);
+    var p = doc.getElementById("plakat");
+    var advarsel = doc.getElementById("formange");
+    var r = {
+      gruppe: gruppe, navn: navn, nokkel: gruppe + " | " + navn,
+      avtrykk: avtrykk(p),
+      advarsel: advarsel && !advarsel.hidden ? advarsel.textContent : "",
+      tegnes: tegnes,
+      html: p.outerHTML,
+      bredde: parseInt(p.style.getPropertyValue("--bredde"), 10) || 1080,
+      hoyde: parseInt(p.style.getPropertyValue("--hoyde"), 10) || 1350
+    };
+    resultater.push(r);
+    visKort(r);
+  }
+
+  var NIVAAER = [["merkelapp", "", "Merkelapp"], ["plakat", "", "Plakat"], ["postkort", "a", "Postkort Stor"], ["postkort", "b", "Postkort Stempel"], ["postkort", "c", "Postkort Med kant"]];
+  var FORMAT = [["feed", "Innlegg"], ["story", "Historie"]];
+
+  async function nivaaerOgFormater(doc, gruppe, prefiks) {
+    for (var f = 0; f < FORMAT.length; f++) {
+      velg(doc, "format", FORMAT[f][0]);
+      for (var n = 0; n < NIVAAER.length; n++) {
+        velg(doc, "nivaa", NIVAAER[n][0]);
+        if (NIVAAER[n][1]) velg(doc, "signatur", NIVAAER[n][1]);
+        await ta(doc, gruppe, prefiks + NIVAAER[n][2] + ", " + FORMAT[f][1]);
+      }
+    }
+  }
+
+  async function kalender(doc, gruppe, mal, tekster) {
+    velg(doc, "mal", mal);
+    for (var t = 0; t < tekster.length; t++) {
+      velg(doc, "tekst", tekster[t]);
+      var tn = tekster.length > 1 ? (tekster[t] === "stor" ? ", stor tekst" : ", normal tekst") : "";
+      for (var f = 0; f < FORMAT.length; f++) {
+        velg(doc, "format", FORMAT[f][0]);
+        velg(doc, "oppsett", "topp"); await ta(doc, gruppe, "Bilde øverst, " + FORMAT[f][1] + tn);
+        velg(doc, "oppsett", "bakgrunn"); await ta(doc, gruppe, "Stort bilde, " + FORMAT[f][1] + tn);
+      }
+      velg(doc, "format", "karusell");
+      // Verktøyet husker siden som sist ble vist, så vi blar tilbake til forsiden først.
+      for (var b = 0; b < 6; b++) {
+        var forrige = doc.getElementById("karusell-forrige");
+        if (!forrige || forrige.disabled) break;
+        forrige.click();
+      }
+      for (var side = 1; side <= 6; side++) {
+        await ta(doc, gruppe, "Karusell side " + side + tn);
+        var neste = doc.getElementById("karusell-neste");
+        if (!neste || neste.disabled) break;
+        neste.click();
+      }
+    }
+    velg(doc, "format", "feed");
+  }
+
+  async function turlag(doc) {
+    var g = "Turlag";
+    await kalender(doc, g + ", turkalender", "turkalender", ["normal", "stor"]);
+    velg(doc, "tekst", "normal");
+    velg(doc, "mal", "arrangement");
+    var typer = [["arrangement", "Tur"], ["kurs", "Kurs"], ["dugnad", "Dugnad"]];
+    for (var i = 0; i < typer.length; i++) {
+      velg(doc, "arrType", typer[i][0]);
+      await nivaaerOgFormater(doc, g + ", arrangement", typer[i][1] + ", ");
+    }
+    velg(doc, "mal", "turtips");
+    await nivaaerOgFormater(doc, g + ", turtips", "");
+    velg(doc, "mal", "postkort");
+    for (var f = 0; f < FORMAT.length; f++) {
+      velg(doc, "format", FORMAT[f][0]);
+      for (var s = 0; s < 3; s++) { velg(doc, "signatur", "abc"[s]); await ta(doc, g + ", postkort", ["Stor", "Stempel", "Med kant"][s] + ", " + FORMAT[f][1]); }
+    }
+  }
+
+  async function hytte(doc, id) {
+    var h = ramme.contentWindow.HYTTER.filter(function (x) { return x.id === id; })[0];
+    var g = h.kortnavn;
+    velg(doc, "avsender", "hytte");
+    velgHytte(doc, id);
+    velg(doc, "mal", "sesong");
+    var typer = [["apner", "Vi åpner"], ["booking", "Booking åpner"], ["ledig", "Ledige senger"], ["takk", "Takk for sesongen"], ["soker", "Vi søker folk"]];
+    for (var i = 0; i < typer.length; i++) {
+      velg(doc, "sesongType", typer[i][0]);
+      await nivaaerOgFormater(doc, g + ", sesong og booking", typer[i][1] + ", ");
+    }
+    velg(doc, "mal", "meny");
+    await nivaaerOgFormater(doc, g + ", mat og meny", "");
+    velg(doc, "mal", "arrangement");
+    velg(doc, "arrType", "arrangement");
+    await nivaaerOgFormater(doc, g + ", arrangement", "");
+    velg(doc, "mal", "turtips");
+    var antall = (h.turer || []).length || 1;
+    for (var t = 0; t < antall; t++) {
+      await nivaaerOgFormater(doc, g + ", turtips", "Tur " + (t + 1) + ", ");
+      var neste = doc.getElementById("nytt-turforslag");
+      if (neste && !neste.hidden) neste.click();
+    }
+    velg(doc, "mal", "postkort");
+    for (var f = 0; f < FORMAT.length; f++) {
+      velg(doc, "format", FORMAT[f][0]);
+      for (var s = 0; s < 3; s++) { velg(doc, "signatur", "abc"[s]); await ta(doc, g + ", postkort", ["Stor", "Stempel", "Med kant"][s] + ", " + FORMAT[f][1]); }
+    }
+    velg(doc, "format", "feed");
+    await kalender(doc, g + ", program", "program", ["normal"]);
+  }
+
+  // Turlisten med 6 turer, maks i «Bilde øverst» i innlegg, med lange turmål.
+  function mangeTurer() {
+    var tur = function (dag, dato, tid, tittel, sted) { return { dag: dag, dato: dato, tid: tid, tittel: tittel, sted: sted, turleder: "", varighet: "", grad: "", pamelding: false }; };
+    return [
+      tur("TIR", "15", "10:30", "Trilletur til Lilloseter", "Ammerud utfartsparkering"),
+      tur("TIR", "15", "11:00", "Tirsdagstur fra SNØ, Gjelleråsen og Mortens kro", "Fra SNØ"),
+      tur("ONS", "16", "18:00", "Kveldstur med utsikt fra Marikollslottet og Bjønnåsen", "Sandbekken fotballbane"),
+      tur("TOR", "17", "10:00", "Seniortur til Vettakollen", "Frognerseteren stasjon"),
+      tur("FRE", "18", "17:30", "Fredagstur rundt Sognsvann", "Sognsvann T-banestasjon"),
+      tur("LØR", "19", "09:00", "Lang lørdagstur til Kikutstua", "Sognsvann, ved bommen")
+    ];
+  }
+
+  async function kjor() {
+    avbryt = false;
+    tegnes = true;
+    resultater = [];
+    referanse = lesReferanse();
+    $("#grupper").innerHTML = "";
+    $("#kjor").disabled = true;
+    $("#lagre-ref").disabled = true;
+    var start = Date.now();
+    try {
+      settStatus("Laster verktøyet …");
+      var doc = await lastVerktoy({ avsender: "turlag", turlag: "DNT Bærum", mal: "turkalender" });
+      await turlag(doc);
+
+      settStatus("Laster verktøyet med 6 turer …");
+      doc = await lastVerktoy({ avsender: "turlag", turlag: "DNT Bærum", mal: "turkalender", turer: mangeTurer() });
+      velg(doc, "format", "feed");
+      velg(doc, "oppsett", "topp"); await ta(doc, "Turlag, 6 turer", "Bilde øverst, Innlegg");
+      velg(doc, "oppsett", "bakgrunn"); await ta(doc, "Turlag, 6 turer", "Stort bilde, Innlegg");
+      velg(doc, "format", "karusell"); await ta(doc, "Turlag, 6 turer", "Karusell side 1");
+      doc.getElementById("karusell-neste").click(); await ta(doc, "Turlag, 6 turer", "Karusell side 2");
+
+      var ider = $("#alle-hytter").checked
+        ? ramme.contentWindow.HYTTER.map(function (h) { return h.id; })
+        : UTVALG;
+      for (var i = 0; i < ider.length && !avbryt; i++) {
+        settStatus("Hytte " + (i + 1) + " av " + ider.length + " …");
+        tegnes = UTVALG.indexOf(ider[i]) >= 0;
+        doc = await lastVerktoy({ avsender: "hytte", hytte: ider[i], mal: "sesong" });
+        await hytte(doc, ider[i]);
+      }
+    } catch (e) {
+      console.error(e);
+      settStatus("Kontrollen stoppet: " + (e && e.message ? e.message : e));
+      $("#kjor").disabled = false;
+      return;
+    } finally {
+      if (ramme) { ramme.remove(); ramme = null; }
+    }
+    $("#kjor").disabled = false;
+    $("#lagre-ref").disabled = false;
+    oppsummer(Math.round((Date.now() - start) / 1000));
+  }
+
+  // ---------- Visning ----------
+
+  function settStatus(tekst) { $("#status").textContent = tekst; }
+
+  function oppsummer(sekunder) {
+    var advarsler = resultater.filter(function (r) { return r.advarsel; }).length;
+    var endret = resultater.filter(function (r) { return r.endret; }).length;
+    var nye = resultater.filter(function (r) { return r.ny; }).length;
+    var ref = referanse
+      ? endret + " endret og " + nye + " nye siden referansen fra " + new Date(referanse.tid).toLocaleString("nb-NO") + ". "
+      : "Ingen referanse lagret ennå. ";
+    $("#status").innerHTML = "<strong>" + resultater.length + " bilder på " + sekunder + " s.</strong> " +
+      advarsler + " med plassadvarsel. " + ref;
+  }
+
+  function gruppeElement(navn) {
+    var id = "g-" + fnv(navn);
+    var el = document.getElementById(id);
+    if (el) return el;
+    el = document.createElement("section");
+    el.className = "kt-gruppe kt-gruppe--ok";
+    el.id = id;
+    el.innerHTML = "<h2></h2><div class=\"kt-rutenett\"></div>";
+    el.querySelector("h2").textContent = navn;
+    $("#grupper").appendChild(el);
+    return el;
+  }
+
+  function plakatBoks(r, bredde) {
+    var boks = document.createElement("div");
+    boks.className = "kt-plakat";
+    var skala = bredde / r.bredde;
+    boks.style.width = bredde + "px";
+    boks.style.height = Math.round(r.hoyde * skala) + "px";
+    var indre = document.createElement("div");
+    indre.style.transform = "scale(" + skala + ")";
+    indre.innerHTML = r.html;
+    boks.appendChild(indre);
+    return boks;
+  }
+
+  function visKort(r) {
+    var ref = referanse && referanse.avtrykk ? referanse.avtrykk[r.nokkel] : undefined;
+    r.ny = Boolean(referanse) && ref === undefined;
+    r.endret = ref !== undefined && ref !== r.avtrykk;
+    var kort = document.createElement("div");
+    var avvik = r.advarsel || r.endret || r.ny;
+    kort.className = "kt-kort " + (r.advarsel ? "kt-kort--advarsel" : r.endret ? "kt-kort--endret" : "") + (avvik ? "" : " kt-kort--ok");
+    var g = gruppeElement(r.gruppe);
+    if (avvik) g.classList.remove("kt-gruppe--ok");
+    // Med alle hyttene tegnes bare utvalget og avvikene, ellers blir siden tung.
+    if (r.tegnes || avvik) kort.appendChild(plakatBoks(r, VIS_BREDDE));
+    var navn = document.createElement("div");
+    navn.className = "kt-navn";
+    navn.textContent = r.navn;
+    kort.appendChild(navn);
+    var merker = document.createElement("div");
+    merker.className = "kt-merker";
+    if (r.advarsel) merker.innerHTML += '<span class="kt-merke kt-merke--advarsel">Plassadvarsel</span>';
+    if (r.endret) merker.innerHTML += '<span class="kt-merke kt-merke--endret">Endret</span>';
+    if (r.ny) merker.innerHTML += '<span class="kt-merke kt-merke--ny">Ny</span>';
+    merker.innerHTML += '<span class="kt-merke">' + r.avtrykk + "</span>";
+    kort.appendChild(merker);
+    kort.addEventListener("click", function () { visStor(r); });
+    g.querySelector(".kt-rutenett").appendChild(kort);
+  }
+
+  function visStor(r) {
+    var lag = document.createElement("div");
+    lag.className = "kt-stor";
+    var hoyde = Math.min(window.innerHeight - 48, 900);
+    lag.appendChild(plakatBoks(r, Math.round(hoyde * r.bredde / r.hoyde)));
+    var tekst = document.createElement("div");
+    tekst.className = "kt-stor__tekst";
+    tekst.innerHTML = "<strong></strong><span></span>";
+    tekst.querySelector("strong").textContent = r.gruppe + ", " + r.navn;
+    tekst.querySelector("span").textContent = (r.advarsel ? "Advarsel: " + r.advarsel + " " : "") + "Fingeravtrykk " + r.avtrykk + ".";
+    lag.appendChild(tekst);
+    lag.addEventListener("click", function () { lag.remove(); });
+    document.body.appendChild(lag);
+  }
+
+  // ---------- Knapper ----------
+
+  $("#kjor").addEventListener("click", kjor);
+  $("#lagre-ref").addEventListener("click", function () {
+    var avtrykk = {};
+    resultater.forEach(function (r) { avtrykk[r.nokkel] = r.avtrykk; });
+    // En kjøring med bare utvalget skal ikke slette referansen for de andre hyttene.
+    var gammel = lesReferanse();
+    if (gammel && gammel.avtrykk) Object.keys(gammel.avtrykk).forEach(function (k) { if (!(k in avtrykk)) avtrykk[k] = gammel.avtrykk[k]; });
+    try { localStorage.setItem(REFERANSE, JSON.stringify({ tid: Date.now(), avtrykk: avtrykk })); } catch (e) { /* ignorer */ }
+    referanse = lesReferanse();
+    resultater.forEach(function (r) { r.endret = false; r.ny = false; });
+    document.querySelectorAll(".kt-merke--endret, .kt-merke--ny").forEach(function (m) { m.remove(); });
+    document.querySelectorAll(".kt-kort--endret").forEach(function (k) { k.classList.remove("kt-kort--endret"); });
+    settStatus("Referansen er lagret med " + Object.keys(avtrykk).length + " fingeravtrykk.");
+  });
+  $("#bare-avvik").addEventListener("change", function (e) { $("#grupper").classList.toggle("kt-skjul-ok", e.target.checked); });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(kjor); else kjor();
+})();
+</script>
+</body>
+</html>

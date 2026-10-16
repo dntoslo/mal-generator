@@ -4,7 +4,7 @@ Kort om det som ikke er opplagt fra koden. Leses ved behov.
 
 ## Størrelsestrinn
 
-`TEKST` i `js/app.js` har to sett (normal og stor), hvert med fire trinn. Trinn 0 er romsligst og trinn 3 tettest. Trinnet velges i `beregn()` slik:
+`TEKST` i `js/konstanter.js` har to sett (normal og stor), hvert med fire trinn. Trinn 0 er romsligst og trinn 3 tettest. Trinnet velges i `beregn()` slik:
 
 | Antall synlige turer | Trinn |
 |---|---|
@@ -38,7 +38,7 @@ Alternativet var å krympe luften i designet. Det gir en trangere plakat som bry
 
 ## Tittel som tilpasser seg
 
-Tittelen skal helst stå på én linje. `tilpassStorrelse()` i app.js måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen). Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen med turlagets navn og perioden («DNT BÆRUM   UKE 42, OKTOBER», med luft mellom) skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
+Tittelen skal helst stå på én linje. `tilpassStorrelse()` i `js/maaling.js` måler tekstbredden med canvas og skalerer skriften ned i steg på 2 px: fra 92 til 56 px i heroen (bredde minus 56 px marg og 170 px reservert til logoen). Får den fortsatt ikke plass på minste størrelse, brytes den. Overlinjen med turlagets navn og perioden («DNT BÆRUM   UKE 42, OKTOBER», med luft mellom) skaleres på samme måte fra 24 til 18 px. Målingen krever at fontene er lastet, så plakaten rendres på nytt når `document.fonts.ready` løser seg.
 
 Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen nederst i heroen i «Bilde øverst» i innlegg.
 
@@ -93,7 +93,7 @@ Graderingsfargene i `GRAD` (Enkel grønn `#2E6B3E`, Middels blå `#316095`, Krev
 
 Display-fonten er Whitman fra Font Bureau, fra 25. september 2026. Den erstattet Romek. Bare to filer brukes: `Whitman-RomanLF.ttf` (400) og `Whitman-BoldLF.ttf` (700). LF betyr linjetall, så tall i en tittel («Turer i 2026») står på linje. Med gammeldagse tall (OsF) ville sifrene hoppet opp og ned. Fra 28. september 2026 brukes Whitman bare i titler, ikke i datofeltene. Whitman har ingen Light-vekt, så vekt 300 faller tilbake til Roman. Resten av Whitman-filene (Italic, SmallCaps og OsF) ligger utenfor repoet i `original/`.
 
-Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i app.js og som `letter-spacing` på alle titler som måles: `.p-tittel`, `.a-tittel`, `.m-tittel`, `.s-navn` og `.k-tittel`. De må være like, ellers regner `tilpassStorrelse()` feil bredde.
+Titlene har sporing −0,02 em. Romek hadde −0,03 em, men Whitman er en tekstserif som blir for tett med det. Verdien står i `TITTELSPORING` i `js/konstanter.js` og som `letter-spacing` på alle titler som måles: `.p-tittel`, `.a-tittel`, `.m-tittel`, `.s-navn` og `.k-tittel`. De må være like, ellers regner `tilpassStorrelse()` feil bredde.
 
 ## Arrangementsmalen
 
@@ -159,6 +159,16 @@ Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Ge
 - **Ingen midtprikk som skilletegn.** Den tynne prikken (·) mellom høyde og område, i perioden og i lengde og varighet virket KI-generert. Nå står det «1405 moh i Jotunheimen» (eller «på Hardangervidda», «Ved Oslofjorden»), «UKE 42, OKTOBER» (ikke «I», som ser ut som en strek i versaler med sporing), «3,3 km, 1 time» og luft mellom navn og periode i overlinjen.
 - **Postkort C med lange titler.** Signaturen med lys kant ble laget for hyttenavn med høyde og område til høyre. I Turtips og Sesong står tittelen og undertittelen der, og de kolliderte. Nå måles begge: får de ikke plass side om side med navnet i minst 72 px, står undertittelen under navnet, og navnet får hele bredden (900 px, ned til 56 px, ellers to linjer). En test av alle hytter, maler, nivåer, signaturer, formater, varianter og karusellsider fant ingen kollisjoner etterpå.
 - **Vinterbilder til påske.** Hyttebildene er merket vinter, sommer eller inne. Handler innlegget om påske, vinter eller ski, brukes et vinterbilde. Handler det om sommer eller fiske, brukes et sommerbilde. Sju hytter som er åpne i påsken, manglet vinterbilde og fikk ett fra UT.no.
+
+## Kodestruktur (16. oktober 2026)
+
+Fase 5 av gjennomgangen. `js/app.js` var én funksjon på 2800 linjer. Nå er den delt i ES-moduler uten byggesteg, og plakatene er bevist like før og etter.
+
+- **Kontrollside først.** `kontroll.html` laster verktøyet i en skjult ramme (`srcdoc`), med `Math.random` låst til et fast frø, datoen låst til 16. oktober 2026 og lagringen i minnet. Den trykker seg gjennom alle valgene og lager et fingeravtrykk av hver plakat (variablene på `#plakat` sortert, pluss html-en). Med alle 25 hyttene er det 2782 plakater. Referansen ble lagret før endringene, og felttabellen og modulene ga 0 endrede plakater.
+- **Felttabell.** `FELT` i `js/lagring.js` beskriver alt som lagres, med type og gyldige verdier. `lagre()` og `hent()` leser den. Turrader og utsnitt sjekkes felt for felt (`hentTur()`, `hentUtsnitt()`), og gamle verdier flyttes i `flyttGamle()`. Et tall i et turmål eller en ødelagt lagring stopper ikke lenger oppstarten.
+- **Delingen** ble gjort med et skript som tildelte hver del av filen en modul, fant navnene hver modul bruker fra de andre og lagde `import` og `export`. Etterpå ble det sjekket at alle 2542 kodelinjer og 216 deklarasjoner er de samme som før. Bare det andre moduler bruker, er eksportert.
+- **Regler som følger av modulene.** En importert variabel kan ikke endres fra en annen modul. Derfor eies `vanligStatus` av `skjema.js`, `apenTur` endres med `settApenTur()`, og fontmålingen nullstilles med `fonterErKlare()`. `konstanter.js` importerer ingenting, så den er ferdig før alle andre. Kode som kjører med en gang en modul lastes (ikke inne i en funksjon), kan bare bruke konstanter og egne navn.
+- **Versjonsnummer.** Modulene lastes gjennom et importkart i `index.html`, der hver fil har `?v=` med samme nummer, som CSS-filene og `hytter.js`. Ett nytt nummer gir et samlet sett nye filer, så nettleseren ikke blander gamle og nye moduler i de ti minuttene Pages ber den huske filene.
 
 ## Tekst og plass (16. oktober 2026)
 
