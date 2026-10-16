@@ -34,8 +34,14 @@ input, select, button, textarea { font: inherit; }
 
 @media (min-width: 900px) {
   .app { display: grid; grid-template-columns: minmax(340px, 470px) minmax(0, 1fr); gap: 28px; align-items: start; }
-  /* Forhåndsvisningen følger med når skjemaet rulles */
-  .forhandsvisning { position: sticky; top: 28px; }
+  /* Forhåndsvisningen står fast mens skjemaet rulles. Den er aldri høyere enn vinduet og ruller
+     selv, så bildet og knappen alltid er synlige, også nederst i skjemaet. Posteteksten under
+     nås ved å rulle i kolonnen. Når kolonnen er rullet til bunns, ruller siden videre.
+     Polstringen på sidene gir plass til skyggen rundt bildet. */
+  .forhandsvisning {
+    position: sticky; top: 28px; max-height: calc(100vh - 28px); overflow-y: auto;
+    box-sizing: border-box; padding: 0 20px 20px; margin: 0 -20px;
+  }
   .lukk, .bunnlinje { display: none !important; }
 }
 
