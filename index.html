@@ -172,7 +172,11 @@
         <label class="glider"><span>Vannrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="x"></label>
         <label class="glider"><span>Loddrett</span><input type="range" min="0" max="100" step="1" data-utsnitt="y"></label>
         <label class="glider"><span>Zoom</span><input type="range" min="100" max="200" step="1" data-utsnitt="z"></label>
-        <p class="hjelp">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så innlegg og historie kan ha ulikt.</p>
+        <!-- Statusområdet står alltid i siden, så skjermlesere leser opp varselet om oppløsning når det dukker opp. -->
+        <div class="utsnitt-status" role="status" aria-live="polite">
+          <p class="advarsel" id="opplosning" hidden></p>
+          <p class="hjelp">Dra til det du vil ha med er synlig. Bildet beholder alltid sine egne proporsjoner. Utsnittet huskes for hvert format, så innlegg og historie kan ha ulikt. Midtstill setter motivet i midten igjen.</p>
+        </div>
       </div>
     </div>
 
