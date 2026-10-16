@@ -40,11 +40,15 @@ Nettside som lar turlag og betjente hytter i DNT Oslo og Omegn lage ferdige bild
 - Rekkefølgen i skjemaet er Hvem, Hva, Innhold, Bilde og Utseende (16. oktober 2026). «Hvor mye tekst?» (nivået) står under Hva, fordi det bestemmer hvilke felt som vises i Innhold: `data-nivaa="plakat"` på felt som bare brukes i Plakat, og `"merkelapp plakat"` på felt som Postkort-signaturen ikke bruker. Hvert felt har synlig etikett (`label.skjemafelt` med `.etikett`), plassholderen er bare et eksempel.
 - Feltene i turradene har ikke klassen `.tekstfelt`. `renderSkjema()` fyller alle `.tekstfelt[data-felt]` fra `state`, og turradenes `data-felt="tittel"` ville da fått kalenderens tittel. Turradene er lukket til én linje unntatt den som redigeres (`apenTur`, lagres ikke).
 - Prompten til Claude («Reserveløsning») ble fjernet 16. oktober 2026 og erstattet av hjelpen «Får du ikke lastet ned?». Ikke legg den inn igjen uten avklaring. Åpnes siden inne i Messenger, Facebook eller Instagram, vises `#app-varsel` øverst (`start()`).
+- Fotoets høyde i «Bilde øverst» og i Plakat er ikke fast (16. oktober 2026). `beregnTurkalender()` og `beregnEnkelt()` måler radene og innholdet i det skjulte måleelementet (`maalHoyde()`, det samme som karusellen bruker) og gir fotoet resten, men minst 330 px (780 i historie) i «Bilde øverst» og 540 px (840) i Plakat. Høyden må være kjent i `beregn*()`, fordi utsnittet er i px. Endrer du noe som påvirker høyden på radene (`.p-rad`, `luft` i `TEKST`) eller innholdet i Plakat (`malPlakatInnhold()`), følger fotoet med, men mål maksgrensene i `OPPSETT` på nytt.
+- Maksgrensene er 6 og 7 turer i «Bilde øverst» og 6 og 8 i «Stort bilde» (innlegg og historie), én mindre med stor tekst. De er målt med lange turmål og detaljer 16. oktober 2026, se «Tekst og plass» i `docs/design.md`. Flere turer går til Karusell. `sjekkListe()` advarer hvis listen likevel ikke får plass.
+- Klokkeslettet i turlistene og karusellen er sort (16. oktober 2026). Rødt brukes bare på dagsfeltet.
+- På Postkort-nivå har Sesong, Arrangement, Turtips og Meny avsenderens navn som overlinje øverst (`.s-avsender`, 16. oktober 2026). I Merkelapp og Postkort står merkelappen der datofeltet ellers ville stått, så datoen blir undertittel når undertittelen er tom (`underEllerDato()`). Eksempeltittelen for booking er «Booking åpner», uten dato.
 - Eksportklonen mister id-en `#plakat`, så `.eksport-klone *` har egen `box-sizing: border-box`. Uten den ble flater med både bredde og polstring (f.eks. postkort C) for brede i eksporten.
 
 ## Designrammer
 
-Farger og fonter kommer fra `css/tokens.css`. Minste tekst i plakaten er 24 px. Ingen emoji i plakaten. Norsk bokmål i kode, kommentarer, commit-meldinger og grensesnitt, uten tankestrek.
+Farger og fonter kommer fra `css/tokens.css`. Det man leser for å bli med (sted, turmål, klokkeslett) er minst 30 px, og ingen tekst i plakaten er under 24 px (etiketter, overlinjer, stempel og sidetall kan være 24). Ingen emoji i plakaten. Norsk bokmål i kode, kommentarer, commit-meldinger og grensesnitt, uten tankestrek.
 
 ## Pekere
 

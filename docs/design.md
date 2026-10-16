@@ -15,7 +15,7 @@ Kort om det som ikke er opplagt fra koden. Leses ved behov.
 
 Deretter justeres det: pluss ett trinn hvis noen tur har detaljer (turleder, varighet, gradering eller påmelding), pluss ett hvis oppsettet ikke er «Bilde øverst» og det er mer enn fire turer, minus ett i historie-format fordi det er mer plass. Trinnet klemmes alltid til 0 til 3.
 
-Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `detalj`). Det er nedre grense for lesbarhet på mobil, og skal ikke senkes.
+Fra 16. oktober 2026 er det man leser for å bli med, minst 30 px i normal størrelse på alle trinn: sted 30, turmål 34 og klokkeslett 36 px. Turleder og lengde er 26 px. Før var minste tekst 24 px, men det blir bare ca. 8,7 px på en iPhone. Se «Tekst og plass» under.
 
 ## Maksgrenser per oppsett
 
@@ -23,8 +23,10 @@ Minste tekst i plakaten er 24 px på trinn 3 i normal størrelse (`meta` og `det
 
 | Oppsett | Innlegg | Historie |
 |---|---|---|
-| Bilde øverst (`topp`) | 8 | 8 |
-| Stort bilde (`bakgrunn`) | 7 | 8 |
+| Bilde øverst (`topp`) | 6 | 7 |
+| Stort bilde (`bakgrunn`) | 6 | 8 |
+
+Grensene over gjelder fra 16. oktober 2026. Før var de 8 og 8, og 7 og 8, med mindre tekst. Se «Tekst og plass» under for hvordan de er målt.
 
 Fram til 25. september 2026 fantes også «Stort bilde» med beige flate under fotoet (5 og 7 turer) og «Stående til høyre» (7 og 8). De ble tatt ut for å gjøre valgene enklere. Det nye «Stort bilde» er det som før het «Bilde som bakgrunn», fordi det gir plass til flest turer og viser mest av fotoet.
 
@@ -42,7 +44,7 @@ Bakgrunnen er at en tittel over to linjer på 92 px kolliderte med ukelinjen ned
 
 ## Båndet nederst
 
-Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medium (27 i kortet i «Stort bilde»), altså under turmålene (34 px) og klokkeslettene (36 px) i hierarkiet. Til venstre står DNT-logoen (`dnt-logo.png`) i en hvit sirkel på 48 px med logoen i 33 px, samme forhold som logoen oppe i fotoet (88 og 60 px). Den røde T-en ville ellers forsvinne mot det røde båndet. Fram til 25. september 2026 brukte båndet en egen hvit T (`dnt-t-ikon.png`) som var smalere enn T-en i logoen, bredde delt på høyde 0,75 mot 0,93, og som derfor så ut som en annen logo.
+Nettadressen i det røde båndet er sekundær informasjon og settes i 30 px medium (27 i kortet i «Stort bilde»), altså under turmålene og klokkeslettene i hierarkiet (34 og 36 px før 16. oktober 2026, nå minst 34 og 36). Til venstre står DNT-logoen (`dnt-logo.png`) i en hvit sirkel på 48 px med logoen i 33 px, samme forhold som logoen oppe i fotoet (88 og 60 px). Den røde T-en ville ellers forsvinne mot det røde båndet. Fram til 25. september 2026 brukte båndet en egen hvit T (`dnt-t-ikon.png`) som var smalere enn T-en i logoen, bredde delt på høyde 0,75 mot 0,93, og som derfor så ut som en annen logo.
 
 ## Hvitt kort
 
@@ -72,7 +74,7 @@ To paletter er tillatt, begge definert som tokens i `css/tokens.css`. Plakaten b
 
 | Bruk i plakaten | Token | HEX |
 |---|---|---|
-| Dagbånd i datofelt, klokkeslett, påmelding, bånd nederst | `--dnt-rod` | #D82D20 |
+| Dagbånd i datofelt, påmelding, bånd nederst (klokkeslett til 16. oktober 2026) | `--dnt-rod` | #D82D20 |
 | Plakatbakgrunn, datofelt i hvitt kort, skjemabokser | `--beige-lys` | #F8F2E4 |
 | Annenhver rad, knapper, sidebakgrunn | `--beige` | #F2E6D0 |
 | Datofelt på hvite rader | `--beige-mork` | #E8D7B6 |
@@ -118,7 +120,7 @@ Lagt til 25. september 2026. Ett turmål, i innlegg og historie, med de samme to
 Strammet opp 28. september 2026, etter at Daniel valgte variant B blant fire skisser.
 
 - **Arrangement** (`.a-chip`): 184 px (199 med stor tekst). Dagsnavnet står i rødt bånd i 24 px ABC Social Extended Bold med sporing 0,08 em. Tallet er 70 px ABC Social Extended Bold med linjehøyde 0,8. Måneden er 24 px ABC Social Medium med sporing 0,06 em, og en negativ høyremarg på 0,06 em så ordet står midt i feltet. Med stor tekst ganges alle tre med 1,12.
-- **Turkalender** (`.p-chip`): feltstørrelsene i `TEKST` er uendret, så radhøyder og maksgrenser står som før. Dagsnavnet er minst 24 px på alle trinn, og tallet er ABC Social Extended Bold, omtrent 5 % større enn Whitman-tallet var.
+- **Turkalender** (`.p-chip`): feltstørrelsene i `TEKST` var uendret 28. september, så radhøyder og maksgrenser sto som før. Dagsnavnet var minst 24 px på alle trinn, og tallet er ABC Social Extended Bold, omtrent 5 % større enn Whitman-tallet var. Fra 16. oktober 2026 er feltet 104 til 138 px og dagsnavnet 26 px (28 med stor tekst), se «Tekst og plass».
 - **Hvorfor:** Før var feltet 168 px med måneden i 20 px. «SEPTEMBER» gikk nesten ut til kantene, og det var 21 px luft over tallet mot 8 px under måneden. Måneden og turkalenderens dagsnavn (20 til 22 px) var under minstegrensen på 24 px. Whitman-tallet så lett og boklig ut i et lite ikon med sans rundt.
 - **Plass:** Med 184 px har det lengste månedsnavnet (september) minst 14 px luft til kanten, også med stor tekst. Det lengste dagsnavnet (torsdag) har minst 24 px.
 - **Balanse:** Linjehøyde 0,8 på tallet og 6 px ekstra luft nederst (2 px i turkalenderen) gjør at tallblokken står optisk midt under båndet.
@@ -144,7 +146,7 @@ Verktøyet ble utvidet til de 25 betjente hyttene og fikk navnet Turposten. Bakg
 Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Geiterygghytta var for langt for ett bilde. Karusell er derfor et eget format for turkalender og program, i innleggsformat 1080 × 1350.
 
 - **Forsiden** er bygget som Merkelapp: foto over hele flaten, stempelet, perioden i merkelappen («PÅSKEN 2027»), tittelen og «Bla videre» nede til høyre. Undertittel er valgfri. Farge og plassering varieres med «Prøv en annen variant».
-- **Listesidene** har logo og navn øverst, sidetall («2 / 4»), tittelen i Whitman og én blokk per dag: datofelt med dagbånd og dato, og under hverandre klokkeslett i rødt, aktivitet og sted. Punkter med samme dag og dato etter hverandre samles i én blokk. Blokkene veksler mellom hvit og lys beige som i turkalenderen.
+- **Listesidene** har logo og navn øverst, sidetall («2 / 4»), tittelen i Whitman og én blokk per dag: datofelt med dagbånd og dato, og under hverandre klokkeslett (rødt til 16. oktober 2026, nå sort), aktivitet og sted. Punkter med samme dag og dato etter hverandre samles i én blokk. Blokkene veksler mellom hvit og lys beige som i turkalenderen.
 - **Fordelingen** måles, ikke regnes ut: alle dagene rendres i et skjult element med samme stiler, og så fylles hver side til det ikke er plass til neste dag. 48 px luft nederst. En dag deles aldri på to bilder. Er én dag høyere enn en hel side, sier skjemaet fra.
 - **«Godt å vite»** er siste side når feltet er fylt ut: et annet foto av hytta øverst (540 px), tittel og opptil fem punkter med ikon i beige sirkel. Ikonet velges ut fra ordene i linjen (`ikonFor()`), med i-ikon når ingenting passer.
 - **Nedlasting.** Bildene lages ett for ett fra forhåndsvisningen, så de blir identiske med det man ser. Datamaskin: lastes ned etter hverandre, og nettleseren kan spørre om lov til flere filer. Mobil med delingsark: første trykk lager bildene, andre trykk åpner delingsarket, fordi delingsarket krever et ferskt trykk. Filnavnene er nummerert i rekkefølgen de skal lastes opp.
@@ -157,6 +159,19 @@ Kartleggingen viste at hyttene bruker karuseller mye, og påskeprogrammet til Ge
 - **Ingen midtprikk som skilletegn.** Den tynne prikken (·) mellom høyde og område, i perioden og i lengde og varighet virket KI-generert. Nå står det «1405 moh i Jotunheimen» (eller «på Hardangervidda», «Ved Oslofjorden»), «UKE 42, OKTOBER» (ikke «I», som ser ut som en strek i versaler med sporing), «3,3 km, 1 time» og luft mellom navn og periode i overlinjen.
 - **Postkort C med lange titler.** Signaturen med lys kant ble laget for hyttenavn med høyde og område til høyre. I Turtips og Sesong står tittelen og undertittelen der, og de kolliderte. Nå måles begge: får de ikke plass side om side med navnet i minst 72 px, står undertittelen under navnet, og navnet får hele bredden (900 px, ned til 56 px, ellers to linjer). En test av alle hytter, maler, nivåer, signaturer, formater, varianter og karusellsider fant ingen kollisjoner etterpå.
 - **Vinterbilder til påske.** Hyttebildene er merket vinter, sommer eller inne. Handler innlegget om påske, vinter eller ski, brukes et vinterbilde. Handler det om sommer eller fiske, brukes et sommerbilde. Sju hytter som er åpne i påsken, manglet vinterbilde og fikk ett fra UT.no.
+
+## Tekst og plass (16. oktober 2026)
+
+Fase 4 av gjennomgangen. Skissene ligger i `original/skisser-fase4/tekst-og-plass.html` (ignorert av git), og Daniel valgte forslaget på alle punkter.
+
+- **Lesekritisk tekst minst 30 px.** 1080 px vises på 390 px i feeden på en iPhone, så 24 px blir ca. 8,7 px. Med 8 turer var turmål 26 px, sted og detaljer 24 px og klokkeslett 28 px. Nå er sted 30, turmål 34 og klokkeslett 36 px på alle trinn (`TEKST`), datofeltets dagsnavn 26 px og turleder og lengde 26 px. Karusellens listesider har aktivitet 36, sted 30 og klokkeslett 34 px. Etiketter, overlinjer, stempel, sidetall og datofeltene i enkeltmalene kan fortsatt være 24 px. Ingen tekst er under 24 px (etikettene i Plakat var 22 px og er rettet).
+- **Færre turer per bilde.** Grensene er målt med tre lister: eksempelturene, åtte turmål som alle går over to linjer, og eksempelturene med turleder og lengde på alle. «Bilde øverst» får plass til 6 i innlegg og 7 i historie (6 når alle har turleder og lengde). I «Stort bilde» kan kortet teknisk ta 8 turer i innlegg, men da er nesten hele fotoet dekket. Grensen er satt der kortet starter omtrent en tredjedel ned: 6 turer (kortet på 445 til 506 av 1350 px) og 8 i historie (753 til 811 av 1920 px). Flere turer går til Karusell. `sjekkListe()` sier fra om radene likevel renner over, eller om kortet når opp i tittelen.
+- **Fotoet i «Bilde øverst» vokser.** Radene har naturlig høyde med fast luft (`luft` i `TEKST`, `--rad-luft`), og fotoet tar resten, men aldri mindre enn 330 px (780 i historie). Radenes høyde måles i det skjulte måleelementet (`maalHoyde()`) før plakaten bygges, fordi utsnittet regnes ut i px for fotoflaten. Med eksempelturene (4) er fotoet 608 px i stedet for 330, og med 5 programpunkter 500 px.
+- **Fotoet i Plakat vokser.** Innholdet står rett under fotoet med 56 px luft over og 72 under (340 i historie, der Instagram legger knapper), og fotoet tar resten. Med lang tekst krymper fotoet, men aldri under 540 px i innlegg og 840 i historie. Før var det fast 620 og 1080. Grensen er satt så det lengste turforslaget fra UT.no (Nordstedalseter) får plass uten advarsel.
+- **Klokkeslett i sort.** Rødt brukes bare på dagsfeltet, så det blir ett tydelig signal.
+- **Avsender på Postkort-nivået.** Når Sesong, Arrangement, Turtips eller Meny står på Postkort-nivå, står avsenderens navn som overlinje øverst (`.s-avsender`), som i Plakat, med en svak skygge mot lys himmel. I historie står den 210 px ned, under Instagrams knapper. I «Med kant» står den inne i fotoet. Postkort-malen har navnet i signaturen og får ingen overlinje.
+- **Eksempeltittel uten dato.** «Booking åpner 15. oktober» sto ved siden av datofeltet «TORSDAG 15 OKTOBER» i Plakat. Nå er eksempeltittelen «Booking åpner». I Merkelapp og Postkort står merkelappen der datofeltet ellers ville stått, så datoen blir undertittel når undertittelen er tom (`underEllerDato()`). Posteteksten for Sesong får datoen etter tittelen når den ikke står der: «Booking åpner torsdag 15. oktober.»
+- **Testet** med alle 25 hyttene (Sesong med alle typer, Meny, Arrangement og Program) og alle 67 turforslagene, i innlegg og historie, på alle nivåer og signaturer: ingen plassadvarsler. Eksporten er lik forhåndsvisningen.
 
 ## Gjennomgang 16. oktober 2026
 

@@ -32,19 +32,24 @@
   // To tekststørrelser. «Stor» er for turlag med mange seniorer blant deltakerne,
   // og tar plassen fra antall turer, ikke fra luften i designet.
   // Hver liste har fire trinn: trinn 0 er romsligst, trinn 3 er tettest.
-  // Dagsnavnet i datofeltet er aldri under 24 px. Datotallet er i ABC Social Extended Bold.
+  // Fra 16. oktober 2026 er det man leser for å bli med, minst 30 px i normal størrelse:
+  // sted 30, turmål 34 og klokkeslett 36. 24 px i bildet blir bare ca. 8,7 px på en iPhone.
+  // Dagsnavnet i datofeltet er 26 px. Datotallet er i ABC Social Extended Bold.
+  // luft er polstringen over og under hver rad i «Bilde øverst», se beregnTurkalender().
   var TEKST = {
     normal: {
-      chip: [116, 106, 96, 88], chipSmal: [100, 94, 88, 84],
-      dag: [24, 24, 24, 24], dato: [46, 42, 38, 35], datoSmal: [42, 39, 36, 33],
-      title: [34, 31, 28, 26], titleSmal: [31, 29, 27, 25],
-      meta: [26, 25, 24, 24], detalj: 24, tid: [36, 33, 30, 28]
+      chip: [124, 118, 112, 112], chipSmal: [112, 108, 104, 104],
+      dag: [26, 26, 26, 26], dato: [50, 48, 46, 46], datoSmal: [46, 44, 42, 42],
+      title: [38, 36, 34, 34], titleSmal: [36, 34, 34, 34],
+      meta: [32, 30, 30, 30], detalj: 26, tid: [40, 38, 36, 36],
+      luft: [30, 26, 22, 18]
     },
     stor: {
-      chip: [136, 124, 110, 98], chipSmal: [118, 110, 100, 92],
-      dag: [26, 25, 24, 24], dato: [56, 50, 45, 40], datoSmal: [50, 46, 42, 38],
-      title: [44, 39, 34, 30], titleSmal: [39, 35, 31, 28],
-      meta: [32, 30, 27, 25], detalj: 26, tid: [46, 41, 36, 32]
+      chip: [138, 132, 126, 126], chipSmal: [126, 120, 116, 116],
+      dag: [28, 28, 28, 28], dato: [56, 54, 52, 52], datoSmal: [52, 50, 48, 48],
+      title: [42, 40, 38, 38], titleSmal: [40, 38, 38, 38],
+      meta: [36, 34, 34, 34], detalj: 28, tid: [44, 42, 40, 40],
+      luft: [30, 26, 22, 18]
     }
   };
 
@@ -134,7 +139,7 @@
   var SESONG_TYPER = {
     apner:   { hjelp: "Når hytta åpner for sesongen.",
                fakta: [["Åpent", "kalender"], ["Bestilling", "seng"]] },
-    booking: { hjelp: "Når bookingen åpner. Datofeltet vises i Plakat.",
+    booking: { hjelp: "Når bookingen åpner. Datoen står i datofeltet i Plakat og under tittelen i Merkelapp.",
                fakta: [["Periode", "kalender"], ["Bestilling", "post"]] },
     ledig:   { hjelp: "Ledige senger i en periode.",
                fakta: [["Periode", "kalender"], ["Bestilling", "seng"]] },
@@ -164,11 +169,14 @@
     rute:     '<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/>'
   };
 
+  // Maksgrensene ble satt ned 16. oktober 2026, da teksten i listene ble større.
+  // Flere turer går til Karusell. Grensene er målt med lange turmål og detaljer, se
+  // «Tekst og plass» i docs/design.md. sjekkListe() sier fra hvis innholdet likevel ikke får plass.
   var OPPSETT = {
-    topp:     { tekst: "Bildet som bånd øverst. Mest plass til turene.", maks: { feed: 8, story: 8 } },
+    topp:     { tekst: "Bildet øverst, og det vokser når det er få turer.", maks: { feed: 6, story: 7 } },
     // Vises som «Stort bilde». «Stort bilde» med beige under fotoet og «Stående til høyre»
     // ble fjernet 25. september 2026, lagrede valg av dem blir til bakgrunn i hent().
-    bakgrunn: { tekst: "Bildet fyller hele flaten, turene står i et hvitt kort nederst.", maks: { feed: 7, story: 8 } }
+    bakgrunn: { tekst: "Bildet fyller hele flaten, turene står i et hvitt kort nederst.", maks: { feed: 6, story: 8 } }
   };
 
   // Eksempelbilder som vises når ingen laster opp eget foto. Ett liggende og
@@ -259,7 +267,8 @@
       },
       booking: {
         sesongMerke: "Påsken 2027",
-        sesongTittel: "Booking åpner 15. oktober",
+        // Uten dato i tittelen (16. oktober 2026). Datoen står i datofeltet, ellers står den dobbelt.
+        sesongTittel: "Booking åpner",
         sesongUnder: "",
         sesongTekst: "Send oss ønsket periode, antall personer og kontaktinformasjon, så bekrefter vi og sender lenke til betaling.",
         sesongFakta1: "19. til 28. mars", sesongFakta2: epost,
@@ -673,6 +682,8 @@
       state.periode = state.periode.replace(/^(UKE \d+) · ([A-ZÆØÅ]+)$/, "$1, $2");
       // Den gamle instruksjonen i turlagsfeltet blir et tomt felt (16. oktober 2026).
       if (state.turlag === "Fyll inn turlag") state.turlag = "";
+      // Den gamle eksempeltittelen hadde datoen i seg. Den nye regnes som eksempel, så den byttes med typen.
+      if (state.sesongTittel === "Booking åpner 15. oktober") state.sesongTittel = "Booking åpner";
       if (state.lenke === "Fyll inn lenke til turkalender" || state.lenke === "Fyll inn nettadresse, f.eks. dnt.no/oslo") state.lenke = standardSkjema().lenke;
       ["visLogo", "visBand", "visTurbo", "kortGlass", "visMerke"].forEach(function (k) {
         if (typeof d[k] === "boolean") state[k] = d[k];
@@ -928,8 +939,14 @@
       };
     }
     var over = inn.merke || datoTekst(inn.dato);
-    var meta = (inn.under || "").trim() || (inn.fakta[0] ? inn.fakta[0].verdi : "");
+    var meta = underEllerDato(inn) || (inn.fakta[0] ? inn.fakta[0].verdi : "");
     return { over: over, navn: inn.tittel, meta: meta, metaLinjer: meta ? [meta] : [] };
+  }
+
+  // Undertittelen, eller datoen når merkelappen står der datofeltet ellers ville stått
+  // (Merkelapp og Postkort). Ellers forsvinner f.eks. bookingdatoen fra bildet (16. oktober 2026).
+  function underEllerDato(inn) {
+    return (inn.under || "").trim() || (inn.merke ? datoTekst(inn.dato) : "");
   }
 
   // Enkeltplakaten: arrangement, turtips, sesong, meny eller postkort, på tre
@@ -948,16 +965,9 @@
     var sig = nivaa === "postkort" ? signaturFor(innhold) : null;
     var farge = FARGER[s.farge] || FARGER.rod;
 
-    // Fotoflaten. Plakat har foto øverst, postkort C har foto med lys kant, resten fyller flaten.
-    var fotoH = story ? 1080 : 620;
+    // Postkort C har foto med lys kant og signaturen under.
     var cTopp = story ? 180 : 44, cBunn = 266, cLuft = story ? 200 : 0;
     var cFotoH = fmt.hoyde - cTopp - cBunn - cLuft;
-    var fotoFlate = nivaa === "plakat" ? [fmt.bredde, fotoH]
-      : (nivaa === "postkort" && s.signatur === "c") ? [fmt.bredde - 88, cFotoH]
-      : [fmt.bredde, fmt.hoyde];
-    var u = s.utsnitt[s.format];
-    var bilde = kildeBilde(fotoFlate[0], fotoFlate[1]);
-    var bg = bakgrunn(bilde, fotoFlate[0], fotoFlate[1], u);
 
     // Datofeltet er 184 px, så hele månedsnavnet får plass i 24 px (se docs/design.md).
     var tekstBredde = fmt.bredde - 2 * pad;
@@ -988,6 +998,57 @@
       sigNavnPx = tittel.px;
     }
 
+    var vars = {
+      "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
+      "--a-pad": pad + "px", "--a-chip": chip + "px",
+      // Luft over og under innholdet i Plakat. Historie har mer nederst, der Instagram legger knapper.
+      "--a-innhold-topp": "56px", "--a-innhold-bunn": (story ? 340 : 72) + "px",
+      "--a-dag-size": Math.round(24 * k) + "px",
+      "--a-dato-size": Math.round(70 * k) + "px",
+      "--a-maaned-size": Math.round(24 * k) + "px",
+      "--a-merke-size": Math.round(26 * k) + "px",
+      "--a-tittel-size": tittel.px + "px",
+      "--a-under-size": Math.round(34 * k) + "px",
+      // Etikettene var 22 px til 16. oktober 2026, under grensen på 24 px.
+      "--a-etikett-size": Math.round(24 * k) + "px",
+      "--a-verdi-size": Math.round(30 * k) + "px",
+      "--a-tekst-size": Math.round(30 * k) + "px",
+      "--merke-bg": farge.bg, "--merke-fg": farge.fg,
+      "--m-tittel-size": tittel.px + "px",
+      "--m-under-size": Math.round(36 * k) + "px",
+      "--m-fakta-size": Math.round(34 * k) + "px",
+      // Instagram legger knapper over toppen og bunnen av en historie, derfor mer luft der.
+      "--m-topp": (story ? 210 : 56) + "px",
+      "--m-bunn": ((story ? 340 : 76) + band) + "px",
+      "--m-innhold-topp": (story ? 230 : 72) + "px",
+      "--m-stempel-bunn": ((story ? 300 : 56) + band) + "px",
+      "--s-navn-size": sigNavnPx + "px",
+      "--s-bunn": ((story ? 340 : 72) + band) + "px",
+      "--s-bunn-b": ((story ? 300 : 56) + band) + "px",
+      "--s-c-topp": cTopp + "px", "--s-c-foto-h": cFotoH + "px",
+      "--turbo-h": "200px", "--band-h": band + "px"
+    };
+
+    // Plakat: innholdet står rett under fotoet med fast luft, og fotoet tar resten av høyden
+    // (16. oktober 2026). Med kort tekst blir fotoet stort. Med lang tekst krymper det, men aldri
+    // under 540 px i innlegg og 840 i historie (før var det fast 620 og 1080). Da får også det
+    // lengste turforslaget fra UT.no plass. Høyden må være kjent her, fordi utsnittet regnes ut i px.
+    var fotoH = story ? 1080 : 620;
+    if (nivaa === "plakat") {
+      var innholdH = maalHoyde(malPlakatInnhold({ innhold: innhold, info: innhold.info, tittelBryt: tittel.bryt }), vars);
+      fotoH = Math.max(story ? 840 : 540, fmt.hoyde - band - innholdH);
+    }
+    vars["--a-foto-h"] = fotoH + "px";
+
+    // Fotoflaten. Plakat har foto øverst, postkort C har foto med lys kant, resten fyller flaten.
+    var fotoFlate = nivaa === "plakat" ? [fmt.bredde, fotoH]
+      : (nivaa === "postkort" && s.signatur === "c") ? [fmt.bredde - 88, cFotoH]
+      : [fmt.bredde, fmt.hoyde];
+    var bilde = kildeBilde(fotoFlate[0], fotoFlate[1]);
+    var bg = bakgrunn(bilde, fotoFlate[0], fotoFlate[1], s.utsnitt[s.format]);
+    vars["--bg-str"] = bg.bgStr;
+    vars["--bg-pos"] = bg.bgPos;
+
     return {
       mal: s.mal, nivaa: nivaa, oppsett: nivaa, fmt: fmt, opp: NIVAA[nivaa], u: bg.u, stor: stor, forMange: false, synlige: [], maks: 0,
       forstorrelse: bg.forstorrelse, langside: bg.langside,
@@ -998,35 +1059,7 @@
       innhold: innhold,
       info: innhold.info,
       sig: sig,
-      vars: {
-        "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
-        "--a-pad": pad + "px", "--a-chip": chip + "px",
-        "--a-dag-size": Math.round(24 * k) + "px",
-        "--a-dato-size": Math.round(70 * k) + "px",
-        "--a-maaned-size": Math.round(24 * k) + "px",
-        "--a-merke-size": Math.round(26 * k) + "px",
-        "--a-tittel-size": tittel.px + "px",
-        "--a-under-size": Math.round(34 * k) + "px",
-        "--a-etikett-size": Math.round(22 * k) + "px",
-        "--a-verdi-size": Math.round(30 * k) + "px",
-        "--a-tekst-size": Math.round(30 * k) + "px",
-        "--a-foto-h": fotoH + "px",
-        "--merke-bg": farge.bg, "--merke-fg": farge.fg,
-        "--m-tittel-size": tittel.px + "px",
-        "--m-under-size": Math.round(36 * k) + "px",
-        "--m-fakta-size": Math.round(34 * k) + "px",
-        // Instagram legger knapper over toppen og bunnen av en historie, derfor mer luft der.
-        "--m-topp": (story ? 210 : 56) + "px",
-        "--m-bunn": ((story ? 340 : 76) + band) + "px",
-        "--m-innhold-topp": (story ? 230 : 72) + "px",
-        "--m-stempel-bunn": ((story ? 300 : 56) + band) + "px",
-        "--s-navn-size": sigNavnPx + "px",
-        "--s-bunn": ((story ? 340 : 72) + band) + "px",
-        "--s-bunn-b": ((story ? 300 : 56) + band) + "px",
-        "--s-c-topp": cTopp + "px", "--s-c-foto-h": cFotoH + "px",
-        "--turbo-h": "200px", "--band-h": band + "px",
-        "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos
-      }
+      vars: vars
     };
   }
 
@@ -1048,8 +1081,27 @@
     if (kompakt && n > 4) trinn = Math.min(trinn + 1, 3);
     if (romslig) trinn = Math.max(trinn - 1, 0);
 
-    var heroH = s.format === "story" ? 780 : 330;
     var band = state.visBand ? 88 : 0;
+    var storrelser = {
+      "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
+      "--chip": T.chip[trinn] + "px", "--chip-smal": T.chipSmal[trinn] + "px",
+      "--dag-size": T.dag[trinn] + "px", "--dato-size": T.dato[trinn] + "px", "--dato-size-smal": T.datoSmal[trinn] + "px",
+      "--title-size": T.title[trinn] + "px", "--title-size-smal": T.titleSmal[trinn] + "px",
+      "--meta-size": T.meta[trinn] + "px", "--detalj-size": T.detalj + "px", "--tid-size": T.tid[trinn] + "px",
+      "--rad-luft": T.luft[trinn] + "px",
+      "--kort-gap": [20, 16, 13, 11][trinn] + "px", "--kort-pad": "32px"
+    };
+
+    // «Bilde øverst»: radene får sin naturlige høyde med fast luft, og fotoet tar resten,
+    // men aldri mindre enn før (330 px i innlegg, 780 i historie). Med få turer blir fotoet
+    // stort, med mange blir det som før (16. oktober 2026). Høyden må være kjent her, fordi
+    // utsnittet regnes ut i px for fotoflaten (bakgrunn()).
+    var heroMin = s.format === "story" ? 780 : 330;
+    var heroH = heroMin;
+    if (s.oppsett === "topp" && synlige.length) {
+      var raderH = maalHoyde('<div class="p-rader">' + synlige.map(function (t) { return malRad(t, true, false); }).join("") + "</div>", storrelser);
+      heroH = Math.max(heroMin, fmt.hoyde - band - raderH);
+    }
 
     var fotoFlate = s.oppsett === "topp" ? [fmt.bredde, heroH] : [fmt.bredde, fmt.hoyde];
     var u = s.utsnitt[s.format];
@@ -1070,19 +1122,13 @@
       bilde: bilde,
       eksempel: aktivtEksempel(fotoFlate[0], fotoFlate[1]),
       tittelBryt: tittelHero.bryt,
-      vars: {
-        "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
+      vars: Object.assign(storrelser, {
         "--hero-h": heroH + "px",
-        "--chip": T.chip[trinn] + "px", "--chip-smal": T.chipSmal[trinn] + "px",
-        "--dag-size": T.dag[trinn] + "px", "--dato-size": T.dato[trinn] + "px", "--dato-size-smal": T.datoSmal[trinn] + "px",
-        "--title-size": T.title[trinn] + "px", "--title-size-smal": T.titleSmal[trinn] + "px",
-        "--meta-size": T.meta[trinn] + "px", "--detalj-size": T.detalj + "px", "--tid-size": T.tid[trinn] + "px",
-        "--kort-gap": [20, 16, 13, 11][trinn] + "px", "--kort-pad": "32px",
         "--bg-str": bg.bgStr, "--bg-pos": bg.bgPos,
         "--tittel-size": tittelHero.px + "px",
         "--overlinje-size": overlinje.px + "px",
         "--turbo-h": "200px", "--band-h": band + "px"
-      }
+      })
     };
   }
 
@@ -1209,6 +1255,11 @@
     return '<div class="a-topp a-topp--merke">' + malMerke(inn.merke) + '<div class="a-topp__tekst">' + malArrTittel(b) + '</div></div>';
   }
 
+  // Innholdet under fotoet i Plakat. Samme html måles i beregnEnkelt(), så fotoet kan ta resten.
+  function malPlakatInnhold(b) {
+    return '<div class="a-innhold a-innhold--fyll">' + malArrTopp(b) + malMeny(b) + malArrInfo(b) + malArrTekst(b) + "</div>";
+  }
+
   // Stempelet med logo, avsenderens navn og høyde. Står øverst til venstre i Merkelapp,
   // eller nederst når teksten står øverst. Den eneste logoen i de organiske innleggene.
   function malStempel(klasse) {
@@ -1239,6 +1290,7 @@
       var pl = PLASSERINGER[state.plassering] ? state.plassering : "nede";
       var inn = b.innhold;
       var topp = inn.merke ? malMerke(inn.merke) : (inn.dato ? malChip(inn.dato) : "");
+      var under = underEllerDato(inn);
       return '<div class="m-flate">' +
         '<div class="p-foto p-foto--fyll" data-foto></div>' +
         '<div class="m-scrim m-scrim--' + (pl === "oppe" ? "oppe" : "nede") + '"></div>' +
@@ -1247,7 +1299,7 @@
         '<div class="m-innhold m-innhold--' + pl + (state.visTurbo ? " m-innhold--turbo" : "") + '">' +
           topp +
           '<div class="m-tittel' + (b.tittelBryt ? " m-tittel--bryt" : "") + '">' + esc(inn.tittel) + '</div>' +
-          (inn.under ? '<div class="m-under">' + esc(inn.under) + '</div>' : "") +
+          (under ? '<div class="m-under">' + esc(under) + '</div>' : "") +
           malIkonFakta(b) +
           (b.ekstra || "") +
         '</div>' +
@@ -1260,19 +1312,24 @@
           '<div class="p-foto" data-foto></div><div class="a-scrim a-scrim--topp"></div>' +
           '<div class="a-overlinje">' + esc(overlinjeNavn().toUpperCase()) + '</div>' + malTurbo("p-turbo--fotoflate") +
         '</div>' +
-        '<div class="a-innhold a-innhold--fyll a-innhold--midt">' + malArrTopp(b) + malMeny(b) + malArrInfo(b) + malArrTekst(b) + '</div>' +
+        malPlakatInnhold(b) +
         malBunn() +
       '</div>';
     },
     postkort: function (b) {
       var s = b.sig;
       var v = SIGNATURER[state.signatur] ? state.signatur : "a";
+      // Sesong, Arrangement, Turtips og Meny på Postkort-nivå har ellers ingen avsender i bildet.
+      // Navnet står da som overlinje øverst, som i Plakat (16. oktober 2026). Postkort-malen har
+      // navnet i signaturen allerede.
+      var navn = state.mal !== "postkort" ? avsenderNavn() : "";
+      var avsender = navn ? '<div class="s-avsender-scrim"></div><div class="s-avsender">' + esc(navn.toUpperCase()) + "</div>" : "";
       if (v === "c") {
         // Får ikke navn og meta plass side om side, står meta under navnet (b.cUnder).
         var meta = s.metaLinjer.length ? '<div class="s-c__meta' + (b.cUnder ? " s-c__meta--under" : "") + '">' +
           s.metaLinjer.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
         return '<div class="s-flate s-flate--c">' +
-          '<div class="s-c__foto"><div class="p-foto" data-foto></div></div>' +
+          '<div class="s-c__foto"><div class="p-foto" data-foto></div>' + avsender + "</div>" +
           '<div class="s-c__bunn"><div class="s-c__venstre">' +
             (s.over ? '<span class="s-over s-over--rod s-over--liten">' + esc(s.over) + '</span>' : "") +
             '<span class="s-navn s-navn--c' + (b.tittelBryt ? " s-navn--bryt" : "") + '">' + esc(s.navn) + '</span>' +
@@ -1282,7 +1339,7 @@
       }
       if (v === "b") {
         return '<div class="s-flate">' +
-          '<div class="p-foto p-foto--fyll" data-foto></div>' +
+          '<div class="p-foto p-foto--fyll" data-foto></div>' + avsender +
           '<div class="s-b"><img src="' + LOGO + '" alt="DNT"><div class="s-b__tekst">' +
             (s.over ? '<span class="s-over s-over--rod s-over--liten">' + esc(s.over) + '</span>' : "") +
             '<span class="s-navn s-navn--b">' + esc(s.navn) + '</span>' +
@@ -1292,7 +1349,7 @@
         '</div>';
       }
       return '<div class="s-flate">' +
-        '<div class="p-foto p-foto--fyll" data-foto></div><div class="s-scrim"></div>' +
+        '<div class="p-foto p-foto--fyll" data-foto></div><div class="s-scrim"></div>' + avsender +
         '<div class="s-a' + (state.visTurbo ? " m-innhold--turbo" : "") + '">' +
           (s.over ? '<span class="s-over">' + esc(s.over) + '</span>' : "") +
           '<span class="s-navn s-navn--a' + (b.tittelBryt ? " s-navn--bryt" : "") + '">' + esc(s.navn) + '</span>' +
@@ -1401,20 +1458,37 @@
     return malListeSide(b.kal, b.side.blokker, nr, totalt, b.listeTittelBryt);
   }
 
-  // Fordeler dagene på listesidene. Høydene måles i et skjult element med samme stiler,
-  // så fordelingen følger fonter og tekststørrelse. En dag deles aldri på to bilder.
+  // Skjult element med plakatens bredde og stiler, der innhold måles før plakaten bygges.
+  // Brukes av karusellen (sidene), «Bilde øverst» (radene) og Plakat (innholdet under fotoet).
+  // Variablene settes på nytt hver gang, så ingenting henger igjen fra forrige mal.
   var maaleEl = null;
-  function delOppBlokker(blokker, kal, vars, tittelBryt) {
-    if (!blokker.length) return { sider: [], forStor: false };
+  function maaleElement(vars) {
     if (!maaleEl) {
       maaleEl = document.createElement("div");
       maaleEl.className = "k-maal";
       maaleEl.setAttribute("aria-hidden", "true");
       document.body.appendChild(maaleEl);
     }
+    maaleEl.setAttribute("style", "");
     Object.keys(vars).forEach(function (k) { maaleEl.style.setProperty(k, vars[k]); });
-    maaleEl.innerHTML = malListeSide(kal, blokker, 1, 1, tittelBryt);
-    var rader = $(".k-rader", maaleEl);
+    return maaleEl;
+  }
+
+  // Naturlig høyde på html, målt i det skjulte elementet. Krever lastede fonter,
+  // derfor rendres alt på nytt når fontene er klare (start()).
+  function maalHoyde(html, vars) {
+    var el = maaleElement(vars);
+    el.innerHTML = html;
+    return el.firstElementChild ? el.firstElementChild.offsetHeight : 0;
+  }
+
+  // Fordeler dagene på listesidene. Høydene måles i et skjult element med samme stiler,
+  // så fordelingen følger fonter og tekststørrelse. En dag deles aldri på to bilder.
+  function delOppBlokker(blokker, kal, vars, tittelBryt) {
+    if (!blokker.length) return { sider: [], forStor: false };
+    var el = maaleElement(vars);
+    el.innerHTML = malListeSide(kal, blokker, 1, 1, tittelBryt);
+    var rader = $(".k-rader", el);
     var tilgjengelig = FORMATER.karusell.hoyde - rader.offsetTop - 48;
     var hoyder = Array.prototype.map.call(rader.children, function (e) { return e.offsetHeight; });
     var sider = [], naa = [], brukt = 0, forStor = false;
@@ -1453,11 +1527,12 @@
       "--k-tittel-size": listeTittel.px + "px",
       "--k-chip": Math.round(150 * k) + "px",
       "--k-dato-size": Math.round(60 * k) + "px",
-      "--k-tid-size": Math.round(30 * k) + "px",
-      "--k-post-size": Math.round(32 * k) + "px",
-      "--k-sted-size": Math.round(26 * k) + "px",
+      // Løftet 16. oktober 2026, som turlistene: sted 30, aktivitet 36, klokkeslett 34.
+      "--k-tid-size": Math.round(34 * k) + "px",
+      "--k-post-size": Math.round(36 * k) + "px",
+      "--k-sted-size": Math.round(30 * k) + "px",
       "--k-info-size": Math.round(30 * k) + "px",
-      "--detalj-size": Math.round(24 * k) + "px",
+      "--detalj-size": Math.round(26 * k) + "px",
       "--turbo-h": "200px", "--band-h": band + "px"
     };
 
@@ -1554,10 +1629,13 @@
     } else if (b.mal === "sesong") {
       var slutt = AVSLUTNING[state.sesongType][v];
       var faktaLinjer = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
+      // Står ikke datoen i tittelen («Booking åpner»), kommer den etter: «Booking åpner torsdag 15. oktober.»
+      var d = inn.dato;
+      var tittel = d && d.dato && inn.tittel.indexOf(d.dato) < 0 ? inn.tittel + " " + datoTekst(d).toLowerCase() : inn.tittel;
       if (v === 0) {
-        linjer = [inn.merke ? inn.merke + paa : navn, "", setning(inn.tittel), setning(inn.under), setning(inn.tekst), ""].concat(faktaLinjer, ["", slutt]);
+        linjer = [inn.merke ? inn.merke + paa : navn, "", setning(tittel), setning(inn.under), setning(inn.tekst), ""].concat(faktaLinjer, ["", slutt]);
       } else {
-        linjer = [setning(inn.tittel + (inn.merke ? " (" + inn.merke.toLowerCase() + ")" : "")), setning(inn.tekst || inn.under), ""].concat(faktaLinjer, ["", slutt]);
+        linjer = [setning(tittel + (inn.merke ? " (" + inn.merke.toLowerCase() + ")" : "")), setning(inn.tekst || inn.under), ""].concat(faktaLinjer, ["", slutt]);
       }
     } else if (b.mal === "meny") {
       var meny = inn.meny.length ? [""].concat(inn.meny) : [];
@@ -1704,6 +1782,7 @@
     $$("[data-foto]", p).forEach(function (f) { f.style.backgroundImage = 'url("' + String(b.bilde).replace(/"/g, "%22") + '")'; });
     // Plassen sjekkes før skaleringen, så advarselen er med når plassen til bildet regnes ut.
     if (enkelt) sjekkPlass(p);
+    else if (!b.karusell && !b.forMange) sjekkListe(p);
     renderKarusellNav(b);
     skalerForhandsvisning(b.fmt);
     oppdaterMini(b);
@@ -1746,7 +1825,8 @@
     // treffe stempelet. offsetTop er upåvirket av skaleringen i forhåndsvisningen.
     var m = $(".m-innhold, .s-a", p);
     if (m) {
-      var stempel = $(".m-stempel", p);
+      // Avsenderlinjen øverst på Postkort-nivå er et hinder på samme måte som stempelet.
+      var stempel = $(".m-stempel, .s-avsender", p);
       if (m.classList.contains("m-innhold--oppe")) {
         var grense = stempel ? stempel.offsetTop - 24 : p.offsetHeight - 48;
         trangt = m.offsetTop + m.offsetHeight > grense;
@@ -1760,6 +1840,20 @@
       ? "Innholdet får ikke plass i dette formatet. Kort ned teksten, tøm et felt, eller bytt til Historie."
       : "Teksten får ikke plass på fotoet. Kort ned tittelen eller undertittelen, eller velg Plakat for mer tekst.",
       plakatNivaa ? "Innholdet får ikke plass" : "Teksten får ikke plass");
+  }
+
+  // Turkalender og program har maksgrenser som holder for vanlige turmål. Mange turmål over
+  // to linjer eller mange detaljer kan likevel gjøre listen for høy, og da sier vi fra.
+  // I «Bilde øverst» renner radene over nederst, i «Stort bilde» når kortet opp i tittelen.
+  function sjekkListe(p) {
+    var trangt = false;
+    var rader = $(".p-rader", p);
+    if (rader) trangt = rader.scrollHeight > rader.clientHeight + 1;
+    var kort = $(".p-kort", p), tekst = $(".p-hero__tekst", p);
+    if (kort && tekst) trangt = kort.offsetTop < tekst.offsetTop + tekst.offsetHeight + 24;
+    var hva = state.mal === "program" ? "Programmet" : "Turene";
+    visAdvarsel(trangt ? hva + " får ikke plass i bildet. Kort ned teksten, fjern turleder og lengde, eller velg Karusell." : "",
+      hva + " får ikke plass");
   }
 
   // Bildet er maks 540 px bredt. På brede skjermer (festet ved siden av skjemaet) og når det
@@ -1921,12 +2015,13 @@
     if ($("#post-meta")) $("#post-meta").placeholder = avsenderMeta() ? "Tomt gir " + avsenderMeta() : "F.eks. Østmarka";
 
     $("#format-hjelp").textContent = b.fmt.navn + ", " + b.fmt.tekst;
+    // Fra 16. oktober 2026 er det man leser for å bli med, minst 30 px i normal størrelse.
+    var normalTekst = "Normal tekst: steder og klokkeslett er minst 30 px, som er lett å lese på mobil.";
     $("#tekst-hjelp").textContent = b.karusell
-      ? (b.stor ? "Stor tekst: lettere å lese, og listen fordeles på flere bilder." : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.")
+      ? (b.stor ? "Stor tekst: lettere å lese, og listen fordeles på flere bilder." : normalTekst)
       : enkelt
-      ? (b.stor ? "Stor tekst: litt større informasjon og brødtekst." : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.")
-      : (b.stor ? "Stor tekst: lettere å lese i feeden, men det blir plass til én tur mindre."
-                : "Normal tekst: minste størrelse er 24 px, som er lesbart på mobil.");
+      ? (b.stor ? "Stor tekst: litt større informasjon og brødtekst." : "Normal tekst: lett å lese på mobil.")
+      : (b.stor ? "Stor tekst: enda lettere å lese i feeden, men det blir plass til én tur mindre." : normalTekst);
     if (!enkelt && !b.karusell) $("#oppsett-hjelp").textContent = b.opp.tekst + " Plass til " + b.maks + (state.mal === "program" ? " punkter" : " turer") + " i dette formatet.";
     if ($("#liste-etikett")) settTekst($("#liste-etikett"), (state.mal === "program" ? "Programmet" : "Turene") + " (" + state[listeNokkel()].length + ")");
     $("#legg-til").textContent = state.mal === "program" ? "+ Legg til punkt" : "+ Legg til tur";

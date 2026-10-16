@@ -313,7 +313,9 @@ body.viser-bildet .bunnlinje { display: none; }
 /* Turrader */
 .p-rader { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .p-rad { display: flex; align-items: center; gap: 26px; }
-.p-rader .p-rad { flex: 1; padding: 0 56px; }
+/* Radene har naturlig høyde med fast luft (--rad-luft), og deler eventuell ekstra plass likt.
+   I «Bilde øverst» tar fotoet det radene ikke trenger, se beregnTurkalender(). */
+.p-rader .p-rad { flex: 1 1 auto; padding: var(--rad-luft, 0px) 56px; }
 .p-rader .p-rad:nth-child(odd)  { background: var(--hvit); }
 .p-rader .p-rad:nth-child(even) { background: var(--beige); }
 
@@ -333,7 +335,8 @@ body.viser-bildet .bunnlinje { display: none; }
 .p-grad { display: flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-weight: 700; font-size: var(--detalj-size); line-height: 1; }
 .p-grad__prikk { width: 13px; height: 13px; border-radius: 999px; background: currentColor; }
 .p-pamelding { font-family: var(--font-heading); font-weight: 700; font-size: var(--detalj-size); line-height: 1; color: var(--dnt-rod); }
-.p-tid { flex: none; font-family: var(--font-heading); font-weight: 700; font-size: var(--tid-size); color: var(--dnt-rod); }
+/* Klokkeslettet er sort fra 16. oktober 2026, så rødt bare er signal for dagen i datofeltet. */
+.p-tid { flex: none; font-family: var(--font-heading); font-weight: 700; font-size: var(--tid-size); color: var(--sort); }
 
 /* Rødt bånd nederst. 20 + 48 + 20 = 88 px, samme som band i beregn*() og --band-h.
    Logoen står i hvit sirkel med samme forhold som logoen oppe (88:60). */
@@ -390,9 +393,9 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 
 .a-overlinje { position: absolute; left: var(--a-pad); top: 56px; font-family: var(--font-heading); font-weight: 500; font-size: 26px; letter-spacing: 0.18em; color: var(--hvit); }
 
-.a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-pad); min-height: 0; }
+/* Innholdet står rett under fotoet, og fotoet tar resten av høyden (beregnEnkelt()). */
+.a-innhold { display: flex; flex-direction: column; gap: 24px; padding: var(--a-innhold-topp, 56px) var(--a-pad) var(--a-innhold-bunn, 72px); min-height: 0; }
 .a-innhold--fyll { flex: 1; }
-.a-innhold--midt { justify-content: center; }
 
 .a-topp { display: flex; align-items: flex-start; gap: 36px; }
 .a-topp__tekst { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding-top: 6px; }
@@ -473,6 +476,11 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
    ========================================================= */
 .s-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--foto-bakgrunn); color: var(--hvit); }
 .s-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0) 50%, rgba(20,30,22,0.74) 100%); }
+/* Avsender på Postkort-nivået (16. oktober 2026): navnet som overlinje øverst, som .a-overlinje i Plakat,
+   med en svak skygge så det kan leses på lys himmel. I historie står det under Instagrams knapper (--m-topp). */
+.s-avsender-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.42) 0%, rgba(20,30,22,0) 26%); }
+.s-avsender { position: absolute; left: 64px; top: var(--m-topp, 56px); font-family: var(--font-heading); font-weight: 500; font-size: 26px; letter-spacing: 0.18em; line-height: 1; color: var(--hvit); white-space: nowrap; }
+.s-c__foto .s-avsender { left: 36px; top: 32px; }
 .s-over { font-family: var(--font-heading); font-weight: 700; font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
 .s-over--rod { color: var(--dnt-rod); }
 .s-over--liten { font-size: 24px; }
@@ -533,11 +541,11 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 .k-blokk:nth-child(odd) { background: var(--hvit); }
 .k-chip { flex: none; width: var(--k-chip, 150px); height: var(--k-chip, 150px); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; background: var(--hvit); }
 .k-blokk:nth-child(odd) .k-chip { background: var(--beige-mork); }
-.k-chip__dag { background: var(--dnt-rod); color: var(--hvit); padding: 10px 0 9px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: 24px; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
+.k-chip__dag { background: var(--dnt-rod); color: var(--hvit); padding: 10px 0 9px; text-align: center; font-family: var(--font-heading); font-weight: 700; font-size: 26px; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
 .k-chip__dato { flex: 1; display: flex; align-items: center; justify-content: center; padding-bottom: 4px; font-family: var(--font-heading); font-weight: 700; font-size: var(--k-dato-size, 60px); letter-spacing: -0.02em; line-height: 0.8; }
 .k-poster { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
 .k-post { display: flex; align-items: baseline; gap: 18px; }
-.k-post__tid { flex: none; width: 104px; font-family: var(--font-heading); font-weight: 700; font-size: var(--k-tid-size, 30px); line-height: 1.15; color: var(--dnt-rod); }
+.k-post__tid { flex: none; width: 116px; font-family: var(--font-heading); font-weight: 700; font-size: var(--k-tid-size, 34px); line-height: 1.15; color: var(--sort); }
 .k-post__tekst { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .k-post__tittel { font-family: var(--font-heading); font-weight: 700; font-size: var(--k-post-size, 32px); line-height: 1.15; }
 .k-post__sted { font-family: var(--font-body); font-weight: 400; font-size: var(--k-sted-size, 26px); line-height: 1.2; color: rgba(0,0,0,0.66); }
