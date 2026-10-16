@@ -82,7 +82,7 @@ Verdt å vite:
 
 ## Kontroll før publisering
 
-`kontroll.html` (åpne http://127.0.0.1:8765/kontroll.html) laster verktøyet i en skjult ramme og tegner alle maler, nivåer, signaturer, oppsett og formater med eksempelinnholdet, med låste bildevalg og fast dato. Hver plakat får et fingeravtrykk.
+`kontroll.html` (åpne http://127.0.0.1:8765/kontroll.html) laster verktøyet i en skjult ramme og tegner alle maler, nivåer, signaturer, oppsett og formater med eksempelinnholdet, med låste bildevalg og fast dato. Hver plakat får et fingeravtrykk av html-en og den beregnede stilen, så også endringer i CSS blir fanget.
 
 1. Før du endrer koden: åpne siden, vent til den er ferdig, og trykk «Lagre som referanse».
 2. Etter endringen: åpne siden igjen. Plakater som har endret seg, får gul ramme, og plakater med plassadvarsel får rød.

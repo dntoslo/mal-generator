@@ -2,9 +2,9 @@
    tilstanden (renderSkjema()). */
 import { hytteBilder } from "./bilder.js";
 import { el, opplosningTekst, renderBunnlinjeStatus, settTekst, visAdvarsel } from "./forhandsvisning.js";
-import { $, $$, aktivtNivaa, avsenderMeta, avsenderNavn, erKalender, listeNokkel, maksTurer, valgtHytte } from "./hjelpere.js";
-import { ARR_TYPER, FARGER, MALVALG, NIVAA, PLASSERINGER, SESONG_TYPER, SIGNATURER } from "./konstanter.js";
-import { byggPosttekst } from "./posttekst.js";
+import { $, $$, aktivtNivaa, avsenderMeta, avsenderNavn, erKalender, listeNokkel, maksTurer, valgtFarge, valgtHytte } from "./hjelpere.js";
+import { ARR_TYPER, MALVALG, NIVAA, PLASSERINGER, SESONG_TYPER, SIGNATURER } from "./konstanter.js";
+import { byggPosttekst, fotograferFor } from "./posttekst.js";
 import { state } from "./tilstand.js";
 import { aktivTur, hytteLenke, hytteTurer } from "./valg.js";
 
@@ -85,10 +85,10 @@ export function mobilDeling() {
 }
 
 function variantTekst(b) {
-  if (b.karusell) return "Forside: " + (FARGER[state.farge] || FARGER.rod).beskrivelse + " merkelapp, " + PLASSERINGER[state.plassering] + ".";
+  if (b.karusell) return "Forside: " + valgtFarge().beskrivelse + " merkelapp, " + PLASSERINGER[state.plassering] + ".";
   if (erKalender(b.mal)) return "Oppsett: " + (state.oppsett === "topp" ? "Bilde øverst." : "Stort bilde.");
   if (b.nivaa === "postkort") return "Signatur: " + SIGNATURER[state.signatur].navn + ". " + SIGNATURER[state.signatur].tekst;
-  var f = (FARGER[state.farge] || FARGER.rod).beskrivelse;
+  var f = valgtFarge().beskrivelse;
   if (b.nivaa === "plakat") return "Variant: " + f + " merkelapp.";
   return "Variant: " + f + " merkelapp, " + PLASSERINGER[state.plassering] + ".";
 }
@@ -164,7 +164,7 @@ export function renderSkjema(b, byggTurlisteNy) {
     el.kreditering.hidden = true;
   } else {
     el.kreditering.hidden = false;
-    var fotografer = b.fotografer || (b.eksempel && b.eksempel.fotograf ? [b.eksempel.fotograf] : []);
+    var fotografer = fotograferFor(b);
     el.kreditering.textContent = fotografer.length
       ? (fotografer.length > 1 ? "Bildene er tatt av " : "Bildet er tatt av ") + fotografer.join(" og ") +
         ". Husk å kreditere i posteteksten: Foto: " + fotografer.join(" og ") + "."

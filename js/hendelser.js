@@ -58,13 +58,13 @@ export function kobleHendelser() {
     if (h) kopier(hytteLenke(h), e.target, "Kopiert", "Kopier lenken", null);
   });
 
-  // Avkryssinger. Sjekkes for null, så en hurtigbufret index.html uten
-  // elementene ikke stopper resten av oppstarten.
-  if ($("#vis-logo")) $("#vis-logo").addEventListener("change", function (e) { oppdater({ visLogo: e.target.checked }); });
-  if ($("#vis-merke")) $("#vis-merke").addEventListener("change", function (e) { oppdater({ visMerke: e.target.checked }); });
-  if ($("#vis-band")) $("#vis-band").addEventListener("change", function (e) { oppdater({ visBand: e.target.checked }); });
-  if ($("#kort-glass")) $("#kort-glass").addEventListener("change", function (e) { oppdater({ kortGlass: e.target.checked }); });
-  if ($("#vis-turbo")) $("#vis-turbo").addEventListener("change", function (e) { oppdater({ visTurbo: e.target.checked }); });
+  // Avkryssinger, med feltet i tilstanden de styrer. Sjekkes for null, så en hurtigbufret
+  // index.html uten elementene ikke stopper resten av oppstarten.
+  [["#vis-logo", "visLogo"], ["#vis-merke", "visMerke"], ["#vis-band", "visBand"], ["#kort-glass", "kortGlass"], ["#vis-turbo", "visTurbo"]]
+    .forEach(function (par) {
+      var boks = $(par[0]);
+      if (boks) boks.addEventListener("change", function () { var patch = {}; patch[par[1]] = boks.checked; oppdater(patch); });
+    });
 
   // Utsnitt
   $$("[data-utsnitt]").forEach(function (r) {

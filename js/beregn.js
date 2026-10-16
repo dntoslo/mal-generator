@@ -1,13 +1,42 @@
 /* beregn(): størrelser, fotoflate og CSS-variabler for plakaten som skal
    tegnes. Karusellen har sin egen i karusell.js. */
 import { aktivtEksempel, bakgrunn, kildeBilde } from "./bilder.js";
-import { aktivtNivaa, erKalender, erKarusell, kalenderData, synligeTurer } from "./hjelpere.js";
+import { aktivtNivaa, erKalender, erKarusell, kalenderData, synligeTurer, valgtFarge } from "./hjelpere.js";
 import { innholdFor, signaturFor } from "./innhold.js";
 import { beregnKarusell } from "./karusell.js";
-import { FARGER, FORMATER, NIVAA, OPPSETT, TEKST, TITTELFONT, TITTELSPORING } from "./konstanter.js";
+import { FORMATER, NIVAA, OPPSETT, TEKST, TITTELFONT, TITTELSPORING } from "./konstanter.js";
 import { maalBredde, maalHoyde, tilpassStorrelse, tilpassToLinjer } from "./maaling.js";
 import { malPlakatInnhold, malRad } from "./maler.js";
 import { state } from "./tilstand.js";
+
+// Det røde båndet nederst er valgfritt. Høyden 88 px finnes bare her og som --band-h i CSS
+// (20 px polstring, 48 px logosirkel, 20 px polstring).
+export function bandHoyde() {
+  return state.visBand ? 88 : 0;
+}
+
+// Tittel eller signatur på foto (Merkelapp, Postkort Stor og karusellens forside): én eller to
+// linjer innenfor 64 px polstring på hver side, og 300 px smalere når Turbo står nede til høyre.
+export function tittelPaaFoto(tekst, bredde, maksPx, minPx) {
+  return tilpassToLinjer(tekst, bredde - 128 - (state.visTurbo ? 300 : 0), maksPx, minPx);
+}
+
+// Merkelapp-variablene, felles for enkeltmalene og karusellens forside. Instagram legger
+// knapper over toppen og bunnen av en historie, derfor mer luft der.
+export function merkelappVars(story, band, k, tittelPx) {
+  var farge = valgtFarge();
+  return {
+    "--a-merke-size": Math.round(26 * k) + "px",
+    "--merke-bg": farge.bg, "--merke-fg": farge.fg,
+    "--m-tittel-size": tittelPx + "px",
+    "--m-under-size": Math.round(36 * k) + "px",
+    "--m-fakta-size": Math.round(34 * k) + "px",
+    "--m-topp": (story ? 210 : 56) + "px",
+    "--m-bunn": ((story ? 340 : 76) + band) + "px",
+    "--m-innhold-topp": (story ? 230 : 72) + "px",
+    "--m-stempel-bunn": ((story ? 300 : 56) + band) + "px"
+  };
+}
 
 export function beregn() {
   if (erKarusell()) return beregnKarusell();
@@ -24,11 +53,9 @@ function beregnEnkelt() {
   var stor = s.tekst === "stor";
   var k = stor ? 1.12 : 1;
   var pad = 64;
-  // Båndet nederst er valgfritt. Høyden brukes bare her og som --band-h i CSS.
-  var band = s.visBand ? 88 : 0;
+  var band = bandHoyde();
   var innhold = innholdFor(s.mal);
   var sig = nivaa === "postkort" ? signaturFor(innhold) : null;
-  var farge = FARGER[s.farge] || FARGER.rod;
 
   // Postkort C har foto med lys kant og signaturen under.
   var cTopp = story ? 180 : 44, cBunn = 266, cLuft = story ? 200 : 0;
@@ -43,7 +70,7 @@ function beregnEnkelt() {
     var tittelBredde = innhold.dato ? tekstBredde - chip - 36 : tekstBredde;
     tittel = tilpassStorrelse(innhold.tittel, TITTELFONT, TITTELSPORING, tittelBredde, 104, 60);
   } else if (nivaa === "merkelapp") {
-    tittel = tilpassToLinjer(innhold.tittel, tekstBredde - (s.visTurbo ? 300 : 0), 112, 64);
+    tittel = tittelPaaFoto(innhold.tittel, fmt.bredde, 112, 64);
   } else {
     if (s.signatur === "b") tittel = tilpassStorrelse(sig.navn, TITTELFONT, TITTELSPORING, 740, 46, 32);
     else if (s.signatur === "c") {
@@ -59,11 +86,11 @@ function beregnEnkelt() {
         cUnder = sig.metaLinjer.length > 0;
       }
     }
-    else tittel = tilpassToLinjer(sig.navn, tekstBredde - (s.visTurbo ? 300 : 0), 132, 72);
+    else tittel = tittelPaaFoto(sig.navn, fmt.bredde, 132, 72);
     sigNavnPx = tittel.px;
   }
 
-  var vars = {
+  var vars = Object.assign(merkelappVars(story, band, k, tittel.px), {
     "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
     "--a-pad": pad + "px", "--a-chip": chip + "px",
     // Luft over og under innholdet i Plakat. Historie har mer nederst, der Instagram legger knapper.
@@ -71,28 +98,18 @@ function beregnEnkelt() {
     "--a-dag-size": Math.round(24 * k) + "px",
     "--a-dato-size": Math.round(70 * k) + "px",
     "--a-maaned-size": Math.round(24 * k) + "px",
-    "--a-merke-size": Math.round(26 * k) + "px",
     "--a-tittel-size": tittel.px + "px",
     "--a-under-size": Math.round(34 * k) + "px",
     // Etikettene var 22 px til 16. oktober 2026, under grensen på 24 px.
     "--a-etikett-size": Math.round(24 * k) + "px",
     "--a-verdi-size": Math.round(30 * k) + "px",
     "--a-tekst-size": Math.round(30 * k) + "px",
-    "--merke-bg": farge.bg, "--merke-fg": farge.fg,
-    "--m-tittel-size": tittel.px + "px",
-    "--m-under-size": Math.round(36 * k) + "px",
-    "--m-fakta-size": Math.round(34 * k) + "px",
-    // Instagram legger knapper over toppen og bunnen av en historie, derfor mer luft der.
-    "--m-topp": (story ? 210 : 56) + "px",
-    "--m-bunn": ((story ? 340 : 76) + band) + "px",
-    "--m-innhold-topp": (story ? 230 : 72) + "px",
-    "--m-stempel-bunn": ((story ? 300 : 56) + band) + "px",
     "--s-navn-size": sigNavnPx + "px",
     "--s-bunn": ((story ? 340 : 72) + band) + "px",
     "--s-bunn-b": ((story ? 300 : 56) + band) + "px",
     "--s-c-topp": cTopp + "px", "--s-c-foto-h": cFotoH + "px",
     "--turbo-h": "200px", "--band-h": band + "px"
-  };
+  });
 
   // Plakat: innholdet står rett under fotoet med fast luft, og fotoet tar resten av høyden
   // (16. oktober 2026). Med kort tekst blir fotoet stort. Med lang tekst krymper det, men aldri
@@ -146,7 +163,7 @@ function beregnTurkalender() {
   if (kompakt && n > 4) trinn = Math.min(trinn + 1, 3);
   if (romslig) trinn = Math.max(trinn - 1, 0);
 
-  var band = state.visBand ? 88 : 0;
+  var band = bandHoyde();
   var storrelser = {
     "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
     "--chip": T.chip[trinn] + "px", "--chip-smal": T.chipSmal[trinn] + "px",
@@ -164,7 +181,7 @@ function beregnTurkalender() {
   var heroMin = s.format === "story" ? 780 : 330;
   var heroH = heroMin;
   if (s.oppsett === "topp" && synlige.length) {
-    var raderH = maalHoyde('<div class="p-rader">' + synlige.map(function (t) { return malRad(t, true, false); }).join("") + "</div>", storrelser);
+    var raderH = maalHoyde('<div class="p-rader">' + synlige.map(malRad).join("") + "</div>", storrelser);
     heroH = Math.max(heroMin, fmt.hoyde - band - raderH);
   }
 

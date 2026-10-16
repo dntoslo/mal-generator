@@ -16,17 +16,17 @@ export function malDetaljer(t) {
   return html + '</div>';
 }
 
-export function malRad(t, visTid, stedOgTid) {
-  var sted = stedOgTid ? [t.sted, t.tid ? "kl. " + t.tid : ""].filter(Boolean).join(", ") : t.sted;
-  var html = '<div class="p-rad">' +
+// Én tur eller ett programpunkt i turkalenderen og programmet. Ekstra argumenter fra map() ignoreres.
+export function malRad(t) {
+  return '<div class="p-rad">' +
     '<div class="p-chip"><div class="p-chip__dag">' + esc(t.dag) + '</div><div class="p-chip__dato">' + esc(t.dato) + '</div></div>' +
     '<div class="p-info">' +
       '<div class="p-info__tittel">' + esc(t.tittel) + '</div>' +
-      '<div class="p-info__sted">' + esc(sted) + '</div>' +
+      '<div class="p-info__sted">' + esc(t.sted) + '</div>' +
       malDetaljer(t) +
-    '</div>';
-  if (visTid) html += '<div class="p-tid">' + esc(t.tid) + '</div>';
-  return html + '</div>';
+    '</div>' +
+    '<div class="p-tid">' + esc(t.tid) + '</div>' +
+  '</div>';
 }
 
 // Den runde T-en kan skrus av, uavhengig av båndet nederst. Logoen er alltid
@@ -60,7 +60,7 @@ export var MALER = {
         malLogo() + malTurbo("p-turbo--hero") +
         '<div class="p-periode">' + esc(b.kal.periode) + '</div>' +
       '</div>' +
-      '<div class="p-rader">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
+      '<div class="p-rader">' + b.synlige.map(malRad).join("") + '</div>' +
       malBunn() +
     '</div>';
   },
@@ -70,7 +70,7 @@ export var MALER = {
       '<div class="p-hero__tekst p-hero__tekst--lav"><span class="p-overlinje">' + esc(b.kal.navn.toUpperCase()) + (b.kal.navn ? '<span class="p-overlinje__skille"></span>' : "") + esc(b.kal.periode) + '</span><span class="p-tittel' + (b.tittelBryt ? " p-tittel--bryt" : "") + '">' + esc(b.kal.tittel) + '</span></div>' +
       malLogo("p-logo--lav") + malTurbo("p-turbo--underlogo") +
       '<div class="p-kort' + (state.kortGlass ? " p-kort--glass" : "") + '">' +
-        '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(function (t) { return malRad(t, true, false); }).join("") + '</div>' +
+        '<div class="p-kort__liste p-kort__liste--bakgrunn">' + b.synlige.map(malRad).join("") + '</div>' +
         malBunn("p-bunn--tett") +
       '</div>' +
     '</div>';

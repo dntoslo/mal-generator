@@ -1,5 +1,5 @@
 /* Små hjelpere: DOM-oppslag, escaping, avsender, malvalg og turlister. */
-import { HYTTER, IKON_STI, MAKS_KARUSELL, MAKS_TURER, MALVALG } from "./konstanter.js";
+import { FARGER, HYTTER, IKON_STI, MAKS_KARUSELL, MAKS_TURER, MALVALG } from "./konstanter.js";
 import { state } from "./tilstand.js";
 
 export var $ = function (sel, rot) { return (rot || document).querySelector(sel); };
@@ -15,6 +15,9 @@ export function slug(s) {
     .replace(/æ/g, "ae").replace(/ø/g, "oe").replace(/å/g, "aa")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "turlag";
 }
+
+// Merkelappens farge. Rød hvis det lagrede valget ikke finnes.
+export function valgtFarge() { return FARGER[state.farge] || FARGER.rod; }
 
 export function erKalender(mal) { return mal === "turkalender" || mal === "program"; }
 

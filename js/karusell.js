@@ -1,9 +1,10 @@
 /* Karusellen: forside, listesider fordelt etter målt høyde, «Godt å vite»
    og beregnKarusell(). */
+import { bandHoyde, merkelappVars, tittelPaaFoto } from "./beregn.js";
 import { aktivtEksempel, bakgrunn, bildeAdresse, hytteBilder, kildeBilde, onsketSesong } from "./bilder.js";
 import { $, esc, ikon, kalenderData, synligeTurer } from "./hjelpere.js";
-import { FARGER, FORMATER, HYTTEMAPPE, LOGO, MAKS_KARUSELL, TITTELFONT, TITTELSPORING } from "./konstanter.js";
-import { maaleElement, tilpassStorrelse, tilpassToLinjer } from "./maaling.js";
+import { FORMATER, HYTTEMAPPE, LOGO, MAKS_KARUSELL, TITTELFONT, TITTELSPORING } from "./konstanter.js";
+import { maaleElement, tilpassStorrelse } from "./maaling.js";
 import { MALER_ARR, malDetaljer } from "./maler.js";
 import { state } from "./tilstand.js";
 
@@ -130,21 +131,14 @@ export function beregnKarusell() {
   var kal = kalenderData();
   var stor = s.tekst === "stor";
   var k = stor ? 1.12 : 1;
-  var band = s.visBand ? 88 : 0;
-  var farge = FARGER[s.farge] || FARGER.rod;
+  var band = bandHoyde();
   var synlige = synligeTurer();
-  var tekstBredde = fmt.bredde - 128;
-  var forsideTittel = tilpassToLinjer(kal.tittel, tekstBredde - (s.visTurbo ? 300 : 0), 112, 64);
-  var listeTittel = tilpassStorrelse(kal.tittel, TITTELFONT, TITTELSPORING, tekstBredde, 92, 60);
-  var vars = {
+  var forsideTittel = tittelPaaFoto(kal.tittel, fmt.bredde, 112, 64);
+  var listeTittel = tilpassStorrelse(kal.tittel, TITTELFONT, TITTELSPORING, fmt.bredde - 128, 92, 60);
+  // Forsiden er Merkelapp i innleggsformat, med de samme variablene som enkeltmalene.
+  var vars = Object.assign(merkelappVars(false, band, k, forsideTittel.px), {
     "--bredde": fmt.bredde + "px", "--hoyde": fmt.hoyde + "px",
-    "--a-pad": "64px", "--a-merke-size": Math.round(26 * k) + "px",
-    "--merke-bg": farge.bg, "--merke-fg": farge.fg,
-    "--m-tittel-size": forsideTittel.px + "px",
-    "--m-under-size": Math.round(36 * k) + "px",
-    "--m-fakta-size": Math.round(34 * k) + "px",
-    "--m-topp": "56px", "--m-bunn": (76 + band) + "px",
-    "--m-innhold-topp": "72px", "--m-stempel-bunn": (56 + band) + "px",
+    "--a-pad": "64px",
     "--k-tittel-size": listeTittel.px + "px",
     "--k-chip": Math.round(150 * k) + "px",
     "--k-dato-size": Math.round(60 * k) + "px",
@@ -155,7 +149,7 @@ export function beregnKarusell() {
     "--k-info-size": Math.round(30 * k) + "px",
     "--detalj-size": Math.round(26 * k) + "px",
     "--turbo-h": "200px", "--band-h": band + "px"
-  };
+  });
 
   var deling = delOppBlokker(grupperDager(synlige), kal, vars, listeTittel.bryt);
   var sider = [{ type: "forside" }];

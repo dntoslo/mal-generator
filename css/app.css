@@ -291,7 +291,9 @@ body.viser-bildet .bunnlinje { display: none; }
 .p-foto { width: 100%; height: 100%; background-size: var(--bg-str); background-position: var(--bg-pos); background-repeat: no-repeat; }
 .p-foto--fyll { position: absolute; inset: 0; }
 .p-scrim { position: absolute; inset: 0; }
-.p-scrim--topp     { background: linear-gradient(180deg, rgba(20,30,22,0.46) 0%, rgba(20,30,22,0.14) 50%, rgba(20,30,22,0.58) 100%); }
+/* Skyggene bak tekst på foto følger en myk kurve (cosinus inn og ut) med samme mørke ytterst
+   som før (16. oktober 2026). Midten av fotoet blir lysere, og mørket samles der teksten står. */
+.p-scrim--topp     { background: linear-gradient(180deg, rgba(20,30,22,0.460) 0%, rgba(20,30,22,0.448) 6.2%, rgba(20,30,22,0.413) 12.5%, rgba(20,30,22,0.361) 18.8%, rgba(20,30,22,0.300) 25%, rgba(20,30,22,0.239) 31.2%, rgba(20,30,22,0.187) 37.5%, rgba(20,30,22,0.152) 43.8%, rgba(20,30,22,0.140) 50%, rgba(20,30,22,0.157) 56.2%, rgba(20,30,22,0.204) 62.5%, rgba(20,30,22,0.276) 68.8%, rgba(20,30,22,0.360) 75%, rgba(20,30,22,0.444) 81.2%, rgba(20,30,22,0.516) 87.5%, rgba(20,30,22,0.563) 93.8%, rgba(20,30,22,0.580) 100%); }
 .p-scrim--bakgrunn { background: linear-gradient(180deg, rgba(20,30,22,0.52) 0%, rgba(20,30,22,0.14) 34%, rgba(20,30,22,0.30) 100%); }
 
 /* Hero (Bilde øverst) og tittel over foto (Stort bilde) */
@@ -441,8 +443,8 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
    ========================================================= */
 .m-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--foto-bakgrunn); color: var(--hvit); }
 .m-scrim { position: absolute; inset: 0; }
-.m-scrim--nede { background: linear-gradient(180deg, rgba(20,30,22,0.34) 0%, rgba(20,30,22,0) 24%, rgba(20,30,22,0) 44%, rgba(20,30,22,0.84) 100%); }
-.m-scrim--oppe { background: linear-gradient(180deg, rgba(20,30,22,0.84) 0%, rgba(20,30,22,0.14) 48%, rgba(20,30,22,0) 70%, rgba(20,30,22,0.26) 100%); }
+.m-scrim--nede { background: linear-gradient(180deg, rgba(20,30,22,0.340) 0%, rgba(20,30,22,0.327) 3%, rgba(20,30,22,0.290) 6%, rgba(20,30,22,0.235) 9%, rgba(20,30,22,0.170) 12%, rgba(20,30,22,0.105) 15%, rgba(20,30,22,0.050) 18%, rgba(20,30,22,0.013) 21%, rgba(20,30,22,0.000) 24%, rgba(20,30,22,0.000) 40%, rgba(20,30,22,0.032) 47.5%, rgba(20,30,22,0.123) 55%, rgba(20,30,22,0.259) 62.5%, rgba(20,30,22,0.420) 70%, rgba(20,30,22,0.581) 77.5%, rgba(20,30,22,0.717) 85%, rgba(20,30,22,0.808) 92.5%, rgba(20,30,22,0.840) 100%); }
+.m-scrim--oppe { background: linear-gradient(180deg, rgba(20,30,22,0.840) 0%, rgba(20,30,22,0.808) 7.5%, rgba(20,30,22,0.717) 15%, rgba(20,30,22,0.581) 22.5%, rgba(20,30,22,0.420) 30%, rgba(20,30,22,0.259) 37.5%, rgba(20,30,22,0.123) 45%, rgba(20,30,22,0.032) 52.5%, rgba(20,30,22,0.000) 60%, rgba(20,30,22,0.000) 75%, rgba(20,30,22,0.010) 78.1%, rgba(20,30,22,0.038) 81.2%, rgba(20,30,22,0.080) 84.4%, rgba(20,30,22,0.130) 87.5%, rgba(20,30,22,0.180) 90.6%, rgba(20,30,22,0.222) 93.8%, rgba(20,30,22,0.250) 96.9%, rgba(20,30,22,0.260) 100%); }
 
 /* Stempelet er den eneste logoen i de organiske innleggene. */
 .m-stempel { position: absolute; left: 56px; top: var(--m-topp, 56px); display: flex; align-items: center; gap: 16px; max-width: 900px; background: var(--hvit); color: var(--sort); border-radius: 22px; padding: 14px 28px 14px 14px; }
@@ -475,7 +477,7 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
    --s-navn-size --s-bunn --s-bunn-b --s-c-topp --s-c-foto-h
    ========================================================= */
 .s-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--foto-bakgrunn); color: var(--hvit); }
-.s-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0) 50%, rgba(20,30,22,0.74) 100%); }
+.s-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.000) 45%, rgba(20,30,22,0.028) 51.9%, rgba(20,30,22,0.108) 58.8%, rgba(20,30,22,0.228) 65.6%, rgba(20,30,22,0.370) 72.5%, rgba(20,30,22,0.512) 79.4%, rgba(20,30,22,0.632) 86.2%, rgba(20,30,22,0.712) 93.1%, rgba(20,30,22,0.740) 100%); }
 /* Avsender på Postkort-nivået (16. oktober 2026): navnet som overlinje øverst, som .a-overlinje i Plakat,
    med en svak skygge så det kan leses på lys himmel. I historie står det under Instagrams knapper (--m-topp). */
 .s-avsender-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,30,22,0.42) 0%, rgba(20,30,22,0) 26%); }

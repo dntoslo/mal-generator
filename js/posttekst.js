@@ -10,6 +10,16 @@ function setning(t) {
   return /[.!?:]$/.test(t) ? t : t + ".";
 }
 
+// «Etikett: verdi», én linje per opplysning i Plakat.
+function infoLinjer(info) {
+  return info.map(function (r) { return r.etikett + ": " + r.verdi; });
+}
+
+// Fotografene bak eksempelbildene som vises. Karusellen kan ha to: forsiden og «Godt å vite».
+export function fotograferFor(b) {
+  return b.fotografer || (b.eksempel && b.eksempel.fotograf ? [b.eksempel.fotograf] : []);
+}
+
 var AVSLUTNING = {
   apner:   ["Vi gleder oss til å se deg.", "Velkommen til fjells."],
   booking: ["Bestill tidlig, det blir fort fullt.", "Vi gleder oss til å ta imot deg."],
@@ -25,8 +35,7 @@ export function byggPosttekst(b) {
   var hytte = state.avsender === "hytte";
   var navn = avsenderNavn();
   var paa = navn ? " på " + navn : "";
-  // Karusellen kan ha to fotografer, ett bilde på forsiden og ett på «Godt å vite».
-  var fotografer = b.fotografer || (b.eksempel && b.eksempel.fotograf ? [b.eksempel.fotograf] : []);
+  var fotografer = fotograferFor(b);
   var foto = fotografer.length ? "Foto: " + fotografer.join(" og ")
     : (state.egetBilde ? "Foto: [navnet på fotografen]" : "");
   var tagg = hytte ? "@dntoslo" : "";
@@ -53,7 +62,7 @@ export function byggPosttekst(b) {
     else linjer = [setning(s.navn + (s.meta ? ", " + s.meta : "")), "Stikk innom når du er på tur i området."];
   } else if (b.mal === "sesong") {
     var slutt = AVSLUTNING[state.sesongType][v];
-    var faktaLinjer = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
+    var faktaLinjer = infoLinjer(inn.info);
     // Står ikke datoen i tittelen («Booking åpner»), kommer den etter: «Booking åpner torsdag 15. oktober.»
     var d = inn.dato;
     var tittel = d && d.dato && inn.tittel.indexOf(d.dato) < 0 ? inn.tittel + " " + datoTekst(d).toLowerCase() : inn.tittel;
@@ -64,7 +73,7 @@ export function byggPosttekst(b) {
     }
   } else if (b.mal === "meny") {
     var meny = inn.meny.length ? [""].concat(inn.meny) : [];
-    var fakta = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
+    var fakta = infoLinjer(inn.info);
     // Etter kolon fortsetter setningen med liten forbokstav: «Dagens middag på Litlos: egenfisket aure.»
     var rett = setning(inn.tittel);
     if (inn.merke) rett = inn.merke + paa + ": " + rett.charAt(0).toLowerCase() + rett.slice(1);
@@ -72,11 +81,11 @@ export function byggPosttekst(b) {
     else linjer = [setning(inn.tittel + paa), setning(inn.under)].concat(meny, [""], fakta, ["", "Vi ses ved bordet."]);
   } else if (b.mal === "arrangement") {
     var datoLinje = datoTekst(inn.dato);
-    var info = inn.info.filter(function (r) { return r.etikett !== "Tid"; }).map(function (r) { return r.etikett + ": " + r.verdi; });
+    var info = infoLinjer(inn.info.filter(function (r) { return r.etikett !== "Tid"; }));
     if (v === 0) linjer = [inn.tittel, inn.under, "", [datoLinje, (state.arrTid || "").trim()].filter(Boolean).join(", "), "", setning(inn.tekst), ""].concat(info);
     else linjer = [setning((inn.under ? inn.under + ": " : "") + inn.tittel + (datoLinje ? ", " + datoLinje.toLowerCase() : "")), setning(inn.tekst), ""].concat(info);
   } else if (b.mal === "turtips") {
-    var tipsInfo = inn.info.map(function (r) { return r.etikett + ": " + r.verdi; });
+    var tipsInfo = infoLinjer(inn.info);
     if (v === 0) linjer = ["Turtips: " + inn.tittel, inn.under, "", setning(inn.tekst), ""].concat(tipsInfo);
     else linjer = [setning(inn.tittel + (inn.under ? ". " + inn.under : "")), setning(inn.tekst), ""].concat(tipsInfo, ["", "God tur."]);
     var tur = aktivTur();

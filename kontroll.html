@@ -53,7 +53,7 @@
   </header>
 
   <div class="kt-verktoy">
-    <button type="button" class="kt-hoved" id="kjor">Kjør på nytt</button>
+    <button type="button" class="kt-hoved" id="kjor" disabled>Kjør på nytt</button>
     <button type="button" id="lagre-ref" disabled>Lagre som referanse</button>
     <label><input type="checkbox" id="alle-hytter"> Alle 25 hyttene (tar et par minutter)</label>
     <label><input type="checkbox" id="bare-avvik"> Vis bare avvik</label>
@@ -67,7 +67,9 @@
 (function () {
   "use strict";
 
-  var REFERANSE = "turposten-kontroll-referanse";
+  // Nøkkelen har versjon: fingeravtrykket tar med beregnet stil fra 16. oktober 2026, og eldre
+  // referanser uten stil ville gitt «endret» på alt.
+  var REFERANSE = "turposten-kontroll-referanse-2";
   var LAGRING = "dnt-ukens-turer-v1";
   var UTVALG = ["leirvassbu", "breivoll-gard"];
   var VIS_BREDDE = 190;
@@ -144,11 +146,22 @@
     return (h >>> 0).toString(16).padStart(8, "0");
   }
 
+  // Egenskapene som avgjør hvordan plakaten ser ut. De leses som beregnet stil for hvert element,
+  // så også endringer i app.css og tokens.css (f.eks. en skygge eller en farge) gir nytt fingeravtrykk.
+  var STILER = ["display", "position", "top", "right", "bottom", "left", "width", "height", "margin", "padding",
+    "border-radius", "border-top-width", "border-top-color", "background-color", "background-image", "background-size",
+    "background-position", "color", "opacity", "font-family", "font-size", "font-weight", "line-height", "letter-spacing",
+    "text-transform", "text-align", "white-space", "box-shadow", "transform", "z-index", "gap", "align-items", "justify-content"];
+
   // Variablene på #plakat sorteres, så rekkefølgen de settes i ikke teller, bare verdiene.
-  function avtrykk(p) {
+  function avtrykk(p, vindu) {
     var stil = (p.getAttribute("style") || "").split(";").map(function (s) { return s.trim(); }).filter(Boolean).sort().join(";");
     var attr = ["data-mal", "data-format", "data-oppsett"].map(function (a) { return a + "=" + p.getAttribute(a); }).join("|");
-    return fnv(stil + "#" + attr + "#" + p.innerHTML);
+    var beregnet = [p].concat(Array.prototype.slice.call(p.querySelectorAll("*"))).map(function (e) {
+      var cs = vindu.getComputedStyle(e);
+      return STILER.map(function (k) { return cs.getPropertyValue(k); }).join(",");
+    }).join("|");
+    return fnv(stil + "#" + attr + "#" + p.innerHTML + "#" + beregnet);
   }
 
   // ---------- Kjøringen ----------
@@ -172,7 +185,7 @@
     var advarsel = doc.getElementById("formange");
     var r = {
       gruppe: gruppe, navn: navn, nokkel: gruppe + " | " + navn,
-      avtrykk: avtrykk(p),
+      avtrykk: avtrykk(p, ramme.contentWindow),
       advarsel: advarsel && !advarsel.hidden ? advarsel.textContent : "",
       tegnes: tegnes,
       html: p.outerHTML,
@@ -288,7 +301,15 @@
     ];
   }
 
+  // Bare én kjøring om gangen. To samtidige ville delt rammen og blandet resultatene.
+  var kjorer = false;
   async function kjor() {
+    if (kjorer) return;
+    kjorer = true;
+    try { await kjorAlt(); } finally { kjorer = false; $("#kjor").disabled = false; }
+  }
+
+  async function kjorAlt() {
     avbryt = false;
     tegnes = true;
     resultater = [];
