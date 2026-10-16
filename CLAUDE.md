@@ -33,6 +33,7 @@ Nettside som lar turlag og betjente hytter i DNT Oslo og Omegn lage ferdige bild
 - Plakaten kan ikke bruke tokens med `color-mix()` (`--fg-muted`, `--border` osv.), fordi html2canvas 1.4.1 ikke forstår det. Bruk hex eller rgba, f.eks. `--foto-bakgrunn`.
 - Turlagsfeltet er tomt som standard (16. oktober 2026). Før sto «Fyll inn turlag» som verdi og havnet i bildet. `hent()` gjør lagret «Fyll inn turlag» om til tomt.
 - Skriving i tekstfelt og glidere går gjennom `oppdaterSnart()`, som samler til én render per skjermbilde (`requestAnimationFrame`, med 100 ms tidsfrist som reserve fordi et skjult panel ikke får skjermbilder). Knapper og valg bruker `oppdater()`, som rendrer med en gang. Kode som trenger det nye skjemaet rett etter et kall (f.eks. fokus i turlisten), må bruke `oppdater()`.
+- UT.no skriver noen fotografer ulikt fra bilde til bilde. I Turposten brukes én skrivemåte (16. oktober 2026): Marius Dalseg, Jasemin Folvik, Geir Lyftingsmo, Liva Ducena Fjeld, Leela Misj Guenin og Sindre Thoresen Lønnes, aldri med «/DNT». Bruk dem også for nye bilder.
 - Utsnittsboksen viser et varsel (`#opplosning`) når fotoet forstørres mer enn `MAKS_FORSTORRELSE` (1,5) i flaten som vises. Forstørrelsen er dekning × zoom fra `bakgrunn()`, der 1 er ett bildepunkt per punkt i det ferdige bildet. Gjelder både eksempelbilder og egne bilder.
 - Eksportklonen mister id-en `#plakat`, så `.eksport-klone *` har egen `box-sizing: border-box`. Uten den ble flater med både bredde og polstring (f.eks. postkort C) for brede i eksporten.
 
