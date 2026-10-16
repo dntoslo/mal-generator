@@ -12,46 +12,101 @@ input, select, button, textarea { font: inherit; }
    tekstfelt får rød, tykkere kant. Selektorene for tekstfelt er like spesifikke som
    kantreglene lenger ned (f.eks. .tur input[type="text"]), så fokus alltid vinner. */
 :focus-visible { outline: 2px solid var(--dnt-rod); outline-offset: 2px; }
-.tekstfelt:focus, .tur input[type="text"]:focus, .tur select:focus,
-.prompt textarea:focus, .posttekst textarea:focus {
+.tekstfelt:focus, .tur input[type="text"]:focus, .tur select:focus, .posttekst textarea:focus {
   outline: none; border-color: var(--dnt-rod); box-shadow: 0 0 0 1px var(--dnt-rod);
 }
 ::placeholder { color: rgba(0,0,0,0.55); opacity: 1; }
 [hidden] { display: none !important; }
 
-/* ---------- Sideoppsett ---------- */
-.app {
-  display: flex; flex-wrap: wrap; gap: 28px; padding: 28px;
-  align-items: flex-start; box-sizing: border-box; min-height: 100vh;
-}
+/* ---------- Sideoppsett ----------
+   Fra 900 px: skjema til venstre og forhåndsvisningen fast til høyre (iPad liggende og opp).
+   Under 900 px: bare skjemaet, en fast linje nederst (.bunnlinje) og forhåndsvisningen
+   over hele skjermen når den åpnes (body.viser-bildet). Fase 2, 16. oktober 2026. */
+.app { box-sizing: border-box; min-height: 100vh; padding: 28px; }
 .panel {
-  flex: 1 1 400px; max-width: 470px; background: var(--hvit); border-radius: 20px;
-  padding: 26px; display: flex; flex-direction: column; gap: 24px; box-shadow: var(--shadow-md);
+  box-sizing: border-box; background: var(--hvit); border-radius: 20px;
+  padding: 26px; display: flex; flex-direction: column; box-shadow: var(--shadow-md);
 }
-.forhandsvisning { flex: 1 1 560px; display: flex; flex-direction: column; gap: 13px; align-items: flex-start; min-width: 0; }
-/* På brede skjermer følger forhåndsvisningen med når skjemaet rulles */
-@media (min-width: 960px) { .forhandsvisning { position: sticky; top: 28px; } }
+.forhandsvisning { display: flex; flex-direction: column; gap: 13px; align-items: flex-start; min-width: 0; }
+/* Delene får ikke krympe, ellers klemmes bildet når forhåndsvisningen har fast høyde på mobil. */
+.forhandsvisning > * { width: var(--forh-bredde, 540px); max-width: 100%; box-sizing: border-box; flex-shrink: 0; }
+.kun-smal { display: none; }
+
+@media (min-width: 900px) {
+  .app { display: grid; grid-template-columns: minmax(340px, 470px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  /* Forhåndsvisningen følger med når skjemaet rulles */
+  .forhandsvisning { position: sticky; top: 28px; }
+  .lukk, .bunnlinje { display: none !important; }
+}
+
+@media (max-width: 899px) {
+  .app { padding: 16px 16px calc(100px + env(safe-area-inset-bottom)); }
+  .panel { max-width: 640px; margin: 0 auto; }
+  .kun-bred { display: none; }
+  .kun-smal { display: inline; }
+  /* Forhåndsvisningen er usynlig til «Se bildet» eller «Lagre eller del» åpner den over hele
+     skjermen. Den er fortsatt lagt ut (visibility, ikke display: none), så sjekkPlass() kan måle
+     plakaten og miniatyren kan kopieres mens skjemaet fylles ut. */
+  .forhandsvisning {
+    position: fixed; inset: 0; z-index: 30; overflow-y: auto; overscroll-behavior: contain;
+    background: var(--beige); padding: 12px 16px 0; align-items: center;
+    visibility: hidden; transform: translateY(24px); opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+  body.viser-bildet { overflow: hidden; }
+  body.viser-bildet .forhandsvisning {
+    visibility: visible; transform: none; opacity: 1;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  /* Lagreknappen står fast nederst i forhåndsvisningen, også når posteteksten rulles fram. */
+  body.viser-bildet .lagre {
+    position: sticky; bottom: 0; z-index: 1; padding: 12px 0 calc(14px + env(safe-area-inset-bottom));
+    background: var(--beige); box-shadow: 0 -10px 14px var(--beige);
+  }
+  body.viser-bildet .posttekst { margin-bottom: 24px; }
+}
 
 /* Smale mobiler: mindre marg, så tre malknapper og utsnittsknappene får plass uten sidelengs rulling */
 @media (max-width: 420px) {
-  .app { padding: 16px; gap: 16px; }
+  .app { padding-left: 12px; padding-right: 12px; }
   .panel { padding: 20px; }
   .pille { padding: 12px 4px; font-size: 13px; }
 }
 
+/* Varsel øverst når siden er åpnet inne i Messenger, Facebook eller Instagram */
+.app-varsel {
+  margin: 0; padding: 14px 18px; background: var(--ny-gul); color: var(--sort);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.45; text-align: center;
+}
+
 /* ---------- Skjema ---------- */
-.panel__intro { display: flex; flex-direction: column; gap: 7px; }
+.panel__intro { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
 .panel__tittel { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.1; letter-spacing: 0; color: var(--sort); margin: 0; }
 .panel__ingress { font-family: var(--font-body); font-weight: 400; font-size: 15px; line-height: 1.45; color: rgba(0,0,0,0.62); margin: 0; }
 .panel__tips { font-family: var(--font-body); font-weight: 400; font-size: 14px; line-height: 1.45; color: rgba(0,0,0,0.7); margin: 4px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--beige-lys); }
 .panel__tips strong { font-family: var(--font-heading); font-weight: 700; color: var(--sort); }
 
-.felt { display: flex; flex-direction: column; gap: 9px; }
-.felt--romslig { gap: 12px; }
+/* Stegene: Hvem, Hva, Innhold, Bilde og Utseende, med nummer og strek mellom */
+.steg { display: flex; flex-direction: column; gap: 14px; padding: 24px 0; border-top: 1px solid rgba(0,0,0,0.1); }
+.steg:first-of-type { border-top: none; padding-top: 4px; }
+.steg__tittel { display: flex; align-items: center; gap: 10px; margin: 0; font-family: var(--font-heading); font-weight: 700; font-size: 17px; line-height: 1.2; color: var(--sort); }
+.steg__nr { flex: none; width: 26px; height: 26px; border-radius: 999px; background: var(--sort); color: var(--hvit); font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+.undersporsmal { margin: 6px 0 0; font-family: var(--font-heading); font-weight: 700; font-size: 14px; line-height: 1.3; color: var(--sort); }
+.felt__topp .undersporsmal { margin: 0; }
+
+.felt { display: flex; flex-direction: column; gap: 10px; }
 /* Gråtonene i skjemaet er minst 0,6 sort, som gir over 4,5:1 kontrast på hvitt og beige. */
 .felt__etikett { font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.6); margin: 0; }
 .felt__topp { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
 .hjelp { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.45; color: rgba(0,0,0,0.6); margin: 0; }
+
+/* Synlig etikett over hvert felt. Plassholderen viser bare et eksempel. */
+.skjemafelt { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.etikett { font-family: var(--font-body); font-weight: 500; font-size: 14px; line-height: 1.3; color: var(--sort); margin: 0; }
+.etikett__tillegg { font-weight: 400; color: rgba(0,0,0,0.6); }
+.feltrad { display: flex; gap: 8px; align-items: flex-start; }
+.feltrad > * { flex: 1 1 0; min-width: 0; }
+.feltrad > .smal { flex: 0 0 82px; }
 
 .knapperad { display: flex; gap: 9px; }
 .knapperad--grid { display: grid; grid-template-columns: 1fr 1fr; }
@@ -64,7 +119,6 @@ input, select, button, textarea { font: inherit; }
 .pille { flex: 1; border-radius: 999px; padding: 12px 8px; }
 .pille--stor { font-size: 16px; }
 .pille--liten { flex: 0 1 auto; padding: 10px 14px; font-size: 13px; }
-.smaa-etikett { font-family: var(--font-body); font-weight: 500; font-size: 13px; color: rgba(0,0,0,0.62); margin: 4px 0 0; }
 .tips-gul { font-family: var(--font-body); font-size: 14px; line-height: 1.45; color: var(--sort); margin: 0; padding: 11px 13px; border-radius: 12px; background: var(--ny-gul); }
 .tips-gul strong { font-family: var(--font-heading); font-weight: 700; }
 .lenketekst { color: var(--sort); word-break: break-all; }
@@ -88,6 +142,7 @@ input, select, button, textarea { font: inherit; }
   border: none; background: rgba(0,0,0,0.07); border-radius: 999px; padding: 6px 13px;
   font-family: var(--font-heading); font-weight: 700; font-size: 13px; color: var(--sort); cursor: pointer;
 }
+.liten-knapp:disabled { opacity: 0.4; cursor: default; }
 .glider { display: flex; align-items: center; gap: 12px; }
 .glider span { flex: none; width: 80px; font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7); }
 .glider input { flex: 1; accent-color: var(--dnt-rod); }
@@ -96,32 +151,40 @@ input, select, button, textarea { font: inherit; }
   width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 13px;
   font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);
 }
+textarea.tekstfelt { line-height: 1.45; resize: vertical; }
 
-/* Turliste */
-.turliste { display: flex; flex-direction: column; gap: 12px; }
-.tur { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: var(--beige-lys); }
-.tur__topp { display: flex; align-items: center; gap: 8px; }
-.tur__nummer { flex: 1; font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: rgba(0,0,0,0.6); }
-.ikon-knapp {
-  width: 32px; height: 32px; border: none; border-radius: 8px; background: rgba(0,0,0,0.06);
-  font-size: 15px; line-height: 1; color: rgba(0,0,0,0.6); cursor: pointer;
+/* Turliste og program. Hver tur er én linje (.turrad) til den åpnes for redigering.
+   Datofeltet i linjen speiler den røde dagsfanen i plakaten. */
+.turliste { display: flex; flex-direction: column; gap: 8px; }
+.tur { display: flex; flex-direction: column; border-radius: 12px; background: var(--beige-lys); }
+.turrad {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; box-sizing: border-box;
+  padding: 8px 12px 8px 8px; border: none; border-radius: 12px; background: none; text-align: left; cursor: pointer; color: var(--sort);
 }
-.ikon-knapp--fjern { font-size: 17px; }
-.tur__rad { display: flex; gap: 8px; align-items: center; }
-.tur__rad > * { flex: 1; min-width: 0; }
+.turrad__dato { flex: none; width: 46px; border-radius: 8px; overflow: hidden; background: var(--hvit); text-align: center; box-shadow: 0 0 0 1px rgba(0,0,0,0.08); }
+.turrad__dag { display: block; background: var(--dnt-rod); color: var(--hvit); font-family: var(--font-heading); font-weight: 700; font-size: 11px; letter-spacing: 0.08em; padding: 3px 0 2px; }
+.turrad__tall { display: block; font-family: var(--font-heading); font-weight: 700; font-size: 18px; line-height: 1; padding: 5px 0 6px; min-height: 18px; }
+.turrad__tekst { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.turrad__tittel { font-family: var(--font-heading); font-weight: 700; font-size: 14px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.turrad__meta { font-family: var(--font-body); font-size: 13px; color: rgba(0,0,0,0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.turrad__endre { flex: none; font-family: var(--font-heading); font-weight: 700; font-size: 13px; color: var(--mork-bla); }
+.tur--apen { background: var(--hvit); box-shadow: 0 0 0 2px var(--sort); }
+.tur__skjema { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+.tur__nummer { margin: 0; font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: rgba(0,0,0,0.6); }
 .tur input[type="text"], .tur select {
-  width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 9px; padding: 11px;
+  width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.22); border-radius: 10px; padding: 11px;
   font-family: var(--font-body); font-size: 16px; color: var(--sort); background: var(--hvit);
 }
 /* 16 px i alle felt, ellers zoomer Safari på iPhone inn når feltet får fokus. */
-.tur__kort { font-family: var(--font-heading) !important; font-weight: 700; font-size: 16px !important; text-align: center; padding: 10px !important; }
-.tur__dag { flex: none !important; width: 88px !important; padding: 10px 8px !important; text-align: left; }
-.tur__liten { font-size: 16px !important; }
-.tur__pamelding { flex: none !important; display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer; }
-.tur__pamelding input { width: 18px; height: 18px; accent-color: var(--dnt-rod); margin: 0; }
+.tur__dag-felt { flex: 0 0 96px !important; }
+.feltrad--bunn { align-items: flex-end; }
+.tur__pamelding { flex: 0 0 auto !important; min-height: 46px; }
+.tur__handlinger { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 2px; }
+.tur__handlinger .liten-knapp { min-height: 40px; padding: 0 14px; }
+.tur__handlinger .mork-knapp { margin-left: auto; min-height: 40px; padding: 0 20px; }
 
-.avkryssing { display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer; }
-.avkryssing input { width: 18px; height: 18px; accent-color: var(--dnt-rod); margin: 0; }
+.avkryssing { display: flex; align-items: center; gap: 8px; min-height: 32px; font-family: var(--font-body); font-size: 15px; color: var(--sort); cursor: pointer; }
+.avkryssing input { width: 18px; height: 18px; accent-color: var(--dnt-rod); margin: 0; flex: none; }
 
 .advarsel { border-radius: 12px; padding: 13px 15px; background: var(--advarsel-bg); font-family: var(--font-body); font-size: 14px; line-height: 1.45; color: var(--advarsel-tekst); margin: 0; }
 
@@ -134,34 +197,72 @@ input, select, button, textarea { font: inherit; }
 
 .bunn { border-top: 1px solid rgba(0,0,0,0.10); padding-top: 18px; display: flex; flex-direction: column; gap: 10px; }
 .lenkeknapp { border: none; background: none; padding: 0; text-align: left; font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--mork-bla); cursor: pointer; }
-.prompt { display: flex; flex-direction: column; gap: 9px; }
-.prompt textarea {
-  width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.18); border-radius: 10px; padding: 12px;
-  font-family: var(--font-body); font-size: 13px; line-height: 1.5; color: var(--sort); background: var(--beige-lys); resize: vertical;
-}
 .mork-knapp {
   border: none; border-radius: 999px; background: var(--sort); color: var(--hvit); align-self: flex-start;
   font-family: var(--font-heading); font-weight: 700; font-size: 14px; padding: 12px 18px; cursor: pointer;
 }
 
 /* ---------- Forhåndsvisning ---------- */
-.forhandsvisning__topp { width: 540px; max-width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.forhandsvisning__hode { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.forhandsvisning__tittel { margin: 0; font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.6); }
+.forhandsvisning__variant { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.forhandsvisning__variant .hjelp { flex: 1; min-width: 0; }
+.forhandsvisning__variant .liten-knapp { flex: none; }
 .liten-knapp--ikon { display: inline-flex; align-items: center; gap: 7px; background: var(--hvit); box-shadow: var(--shadow-sm); padding: 8px 14px; }
 .ramme { width: 540px; max-width: 100%; overflow: hidden; border-radius: 14px; box-shadow: 0 8px 26px rgba(0,0,0,0.12); background: var(--hvit); }
 #plakat-skala { transform-origin: top left; }
+/* «Tilbake til skjemaet» øverst i forhåndsvisningen på mobil */
+.lukk {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
+  background: var(--hvit); box-shadow: var(--shadow-sm); font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--sort); cursor: pointer;
+}
+@media (max-width: 899px) {
+  .forhandsvisning__tittel { font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--sort); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forhandsvisning, body.viser-bildet .forhandsvisning { transition: none; }
+}
 
 /* Bla i karusellen under forhåndsvisningen */
-.karusell-nav { width: 540px; max-width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.karusell-nav .liten-knapp { background: var(--hvit); box-shadow: var(--shadow-sm); padding: 9px 14px; }
-.karusell-nav .liten-knapp:disabled { opacity: 0.4; cursor: default; }
+.karusell-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.karusell-nav .liten-knapp { background: var(--hvit); box-shadow: var(--shadow-sm); padding: 9px 14px; min-height: 40px; }
 .karusell-nav__tekst { font-family: var(--font-body); font-size: 14px; color: rgba(0,0,0,0.7); text-align: center; }
 
+/* Lagring rett under bildet */
+.lagre { display: flex; flex-direction: column; }
+/* Marg i stedet for gap, så det tomme statusområdet ikke gir luft over knappen. */
+.lagre > :not(:first-child) { margin-top: 8px; }
+.lagre .primar { width: 100%; }
+.lagre .lenkeknapp { text-align: center; }
+.lagre__info { display: flex; flex-direction: column; gap: 10px; }
+.klar { margin: 0; font-family: var(--font-body); font-size: 14px; line-height: 1.4; color: var(--sort); text-align: center; }
+.klar strong { font-family: var(--font-heading); font-weight: 700; }
+.hjelpeboks { padding: 14px 16px; border-radius: 12px; background: var(--hvit); box-shadow: var(--shadow-sm); }
+.hjelpeboks summary { font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--mork-bla); cursor: pointer; }
+.hjelpeboks ol { margin: 12px 0 2px; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.78); }
+.hjelpeboks strong { font-family: var(--font-heading); font-weight: 700; color: var(--sort); }
+
 /* Forslag til posttekst under forhåndsvisningen */
-.posttekst { width: 540px; max-width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 16px; background: var(--hvit); box-shadow: var(--shadow-md); }
+.posttekst { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 16px; background: var(--hvit); box-shadow: var(--shadow-md); }
 .posttekst textarea {
   width: 100%; box-sizing: border-box; border: 1.5px solid rgba(0,0,0,0.14); border-radius: 10px; padding: 12px;
   font-family: var(--font-body); font-size: 15px; line-height: 1.5; color: var(--sort); background: var(--beige-lys); resize: vertical;
 }
+
+/* Fast linje nederst på smale skjermer, med levende miniatyr av bildet (.plakat-mini) */
+.bunnlinje {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--hvit); box-shadow: 0 -6px 20px rgba(0,0,0,0.10);
+}
+body.viser-bildet .bunnlinje { display: none; }
+.bunnlinje__se { flex: 1; min-width: 0; display: flex; align-items: center; gap: 11px; min-height: 52px; border: none; background: none; padding: 0; text-align: left; cursor: pointer; color: var(--sort); }
+.bunnlinje__mini { flex: none; height: 56px; border-radius: 5px; overflow: hidden; background: var(--beige); box-shadow: 0 1px 4px rgba(0,0,0,0.25); position: relative; }
+.bunnlinje__mini > div { position: absolute; left: 0; top: 0; transform-origin: top left; }
+.bunnlinje__tekst { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bunnlinje__tekst strong { font-family: var(--font-heading); font-weight: 700; font-size: 15px; }
+.bunnlinje__tekst span { font-family: var(--font-body); font-size: 13px; color: rgba(0,0,0,0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bunnlinje__tekst .bunnlinje__varsel { color: var(--advarsel-tekst); font-weight: 500; }
+.bunnlinje .primar { flex: none; padding: 14px 20px; font-size: 16px; }
 
 /* =========================================================
    Plakaten. Kun px. Variabler fra JS:
@@ -170,11 +271,11 @@ input, select, button, textarea { font: inherit; }
    --title-size --title-size-smal --meta-size --detalj-size --tid-size
    --kort-gap --kort-pad --bg-str --bg-pos
    ========================================================= */
-#plakat {
+#plakat, .plakat-mini {
   width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys);
   font-weight: 400;
 }
-#plakat * { box-sizing: border-box; }
+#plakat *, .plakat-mini * { box-sizing: border-box; }
 .p-flate { width: var(--bredde); height: var(--hoyde); position: relative; overflow: hidden; background: var(--beige-lys); display: flex; flex-direction: column; }
 .p-flate--bakgrunn { background: var(--foto-bakgrunn); }
 
