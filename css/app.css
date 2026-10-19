@@ -504,8 +504,10 @@ textarea.tekstfelt { resize: vertical; line-height: 1.4; }
 /* C: fotoet med lys kant, signaturen på kanten under */
 .s-flate--c { background: var(--beige-lys); color: var(--sort); padding: var(--s-c-topp, 44px) 44px 0; display: flex; flex-direction: column; }
 .s-c__foto { height: var(--s-c-foto-h, 1040px); flex: none; border-radius: 6px; overflow: hidden; position: relative; background: var(--foto-bakgrunn); }
-.s-c__bunn { height: 266px; flex: none; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px; }
-.s-c__venstre { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.s-c__bunn { height: 266px; flex: none; display: flex; align-items: center; padding: 0 12px; }
+.s-c__venstre { flex: 1 1 auto; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+/* Navn og meta side om side: siste linje i meta på grunnlinjen til navnet. flex-end er reserve. */
+.s-c__rad { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; align-items: last baseline; min-width: 0; }
 .s-navn--c { font-size: var(--s-navn-size, 112px); line-height: 0.9; white-space: nowrap; }
 .s-navn--c.s-navn--bryt { white-space: normal; text-wrap: balance; line-height: 0.95; }
 .s-c__meta { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-family: var(--font-body); font-weight: 500; font-size: 28px; line-height: 1.1; color: rgba(0,0,0,0.66); text-align: right; }

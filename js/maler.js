@@ -196,15 +196,17 @@ export var MALER_ARR = {
     var avsender = navn ? '<div class="s-avsender-scrim"></div><div class="s-avsender">' + esc(navn.toUpperCase()) + "</div>" : "";
     if (v === "c") {
       // Får ikke navn og meta plass side om side, står meta under navnet (b.cUnder).
+      // Side om side står de i samme rad, så meta følger grunnlinjen til navnet og ikke
+      // midten av hele blokken med overlinjen (19. oktober 2026).
       var meta = s.metaLinjer.length ? '<div class="s-c__meta' + (b.cUnder ? " s-c__meta--under" : "") + '">' +
         s.metaLinjer.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div>' : "";
+      var navnC = '<span class="s-navn s-navn--c' + (b.tittelBryt ? " s-navn--bryt" : "") + '">' + esc(s.navn) + '</span>';
       return '<div class="s-flate s-flate--c">' +
         '<div class="s-c__foto"><div class="p-foto" data-foto></div>' + avsender + "</div>" +
         '<div class="s-c__bunn"><div class="s-c__venstre">' +
           (s.over ? '<span class="s-over s-over--rod s-over--liten">' + esc(s.over) + '</span>' : "") +
-          '<span class="s-navn s-navn--c' + (b.tittelBryt ? " s-navn--bryt" : "") + '">' + esc(s.navn) + '</span>' +
-          (b.cUnder ? meta : "") + '</div>' + (b.cUnder ? "" : meta) +
-        '</div>' +
+          (b.cUnder ? navnC + meta : '<div class="s-c__rad">' + navnC + meta + '</div>') +
+        '</div></div>' +
       '</div>';
     }
     if (v === "b") {
